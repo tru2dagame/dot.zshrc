@@ -15,6 +15,7 @@ ZSH_THEME="agnoster"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 eval "$(thefuck-alias)"
+alias vml="ssh vagrant@127.0.0.1 -p 2222"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -53,6 +54,7 @@ plugins=(
     web-search
     encode64
     npm
+    node
     brew
     docker
     laravel5
