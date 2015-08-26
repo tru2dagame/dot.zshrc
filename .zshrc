@@ -61,6 +61,7 @@ plugins=(
     vagrant
     zsh-syntax-highlighting
     tmux
+    emoji
 )
 
 source $ZSH/oh-my-zsh.sh
