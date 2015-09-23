@@ -14,7 +14,8 @@ ZSH_THEME="agnoster"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-eval "$(thefuck-alias)"
+
+eval $(thefuck --alias)
 alias vml="ssh vagrant@127.0.0.1 -p 2222"
 
 # Set to this to use case-sensitive completion
@@ -91,3 +92,5 @@ function proxy () {
 
 proxy off
 
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
