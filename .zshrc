@@ -7,9 +7,11 @@ ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="agnoster"
+# ZSH_THEME="agnoster"
+# ZSH_THEME="dstufft"
 # ZSH_THEME="random"
 # ZSH_THEME="Gentoo"
+ZSH_THEME="murilasso"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -88,8 +90,8 @@ function proxy () {
         # echo Local HTTP Proxy is disabled.
         prefix="😑"
     fi
-    export PS1="%K{blue} $prefix $PS1_backup"
-    # export PS1="$prefix $PS1_backup"
+    # export PS1="%K{blue} $prefix $PS1_backup"
+    export PS1="$prefix $PS1_backup"
 }
 
 proxy off
