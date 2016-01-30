@@ -67,6 +67,7 @@ plugins=(
     zsh-syntax-highlighting
     tmux
     emoji
+    zsh-navigation-tools
 )
 
 source $ZSH/oh-my-zsh.sh
