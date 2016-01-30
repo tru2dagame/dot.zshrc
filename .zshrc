@@ -74,6 +74,8 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
 
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
 
 export PS1_backup=$PS1
 
