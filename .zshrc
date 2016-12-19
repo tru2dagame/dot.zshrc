@@ -83,8 +83,8 @@ export PS1_backup=$PS1
 function proxy () {
     local prefix
     if [ "$1" = "on" ]; then
-        export https_proxy=127.0.0.1:15252
-        export http_proxy=127.0.0.1:15252
+        export https_proxy=127.0.0.1:8888
+        export http_proxy=127.0.0.1:8888
         # echo Local HTTP Proxy is enabled.
         prefix="😇"
     else
