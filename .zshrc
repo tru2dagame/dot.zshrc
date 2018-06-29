@@ -11,11 +11,15 @@ ZSH=$HOME/.oh-my-zsh
 # ZSH_THEME="dstufft"
 # ZSH_THEME="random"
 # ZSH_THEME="Gentoo"
-ZSH_THEME="murilasso"
+# ZSH_THEME="murilasso"
+ZSH_THEME="spaceship"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+#alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacs -nw"
+alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacsclient -t"                     # used to be "emacs -nw"
+alias em="/usr/local/Cellar/emacs/25.3/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
 
 eval $(thefuck --alias)
 alias vml="ssh vagrant@127.0.0.1 -p 2222"
@@ -64,19 +68,27 @@ plugins=(
     docker
     laravel5
     vagrant
-    zsh-syntax-highlighting
     tmux
     emoji
     zsh-navigation-tools
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
-
 # Customize to your needs...
+
+# Homebrew PHP CLI
+
+
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
 
-# export NVM_DIR=~/.nvm
-# source $(brew --prefix nvm)/nvm.sh
+
+#export ALTERNATE_EDITOR=""
+#export EDITOR=emacsclient
+export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
+export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
+
 
 export PS1_backup=$PS1
 
@@ -86,12 +98,12 @@ function proxy () {
         export https_proxy=127.0.0.1:8888
         export http_proxy=127.0.0.1:8888
         # echo Local HTTP Proxy is enabled.
-        prefix="😇"
+        prefix="ProxyOn"
     else
         unset https_proxy
         unset http_proxy
         # echo Local HTTP Proxy is disabled.
-        prefix="😑"
+        prefix=""
     fi
     # export PS1="%K{blue} $prefix $PS1_backup"
     export PS1="$prefix $PS1_backup"
@@ -101,3 +113,11 @@ proxy off
 
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+# Added by Krypton
+#export GPG_TTY=$(tty)
+export PATH="/usr/local/opt/node@8/bin:$PATH"
+
+# Set Spaceship ZSH as a prompt
+autoload -U promptinit; promptinit
+prompt spaceship
