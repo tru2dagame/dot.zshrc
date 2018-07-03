@@ -19,9 +19,6 @@ ZSH_THEME="refined"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-#alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacs -nw"
-alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacsclient -t"                     # used to be "emacs -nw"
-alias em="/usr/local/Cellar/emacs/25.3/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
 
 eval $(thefuck --alias)
 alias vml="ssh vagrant@127.0.0.1 -p 2222"
@@ -84,53 +81,17 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
-# zplug
-# Check if zplug is installed
-if [[ ! -d "$HOME/.zplug" ]]; then
-    git clone https://github.com/zplug/zplug "$HOME/.zplug/repos/zplug/zplug"
-    ln -s "$HOME/.zplug/repos/zplug/zplug/init.zsh" "$HOME/.zplug/init.zsh"
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
-source $HOME/.zplug/init.zsh
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
 
-export ZPLUG_HOME=~/.zplug/.zplug
-
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug 'zsh-users/zsh-autosuggestions'
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-completions"
-
-# If command execution time above min. time, plugins will not output time.
-ZSH_COMMAND_TIME_MIN_SECONDS=3
-
-# Message to display (set to "" for disable).
-ZSH_COMMAND_TIME_MSG="Execution time: %s sec"
-
-# Message color.
-ZSH_COMMAND_TIME_COLOR="cyan"
-
-zsh_command_time() {
-    if [ -n "$ZSH_COMMAND_TIME" ]; then
-        hours=$(($ZSH_COMMAND_TIME/3600))
-        min=$(($ZSH_COMMAND_TIME/60))
-        sec=$(($ZSH_COMMAND_TIME%60))
-        if [ "$ZSH_COMMAND_TIME" -le 60 ]; then
-            timer_show="$fg[green]$ZSH_COMMAND_TIME s."
-        elif [ "$ZSH_COMMAND_TIME" -gt 60 ] && [ "$ZSH_COMMAND_TIME" -le 180 ]; then
-            timer_show="$fg[yellow]$min min. $sec s."
-        else
-            if [ "$hours" -gt 0 ]; then
-                min=$(($min%60))
-                timer_show="$fg[red]$hours h. $min min. $sec s."
-            else
-                timer_show="$fg[red]$min min. $sec s."
-            fi
-        fi
-        printf "${ZSH_COMMAND_TIME_MSG}\n" "$timer_show"
-    fi
-}
-
-
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions ]]; then
+    git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
+fi
 
 
 # Homebrew PHP CLI
@@ -140,8 +101,13 @@ export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/
 
 #export ALTERNATE_EDITOR=""
 #export EDITOR=emacsclient
+
+# emacs on mac
 export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
 export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
+
+alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacsclient -t"                     # used to be "emacs -nw"
+alias em="/usr/local/Cellar/emacs/25.3/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
 
 
 export PS1_backup=$PS1
