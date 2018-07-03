@@ -12,7 +12,9 @@ ZSH=$HOME/.oh-my-zsh
 # ZSH_THEME="random"
 # ZSH_THEME="Gentoo"
 # ZSH_THEME="murilasso"
-ZSH_THEME="spaceship"
+# ZSH_THEME="spaceship"
+# ZSH_THEME="pure"
+ZSH_THEME="refined"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -66,20 +68,72 @@ plugins=(
     node
     brew
     docker
+    docker-compose
+    docker-machine
     laravel5
     vagrant
     tmux
     emoji
+    per-directory-history
     zsh-navigation-tools
     zsh-autosuggestions
     zsh-syntax-highlighting
+    zsh-completions
 )
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
-# Homebrew PHP CLI
+# zplug
+# Check if zplug is installed
+if [[ ! -d "$HOME/.zplug" ]]; then
+    git clone https://github.com/zplug/zplug "$HOME/.zplug/repos/zplug/zplug"
+    ln -s "$HOME/.zplug/repos/zplug/zplug/init.zsh" "$HOME/.zplug/init.zsh"
+fi
 
+source $HOME/.zplug/init.zsh
+
+export ZPLUG_HOME=~/.zplug/.zplug
+
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug 'zsh-users/zsh-autosuggestions'
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-completions"
+
+# If command execution time above min. time, plugins will not output time.
+ZSH_COMMAND_TIME_MIN_SECONDS=3
+
+# Message to display (set to "" for disable).
+ZSH_COMMAND_TIME_MSG="Execution time: %s sec"
+
+# Message color.
+ZSH_COMMAND_TIME_COLOR="cyan"
+
+zsh_command_time() {
+    if [ -n "$ZSH_COMMAND_TIME" ]; then
+        hours=$(($ZSH_COMMAND_TIME/3600))
+        min=$(($ZSH_COMMAND_TIME/60))
+        sec=$(($ZSH_COMMAND_TIME%60))
+        if [ "$ZSH_COMMAND_TIME" -le 60 ]; then
+            timer_show="$fg[green]$ZSH_COMMAND_TIME s."
+        elif [ "$ZSH_COMMAND_TIME" -gt 60 ] && [ "$ZSH_COMMAND_TIME" -le 180 ]; then
+            timer_show="$fg[yellow]$min min. $sec s."
+        else
+            if [ "$hours" -gt 0 ]; then
+                min=$(($min%60))
+                timer_show="$fg[red]$hours h. $min min. $sec s."
+            else
+                timer_show="$fg[red]$min min. $sec s."
+            fi
+        fi
+        printf "${ZSH_COMMAND_TIME_MSG}\n" "$timer_show"
+    fi
+}
+
+
+
+
+# Homebrew PHP CLI
 
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
 
@@ -114,10 +168,4 @@ proxy off
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
 
-# Added by Krypton
-#export GPG_TTY=$(tty)
 export PATH="/usr/local/opt/node@8/bin:$PATH"
-
-# Set Spaceship ZSH as a prompt
-autoload -U promptinit; promptinit
-prompt spaceship
