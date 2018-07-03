@@ -99,15 +99,15 @@ fi
 export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
 
 
-#export ALTERNATE_EDITOR=""
-#export EDITOR=emacsclient
+# Add emacs client use for Mac OS X
+if [[ "$(uname)" == 'Darwin' ]]; then
+    # emacs on mac
+    export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
+    export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
 
-# emacs on mac
-export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
-export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
-
-alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacsclient -t"                     # used to be "emacs -nw"
-alias em="/usr/local/Cellar/emacs/25.3/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
+    alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacsclient -t"                     # used to be "emacs -nw"
+    alias em="/usr/local/Cellar/emacs/25.3/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
+fi
 
 
 export PS1_backup=$PS1
