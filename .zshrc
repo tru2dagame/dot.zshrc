@@ -71,6 +71,7 @@ plugins=(
     vagrant
     tmux
     emoji
+    colorize
     per-directory-history
     zsh-navigation-tools
     zsh-autosuggestions
@@ -80,6 +81,8 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
 
 if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
