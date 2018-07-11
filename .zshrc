@@ -99,7 +99,7 @@ fi
 
 # Homebrew PHP CLI
 
-export PATH=$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
+export PATH=/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
 
 
 # Add emacs client use for Mac OS X
@@ -108,8 +108,8 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
     export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
 
-    alias emacs="/usr/local/Cellar/emacs/25.3/bin/emacsclient -t"                     # used to be "emacs -nw"
-    alias em="/usr/local/Cellar/emacs/25.3/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
+    alias emacs="/usr/local/Cellar/emacs/26.1_1/bin/emacsclient -t"                     # used to be "emacs -nw"
+    alias em="/usr/local/Cellar/emacs/26.1_1/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
 fi
 
 
