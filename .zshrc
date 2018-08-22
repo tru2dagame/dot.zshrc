@@ -72,13 +72,13 @@ plugins=(
     tmux
     emoji
     colorize
+    per-directory-history
     zsh-navigation-tools
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-completions
 )
 
-#    per-directory-history
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
