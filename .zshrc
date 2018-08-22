@@ -84,6 +84,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
+_per-directory-history-set-global-history  # set per directory default to glboal
 
 if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
