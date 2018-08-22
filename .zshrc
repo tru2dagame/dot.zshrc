@@ -72,12 +72,13 @@ plugins=(
     tmux
     emoji
     colorize
-    per-directory-history
     zsh-navigation-tools
     zsh-autosuggestions
     zsh-syntax-highlighting
     zsh-completions
 )
+
+#    per-directory-history
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
@@ -101,7 +102,6 @@ fi
 
 export PATH=/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
 
-
 # Add emacs client use for Mac OS X
 if [[ "$(uname)" == 'Darwin' ]]; then
     # emacs on mac
@@ -110,8 +110,9 @@ if [[ "$(uname)" == 'Darwin' ]]; then
 
     alias emacs="/usr/local/Cellar/emacs/26.1_1/bin/emacsclient -t"                     # used to be "emacs -nw"
     alias em="/usr/local/Cellar/emacs/26.1_1/bin/emacsclient -c -a emacs"               # new - opens the GUI with alternate non-daemon
+else
+    export EDITOR="emacs"
 fi
-
 
 export PS1_backup=$PS1
 
