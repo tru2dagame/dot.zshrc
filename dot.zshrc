@@ -140,6 +140,11 @@ function proxy () {
 
 proxy off
 
+# tab title show hostname
+function precmd {
+   vcs_info
+   print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
+}
 
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 
