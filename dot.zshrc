@@ -148,5 +148,12 @@ function precmd {
 
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 
+# Go path for macOS
+if [[ "$(uname)" == 'Darwin' ]]; then
+    export GOPATH=$HOME/go
+    export GOROOT=/usr/local/opt/go/libexec
+    export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
+fi
+
 # tramp mode for zsh: https://www.gnu.org/software/tramp/tramp-emacs.html
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
