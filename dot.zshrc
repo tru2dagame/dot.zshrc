@@ -158,3 +158,6 @@ fi
 
 # tramp mode for zsh: https://www.gnu.org/software/tramp/tramp-emacs.html
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
