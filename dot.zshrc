@@ -156,6 +156,9 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
 fi
 
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+
 # tramp mode for zsh: https://www.gnu.org/software/tramp/tramp-emacs.html
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
 
