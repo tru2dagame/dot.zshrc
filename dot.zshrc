@@ -148,6 +148,7 @@ function precmd {
 }
 
 export PATH="/usr/local/opt/node@8/bin:$PATH"
+export PATH="$HOME/.tgenv/bin:$PATH"
 
 # Go path for macOS
 if [[ "$(uname)" == 'Darwin' ]]; then
