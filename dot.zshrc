@@ -87,7 +87,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=3'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3,bg=cyan,bold,underline"
 
 # _per-directory-history-set-global-history  # set per directory default to glboal
 
