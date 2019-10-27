@@ -73,13 +73,14 @@ plugins=(
     emoji
     colorize
     #per-directory-history
-    zsh-navigation-tools
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    zsh-completions
     extract
     ansible
     emacs
+    zsh-navigation-tools
+    zsh-autosuggestions
+    zsh-completions
+    zsh-syntax-highlighting
+
 )
 
 
