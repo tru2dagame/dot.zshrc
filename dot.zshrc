@@ -104,6 +104,11 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions ]]; then
 fi
 
 
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-histdb ]]; then
+    git clone https://github.com/larkery/zsh-histdb ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-histdb
+fi
+
+
 # Homebrew PHP CLI
 
 export PATH=/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
@@ -168,4 +173,80 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 
 autoload -U +X bashcompinit && bashcompinit
+
+### zsh-histdb
+source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd histdb-update-outcome
+
+# This query will find the most frequently issued command
+# that is issued in the current directory or any subdirectory.
+# You can get other behaviours by changing the query, for example
+_zsh_autosuggest_strategy_histdb_top_here() {
+    local query="select commands.argv from
+history left join commands on history.command_id = commands.rowid
+left join places on history.place_id = places.rowid
+where places.dir LIKE '$(sql_escape $PWD)%'
+and commands.argv LIKE '$(sql_escape $1)%'
+group by commands.argv order by count(*) desc limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+# https://www.dev-diaries.com/blog/terminal-history-auto-suggestions-as-you-type/
+# This will find the most frequently issued command issued exactly in this directory,
+# or if there are no matches it will find the most frequently issued command in any directory.
+# You could use other fields like the hostname to restrict to suggestions on this host, etc.
+_zsh_autosuggest_strategy_histdb_top() {
+    local query="select commands.argv from
+history left join commands on history.command_id = commands.rowid
+left join places on history.place_id = places.rowid
+where commands.argv LIKE '$(sql_escape $1)%'
+group by commands.argv
+order by places.dir != '$(sql_escape $PWD)', count(*) desc limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+# Query to pull in the most recent command if anything was found similar
+# in that directory. Otherwise pull in the most recent command used anywhere
+# Give back the command that was used most recently
+_zsh_autosuggest_strategy_histdb_top_fallback() {
+    local query="
+    select commands.argv from
+    history left join commands on history.command_id = commands.rowid
+    left join places on history.place_id = places.rowid
+    where places.dir LIKE
+        case when exists(select commands.argv from history
+        left join commands on history.command_id = commands.rowid
+        left join places on history.place_id = places.rowid
+        where places.dir LIKE '$(sql_escape $PWD)%'
+        AND commands.argv LIKE '$(sql_escape $1)%')
+            then '$(sql_escape $PWD)%'
+            else '%'
+            end
+    and commands.argv LIKE '$(sql_escape $1)%'
+    group by commands.argv
+    order by places.dir LIKE '$(sql_escape $PWD)%' desc,
+        history.start_time desc
+    limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+#ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
+ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback)
+
+history_show() {
+    limit="${1:-10}"
+    local query="
+        select history.start_time, commands.argv
+        from history left join commands on history.command_id = commands.rowid
+        left join places on history.place_id = places.rowid
+        where places.dir LIKE '$(sql_escape $PWD)%'
+        order by history.start_time desc
+        limit $limit
+    "
+    results=$(_histdb_query "$query")
+    echo "$results"
+}
+### end zsh-histdb
+
 complete -o nospace -C /usr/local/bin/mc mc
