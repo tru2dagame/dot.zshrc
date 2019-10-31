@@ -88,7 +88,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3,bg=cyan,bold,underline"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3,bold,underline"
 
 # _per-directory-history-set-global-history  # set per directory default to glboal
 
@@ -236,7 +236,7 @@ _zsh_autosuggest_strategy_histdb_top_fallback() {
 }
 
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
-ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback)
+ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
 
 history_show() {
     limit="${1:-10}"
