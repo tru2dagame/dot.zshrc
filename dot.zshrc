@@ -276,3 +276,12 @@ lfcd () {
 bindkey -s '^o' 'lfcd\n'
 
 complete -o nospace -C /usr/local/bin/mc mc
+
+upgrade_custom_plugins () {
+    git -C "$HOME/.zshrc.d" pull
+    for customs in zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search zsh-histdb history-sync
+    do
+        echo "upgrading $customs"
+        git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" pull
+    done
+}
