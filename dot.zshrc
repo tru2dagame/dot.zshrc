@@ -112,6 +112,10 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-histdb ]]; then
     git clone https://github.com/larkery/zsh-histdb ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-histdb
 fi
 
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync ]]; then
+    git clone https://github.com/wulfgarpro/history-sync.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync
+fi
+
 
 # Homebrew PHP CLI
 
@@ -236,7 +240,7 @@ _zsh_autosuggest_strategy_histdb_top_fallback() {
 }
 
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
-ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
+#ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
 
 history_show() {
     limit="${1:-10}"
