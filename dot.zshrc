@@ -76,6 +76,7 @@ plugins=(
     #per-directory-history
     extract
     ansible
+    history-sync
     emacs
     zsh-navigation-tools
     zsh-autosuggestions
