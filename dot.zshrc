@@ -81,8 +81,8 @@ plugins=(
     zsh-navigation-tools
     zsh-autosuggestions
     zsh-completions
-    zsh-history-substring-search
     zsh-syntax-highlighting
+    zsh-history-substring-search
 )
 
 
@@ -118,6 +118,7 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync ]]; then
     git clone -b patch-1 https://github.com/tru2dagame/history-sync.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync
 fi
 
+autoload -U compinit && compinit
 
 # Homebrew PHP CLI
 
@@ -243,6 +244,7 @@ _zsh_autosuggest_strategy_histdb_top_fallback() {
 
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 history_show() {
     limit="${1:-10}"
@@ -286,3 +288,9 @@ upgrade_custom_plugins () {
         git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" pull
     done
 }
+
+# https://github.com/zsh-users/zsh-history-substring-search
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_FUZZY=1
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
