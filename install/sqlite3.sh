@@ -8,7 +8,7 @@ mkdir -p $folder && cd $folder
 wget -O $folder/sqlite-$now.tar.gz \
      https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release && \
      tar xvfz sqlite-$now.tar.gz && \
-     ./sqlite/configure --prefix=/usr && \
+     ./sqlite/configure --prefix=/usr/local && \
      make && \
      make install && \
      sqlite3 --version && \
