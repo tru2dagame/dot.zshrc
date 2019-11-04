@@ -120,10 +120,6 @@ fi
 
 autoload -U compinit && compinit
 
-# Homebrew PHP CLI
-
-export PATH=/usr/local/opt:/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
-
 # Add em alias for macOS
 if [[ "$(uname)" == 'Darwin' ]]; then
     # emacs on mac
@@ -164,8 +160,13 @@ function precmd {
    print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
 }
 
+# Homebrew PHP CLI
+
+export PATH=/usr/local/opt:/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
+
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="$HOME/.tgenv/bin:$PATH"
+export PATH="/usr/local/opt/sqlite/bin:$PATH"
 
 # Go path for macOS
 if [[ "$(uname)" == 'Darwin' ]]; then
