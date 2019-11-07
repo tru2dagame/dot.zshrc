@@ -285,8 +285,12 @@ upgrade_custom_plugins () {
     git -C "$HOME/.zshrc.d" pull
     for customs in zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search zsh-histdb history-sync
     do
-        echo "upgrading $customs"
+        echo -e "upgrading \e[1;34m${customs}\e[0m"
+        echo -e "remote: \e[1;34m`git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" remote -v | grep fetch`\e[0m"
+        echo "branch: \e[1;34m`git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'`\e[0m"
+        git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" checkout master
         git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" pull
+        echo "\n"
     done
 }
 
