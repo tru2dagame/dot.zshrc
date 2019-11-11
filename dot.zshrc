@@ -1,3 +1,5 @@
+# zmodload zsh/zprof    # debug
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -325,3 +327,4 @@ bindkey -M emacs '^N' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_FUZZY=1
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
+# zprof    # debug
