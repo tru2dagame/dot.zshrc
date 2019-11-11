@@ -81,7 +81,7 @@ plugins=(
     history-sync
     fzf
     z.lua
-    autoupdate
+    #autoupdate
     #history-search-multi-word
     iterm2
     emacs
