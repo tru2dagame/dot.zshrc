@@ -77,12 +77,18 @@ plugins=(
     extract
     ansible
     history-sync
+    fzf
+    z.lua
+    autoupdate
+    #history-search-multi-word
+    iterm2
     emacs
     zsh-navigation-tools
+    zsh-history-substring-search
     zsh-autosuggestions
     zsh-completions
     zsh-syntax-highlighting
-    zsh-history-substring-search
+
 )
 
 
@@ -117,6 +123,20 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync ]]; then
     # git clone https://github.com/wulfgarpro/history-sync.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync
     git clone -b patch-1 https://github.com/tru2dagame/history-sync.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync
 fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua ]]; then
+   git clone https://github.com/skywind3000/z.lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate ]]; then
+   git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-search-multi-word ]]; then
+   git clone https://github.com/zdharma/history-search-multi-word.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-search-multi-word
+fi
+
+
 
 autoload -U compinit && compinit
 
@@ -282,16 +302,21 @@ bindkey -s '^o' 'lfcd\n'
 complete -o nospace -C /usr/local/bin/mc mc
 
 upgrade_custom_plugins () {
-    git -C "$HOME/.zshrc.d" pull
-    for customs in zsh-autosuggestions zsh-syntax-highlighting zsh-completions zsh-history-substring-search zsh-histdb history-sync
-    do
-        echo -e "upgrading \e[1;34m${customs}\e[0m"
-        echo -e "remote: \e[1;34m`git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" remote -v | grep fetch`\e[0m"
-        echo "branch: \e[1;34m`git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'`\e[0m"
-        git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" checkout master
-        git -C "$HOME/.oh-my-zsh/custom/plugins/$customs" pull
-        echo "\n"
-    done
+  printf "${BLUE}%s${NORMAL}\n" "Upgrading custom plugins"
+
+  find "${ZSH_CUSTOM}" -type d -name .git | while read d
+  do
+    p=$(dirname "$d")
+    cd "${p}"
+    echo -e "${BLUE}${p}${NORMAL}"
+    if git pull --rebase --stat origin master
+    then
+      printf "%s\n" "Hooray! $d has been updated and/or is at the current version."
+    else
+      printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
+    fi
+    echo "\n"
+  done
 }
 
 # https://github.com/zsh-users/zsh-history-substring-search
@@ -299,3 +324,4 @@ bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_FUZZY=1
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
