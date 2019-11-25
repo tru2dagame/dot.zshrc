@@ -1,3 +1,5 @@
+## -*- mode: conf -*-
+
 # zmodload zsh/zprof    # debug
 
 # Path to your oh-my-zsh configuration.
@@ -63,30 +65,31 @@ plugins=(
     autojump
     web-search
     encode64
-    npm
-    node
+    #npm
+    #node
     brew
     docker
     docker-compose
-    docker-machine
-    laravel5
-    vagrant
+    #docker-machine
+    #laravel5
+    #vagrant
     tmux
     emoji
-    colorize
+    #colorize
     history
     #per-directory-history
     extract
-    ansible
+    #ansible
     history-sync
     fzf
-    z.lua
+    #z.lua
     #autoupdate
     #history-search-multi-word
     iterm2
+    alias-tips
     emacs
     zsh-navigation-tools
-    zsh-history-substring-search
+    history-substring-search
     zsh-autosuggestions
     zsh-completions
     zsh-syntax-highlighting
@@ -136,6 +139,10 @@ fi
 
 if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-search-multi-word ]]; then
    git clone https://github.com/zdharma/history-search-multi-word.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-search-multi-word
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/alias-tips ]]; then
+   git clone https://github.com/djui/alias-tips.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/alias-tips
 fi
 
 
@@ -326,5 +333,6 @@ bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_FUZZY=1
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
 
 # zprof    # debug
