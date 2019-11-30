@@ -183,12 +183,6 @@ function proxy () {
 
 proxy off
 
-# tab title show hostname
-function precmd {
-   vcs_info
-   print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
-}
-
 # Homebrew PHP CLI
 
 export PATH=/usr/local/opt:/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin
@@ -210,15 +204,9 @@ export LC_CTYPE="en_US.UTF-8"
 # tramp mode for zsh: https://www.gnu.org/software/tramp/tramp-emacs.html
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 
 autoload -U +X bashcompinit && bashcompinit
-
-### zsh-histdb
-source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd histdb-update-outcome
 
 # This query will find the most frequently issued command
 # that is issued in the current directory or any subdirectory.
@@ -333,6 +321,25 @@ bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_FUZZY=1
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
+if [ -n "$INSIDE_EMACS" ]; then
+  chpwd() { print -P "\033AnSiTc %d" }
+  print -P "\033AnSiTu %n"
+  print -P "\033AnSiTc %d"
+else
+  test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+  # tab title show hostname
+  function precmd {
+    vcs_info
+    print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
+  }
+
+fi
+
+### zsh-histdb
+source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd histdb-update-outcome
 
 
 # zprof    # debug
