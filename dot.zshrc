@@ -341,5 +341,21 @@ source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd histdb-update-outcome
 
+# fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
+fzf-history-widget-accept() {
+  fzf-history-widget
+  zle accept-line
+}
+zle     -N     fzf-history-widget-accept
+bindkey '^X^R' fzf-history-widget-accept
+# Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+# Full command on preview window
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+
+# https://github.com/junegunn/fzf/wiki/examples#searching-file-contents
+fif() {
+  ag --nobreak --nonumbers --noheading . | fzf
+}
 
 # zprof    # debug
