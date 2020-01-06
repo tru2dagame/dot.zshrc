@@ -86,6 +86,7 @@ plugins=(
     #autoupdate
     #history-search-multi-word
     iterm2
+    aws
     alias-tips
     emacs
     zsh-navigation-tools
