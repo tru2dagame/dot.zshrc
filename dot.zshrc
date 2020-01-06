@@ -323,9 +323,19 @@ HISTORY_SUBSTRING_SEARCH_FUZZY=1
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
 if [ -n "$INSIDE_EMACS" ]; then
-  chpwd() { print -P "\033AnSiTc %d" }
-  print -P "\033AnSiTu %n"
-  print -P "\033AnSiTc %d"
+  # chpwd() { print -P "\033AnSiTc %d" }
+
+  # print -P "\033AnSiTu %n"
+  # print -P "\033AnSiTc %d"
+  echo $INSIDE_EMACS
+  alias clear='printf "\e]51;Evterm-clear-scrollback\e\\";tput clear'
+  export ZSH_THEME="rawsyntax"
+
+  # vterm_prompt_end() {
+  #   printf "\e]51;A$(whoami)@$(hostname):$(pwd)\e\\";
+  # }
+  # PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
+
 else
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
   # tab title show hostname
