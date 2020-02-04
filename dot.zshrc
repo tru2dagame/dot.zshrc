@@ -382,4 +382,8 @@ fif() {
     file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && open "$file"
 }
 
+export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
+# https://github.com/Canop/broot
+source /Users/tru/Library/Preferences/org.dystroy.broot/launcher/bash/br
+
 # zprof    # debug
