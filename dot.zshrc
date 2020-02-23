@@ -302,18 +302,18 @@ bindkey -s '^o' 'lfcd\n'
 complete -o nospace -C /usr/local/bin/mc mc
 
 upgrade_custom_plugins () {
-  printf "${BLUE}%s${NORMAL}\n" "Upgrading custom plugins"
+  printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
 
   find "${ZSH_CUSTOM}" -type d -name .git | while read d
   do
     p=$(dirname "$d")
     cd "${p}"
-    echo -e "${BLUE}${p}${NORMAL}"
+    echo -e "\e[0;33m${p}\e[0m"
     if git pull --rebase --stat origin master
     then
-      printf "%s\n" "Hooray! $d has been updated and/or is at the current version."
+      printf "\e[0;92m%s\e[0m\n" "Hooray! $d has been updated and/or is at the current version."
     else
-      printf "${RED}%s${NORMAL}\n" 'There was an error updating. Try again later?'
+      printf "\e[1;31m%s\e[0m\n" 'There was an error updating. Try again later?'
     fi
     echo "\n"
   done
