@@ -19,7 +19,8 @@ ZSH=$HOME/.oh-my-zsh
 # ZSH_THEME="spaceship"
 # ZSH_THEME="pure"
 # ZSH_THEME="refined"
-ZSH_THEME="bira"
+# ZSH_THEME="bira"
+ZSH_THEME="spaceship"
 
 
 # Example aliases
@@ -342,10 +343,10 @@ if [ -n "$INSIDE_EMACS" ]; then
 else
   test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
   # tab title show hostname
-  function precmd {
-    vcs_info
-    print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
-  }
+  # function precmd {
+  #   vcs_info
+  #   print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
+  # }
 
 fi
 
