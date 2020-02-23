@@ -383,10 +383,9 @@ fif() {
 }
 
 # doom emacs
-export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
-
 # https://github.com/Canop/broot
 if [[ "$(uname)" == 'Darwin' ]]; then
+   export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
    source /Users/tru/Library/Preferences/org.dystroy.broot/launcher/bash/br
 else
    source ~/.config/broot/launcher/bash/br
