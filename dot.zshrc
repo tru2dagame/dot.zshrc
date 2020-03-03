@@ -91,7 +91,7 @@ plugins=(
     iterm2
     aws
     alias-tips
-    emacs
+    #emacs
     zsh-navigation-tools
     history-substring-search
     zsh-autosuggestions
