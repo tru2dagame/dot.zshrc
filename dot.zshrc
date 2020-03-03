@@ -398,4 +398,11 @@ else
    source ~/.config/broot/launcher/bash/br
 fi
 
+# spaceship
+# https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
+SPACESHIP_USER_SHOW=always
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_DIR_TRUNC_REPO=false
+SPACESHIP_DIR_TRUNC=0
+
 # zprof    # debug
