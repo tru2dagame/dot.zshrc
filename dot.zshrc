@@ -158,14 +158,14 @@ fi
 autoload -U compinit && compinit
 
 # Add em alias for macOS
+# PR Merged!
 if [[ "$(uname)" == 'Darwin' ]]; then
-    # emacs on mac
-    export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
-    export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
     alias em="emacs"
+    # emacs on mac
+    # export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
+    # export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
 else
     export EDITOR="emacs"
-
     # workaround for https://github.com/robbyrussell/oh-my-zsh/pull/5714
     alias emacs="te"
 fi
@@ -406,3 +406,5 @@ SPACESHIP_DIR_TRUNC_REPO=false
 SPACESHIP_DIR_TRUNC=0
 
 # zprof    # debug
+export PATH="/usr/local/opt/node@10/bin:$PATH"
+export PATH="/usr/local/opt/node@10/bin:$PATH"
