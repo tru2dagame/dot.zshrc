@@ -217,7 +217,7 @@ export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 
 # tramp mode for zsh: https://www.gnu.org/software/tramp/tramp-emacs.html
-[ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
+[ $TERM = "dumb" ] && unsetopt zle && PS1='# '
 
 
 
@@ -342,7 +342,7 @@ if [ -n "$INSIDE_EMACS" ]; then
 
   # print -P "\033AnSiTu %n"
   # print -P "\033AnSiTc %d"
-  echo $INSIDE_EMACS
+  # echo $INSIDE_EMACS
   alias clear='printf "\e]51;Evterm-clear-scrollback\e\\";tput clear'
   export ZSH_THEME="rawsyntax"
 
