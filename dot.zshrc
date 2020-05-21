@@ -174,7 +174,7 @@ if [[ "$(uname)" == 'Darwin' ]]; then
 else
     export EDITOR="emacs"
     # workaround for https://github.com/robbyrussell/oh-my-zsh/pull/5714
-    alias emacs="te"
+    # alias emacs="te"
 fi
 
 export PS1_backup=$PS1
