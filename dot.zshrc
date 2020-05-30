@@ -294,23 +294,6 @@ history_show() {
 }
 ### end zsh-histdb
 
-# Use lf to switch directories and bind it to ctrl-o
-# https://github.com/gokcehan/lf/blob/master/etc/lfcd.sh
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        if [ -d "$dir" ]; then
-            if [ "$dir" != "$(pwd)" ]; then
-                cd "$dir"
-            fi
-        fi
-    fi
-}
-bindkey -s '^o' 'lfcd\n'
-
 complete -o nospace -C /usr/local/bin/mc mc
 
 upgrade_custom_plugins () {
