@@ -379,6 +379,12 @@ fif() {
     file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && open "$file"
 }
 
+# github_latest_release_download "Canop/broot"
+github_latest_release_download() {
+    curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\")) | .browser_download_url"
+}
+
+
 # doom emacs
 # https://github.com/Canop/broot
 if [[ "$(uname)" == 'Darwin' ]]; then
