@@ -382,7 +382,7 @@ fif() {
 
 # github_latest_release_download "Canop/broot"
 github_latest_release_download() {
-    curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\")) | .browser_download_url"
+    curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\"|\"gz\")) | .browser_download_url"
 }
 
 
