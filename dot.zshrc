@@ -403,7 +403,7 @@ SPACESHIP_DIR_TRUNC_REPO=false
 SPACESHIP_DIR_TRUNC=0
 
 export PATH="/usr/local/opt/node@10/bin:$PATH"
-export PATH="/usr/local/opt/node@10/bin:$PATH"
+export PATH="/usr/local/opt/curl/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
