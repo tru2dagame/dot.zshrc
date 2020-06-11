@@ -407,4 +407,5 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+source ~/Dropbox/Dev/configs/zshrc.d/misc/*
 # zprof    # debug
