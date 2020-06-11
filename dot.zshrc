@@ -93,6 +93,7 @@ plugins=(
     alias-tips
     emacs
     git-open
+    globalias
     zsh-navigation-tools
     history-substring-search
     zsh-autosuggestions
