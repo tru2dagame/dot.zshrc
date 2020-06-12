@@ -27,11 +27,6 @@ ZSH_THEME="spaceship"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-eval $(thefuck --alias)
-alias vml="ssh vagrant@127.0.0.1 -p 2222"
-alias sshtru="ssh tru@192.168.1.1 -p2223"
-alias sshubnt="ssh ubnt@10.100.2.1 -p23333"
-
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -94,6 +89,7 @@ plugins=(
     emacs
     git-open
     globalias
+    thefuck
     zsh-navigation-tools
     history-substring-search
     zsh-autosuggestions
