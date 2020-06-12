@@ -59,6 +59,7 @@ DISABLE_AUTO_TITLE="true"
 plugins=(
     git
     git-extras
+    gitignore
     osx
     autojump
     web-search
@@ -89,7 +90,12 @@ plugins=(
     emacs
     git-open
     globalias
+    ripgrep
+    terraform
     thefuck
+    ufw
+    command-not-found
+    zsh_reload
     zsh-navigation-tools
     history-substring-search
     zsh-autosuggestions
@@ -173,6 +179,8 @@ else
     # workaround for https://github.com/robbyrussell/oh-my-zsh/pull/5714
     # alias emacs="te"
 fi
+
+alias cp="cp -v"
 
 export PS1_backup=$PS1
 
