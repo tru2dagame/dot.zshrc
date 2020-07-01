@@ -95,6 +95,7 @@ plugins=(
     thefuck
     ufw
     command-not-found
+    common-aliases
     zsh_reload
     zsh-navigation-tools
     history-substring-search
