@@ -409,6 +409,8 @@ SPACESHIP_DIR_TRUNC=0
 export PATH="/usr/local/opt/node@10/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 
+export AWS_PAGER=""
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source ~/Dropbox/Dev/configs/zshrc.d/misc/*
