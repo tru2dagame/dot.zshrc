@@ -206,7 +206,7 @@ proxy off
 
 # Homebrew PHP CLI
 
-export PATH=/usr/local/opt:/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
+export PATH=/opt/homebrew/bin:/usr/local/opt:/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
 
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="$HOME/.tgenv/bin:$PATH"
