@@ -392,13 +392,12 @@ github_latest_release_download() {
 
 
 # doom emacs
-# https://github.com/Canop/broot
 if [[ "$(uname)" == 'Darwin' ]]; then
    export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
-   source /Users/tru/Library/Preferences/org.dystroy.broot/launcher/bash/br
-else
-   source ~/.config/broot/launcher/bash/br
 fi
+
+# broot
+source ~/.config/broot/launcher/bash/br
 
 # spaceship
 # https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
