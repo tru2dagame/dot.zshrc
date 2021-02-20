@@ -408,6 +408,13 @@ github_latest_release_download() {
     curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\"|\"gz\")) | .browser_download_url"
 }
 
+awsp() {
+    export AWS_PROFILE="$(aws-profiles | fzf --height 30% --inline-info)"
+}
+
+aws-profiles() {
+    cat ~/.aws/credentials | grep '\[' | grep -v '#' | tr -d '[' | tr -d ']'
+}
 
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
