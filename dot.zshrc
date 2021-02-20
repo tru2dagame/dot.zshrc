@@ -87,6 +87,7 @@ plugins=(
     #z.lua
     #autoupdate
     #history-search-multi-word
+    fzf-tab
     iterm2
     aws
     alias-tips
