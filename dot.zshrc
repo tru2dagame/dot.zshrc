@@ -220,9 +220,15 @@ export PATH="/usr/local/opt/sqlite/bin:$PATH"
 
 # Go path for macOS
 if [[ "$(uname)" == 'Darwin' ]]; then
-    export GOPATH=$HOME/go
-    export GOROOT=/usr/local/opt/go/libexec
-    export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
+   if [[ "$(uname -m)" == 'arm64' ]]; then
+     export GOPATH=$HOME/go
+     export GOROOT=/opt/homebrew/opt/go/libexec
+     export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
+   else
+     export GOPATH=$HOME/go
+     export GOROOT=/usr/local/opt/go/libexec
+     export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
+   fi
 fi
 
 export LC_ALL="en_US.UTF-8"
