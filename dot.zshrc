@@ -2,6 +2,9 @@
 
 # zmodload zsh/zprof    # debug
 
+# homebrew bin path
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
