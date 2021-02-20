@@ -436,7 +436,23 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 
 export AWS_PAGER=""
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# notmuch seach
+# https://emacs-china.org/t/topic/305/73?u=tru
+export XAPIAN_CJK_NGRAM=1
+# FIX OSError: dlopen(libnotmuch.5.dylib, 6): image not found
+export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
+
+
+## If you need to have imagemagick@6 first in your PATH, run:
+## For compilers to find imagemagick@6 you may need to set:
+## For pkg-config to find imagemagick@6 you may need to set:
+
+# export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
+# export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
+# export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
+# export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
 
 source ~/Dropbox/Dev/configs/zshrc.d/misc/*
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # zprof    # debug
