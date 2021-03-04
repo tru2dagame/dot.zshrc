@@ -118,6 +118,23 @@ plugins=(
 
 )
 
+# https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
+autoload -Uz compinit; compinit
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# fzf-tab
+zstyle ':fzf-tab:complete:_zlua:*' query-string input
+zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
+zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
+zstyle ":completion:*:git-checkout:*" sort false
+zstyle ':completion:*:exa' file-sort modification
+zstyle ':completion:*:exa' sort false
+zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
+zstyle ':fzf-tab:*' fzf-command fzf
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
@@ -356,18 +373,6 @@ fif() {
     file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && open "$file"
 }
 
-# fzf-tab
-# disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-# switch group using `,` and `.`
-zstyle ':fzf-tab:*' switch-group ',' '.'
-
 # github_latest_release_download "Canop/broot"
 github_latest_release_download() {
     curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\"|\"gz\")) | .browser_download_url"
@@ -451,7 +456,6 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 
 source ~/Dropbox/Dev/configs/zshrc.d/misc/*
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # zprof    # debug
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
