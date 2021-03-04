@@ -97,8 +97,8 @@ plugins=(
     fzf-tab
     iterm2
     aws
-    alias-tips
-    emacs
+    # alias-tips
+    # emacs
     git-open
     globalias
     ripgrep
@@ -186,6 +186,9 @@ autoload -U compinit && compinit
 # PR Merged!
 if [[ "$(uname)" == 'Darwin' ]]; then
     alias em="emacs"
+    alias emacs="open -a \"Emacs.app\" "
+    export EDITOR="emacs"
+    export VISUAL="emacs"
     # emacs on mac
     # export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
     # export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
@@ -346,6 +349,7 @@ bindkey -M emacs '^N' history-substring-search-down
 HISTORY_SUBSTRING_SEARCH_FUZZY=1
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
+set -o emacs
 if [ -n "$INSIDE_EMACS" ]; then
   # chpwd() { print -P "\033AnSiTc %d" }
 
@@ -434,6 +438,33 @@ aws-profiles() {
 if [[ "$(uname)" == 'Darwin' ]]; then
    export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
 fi
+
+# The emacs or emacsclient command to use
+e() {
+    local TMP;
+    if [[ "$1" == "-" ]]; then
+        TMP="$(mktemp /tmp/emacsstdinXXX)";
+        cat >"$TMP";
+        if ! emacsclient --alternate-editor /usr/bin/false --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"  > /dev/null 2>&1; then
+            emacs --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
+        fi;
+    else
+        emacsclient --alternate-editor "emacs" --no-wait "$@" > /dev/null 2>&1 &
+    fi;
+}
+
+# https://github.com/akermu/emacs-libvterm/blob/7adecaa48c222f2567d503705547cf239e38fc4b/README.md#shell-side-configuration
+vterm_printf(){
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
 
 # broot
 source ~/.config/broot/launcher/bash/br
