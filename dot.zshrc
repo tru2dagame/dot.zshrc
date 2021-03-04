@@ -70,7 +70,7 @@ source $DOTDIR/fetch.plugin.zsh
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
     git
-    git-extras
+    # git-extras
     gitignore
     osx
     autojump
@@ -115,7 +115,6 @@ plugins=(
     zsh-autosuggestions
     zsh-completions
     zsh-syntax-highlighting
-
 )
 
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
@@ -139,12 +138,18 @@ zstyle ':fzf-tab:*' fzf-command fzf
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=3,bold,underline"
+# https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=99,underline"
+# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+ZSH_AUTOSUGGEST_COMPLETION_IGNORE='( |man |pikaur -S )*'
 
 # _per-directory-history-set-global-history  # set per directory default to glboal
 
-
-autoload -U compinit && compinit
+# globalias
+GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
 
 # Add em alias for macOS
 # PR Merged!
@@ -187,7 +192,7 @@ proxy off
 
 # Homebrew PHP CLI
 
-export PATH=/opt/homebrew/bin:/usr/local/opt:/usr/local/bin:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
+export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/local/opt:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
 
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="$HOME/.tgenv/bin:$PATH"
@@ -270,9 +275,14 @@ _zsh_autosuggest_strategy_histdb_top_fallback() {
 
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+#ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback history completion)
 
-history_show() {
+# https://github.com/larkery/zsh-histdb/pull/31
+HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
+alias histdb2='HISTDB_TABULATE_CMD=(sed -e $"s/.*\x1f//") histdb'
+
+tru/show_local_history() {
     limit="${1:-10}"
     local query="
         select history.start_time, commands.argv
@@ -289,7 +299,7 @@ history_show() {
 
 complete -o nospace -C /usr/local/bin/mc mc
 
-upgrade_custom_plugins () {
+tru/upgrade_custom_plugins () {
   printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
 
   find "${ZSH_CUSTOM}" -type d -name .git | while read d
