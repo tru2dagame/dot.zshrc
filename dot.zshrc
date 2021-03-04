@@ -454,7 +454,7 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 # export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
 # export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
 
-source ~/Dropbox/Dev/configs/zshrc.d/misc/*
+[[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 
 # zprof    # debug
 
