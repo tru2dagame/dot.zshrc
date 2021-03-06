@@ -388,6 +388,7 @@ github_latest_release_download() {
     curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\"|\"gz\")) | .browser_download_url"
 }
 
+export AWS_PROFILE=
 awsp() {
     export AWS_PROFILE="$(aws-profiles | fzf --height 30% --inline-info)"
 }
