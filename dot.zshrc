@@ -439,11 +439,6 @@ SPACESHIP_TIME_SHOW=true
 SPACESHIP_DIR_TRUNC_REPO=false
 SPACESHIP_DIR_TRUNC=0
 
-# p10k
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=
-POWERLEVEL9K_SHORTEN_DELIMITER=""
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
-
 export PATH="/usr/local/opt/node@10/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 
@@ -454,7 +449,6 @@ export AWS_PAGER=""
 export XAPIAN_CJK_NGRAM=1
 # FIX OSError: dlopen(libnotmuch.5.dylib, 6): image not found
 export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
-
 
 ## If you need to have imagemagick@6 first in your PATH, run:
 ## For compilers to find imagemagick@6 you may need to set:
@@ -469,5 +463,71 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 
 # zprof    # debug
 
+# p10k
+# https://github.com/romkatv/powerlevel10k/issues/114
+function prompt_my_fire_dir() {
+  emulate -L zsh
+  local split_path=(${(s:/:)${(%):-%~}//\%/%%})
+  (( $#split_path )) || split_path+=/
+  color_yellow=228
+  color_purple=97
+  if (( $#split_path == 1)); then
+    p10k segment -s SOLO -b 92 -f 255 -t $split_path
+    return
+  fi
+  p10k segment -s FIRST -b $color_yellow -f 97 -t $split_path[1]
+  shift split_path
+  while (( $#split_path > 1 )); do
+    p10k segment -s EVEN -b $color_purple -f 3 -t $split_path[1]
+    shift split_path
+    (( $#split_path > 1 )) || break
+    p10k segment -s ODD -b $color_yellow -f 97 -t $split_path[1]
+    shift split_path
+  done
+  p10k segment -s LAST -b 92 -f 255 -t $split_path[1]
+
+}
+
+# POWERLEVEL9K_MY_FIRE_DIR_BACKGROUND=202
+# POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
+# POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
+# POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+[[ ! -f $DOTDIR/p10k-classic.zsh ]] || source $DOTDIR/p10k-classic.zsh
+
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
+typeset -gA my_fire_dir_icons=(
+  "${(b)HOME}"      $'\uF015'
+  "${(b)HOME}/*"    $'\uF07C'
+  "/etc(|/*)"       $'\uF013')
+
+typeset POWERLEVEL9K_MY_FIRE_DIR_{FIRST,SOLO}_VISUAL_IDENTIFIER_EXPANSION=$'${my_fire_dir_icons[(k)$PWD]:-\uF115}'
+
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
+POWERLEVEL9K_OS_ICON_FOREGROUND=232
+POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
+#POWERLEVEL9K_DIR_BACKGROUND=99
+unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
+typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
+typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
+typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
+
+if [[ $(echo $PWD | wc -m) -lt 36 ]]; then
+   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+      os_icon context my_fire_dir vcs newline
+      prompt_char
+   )
+else
+   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+     os_icon context vcs newline
+     my_fire_dir newline
+     prompt_char
+   )
+fi
