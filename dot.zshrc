@@ -155,7 +155,7 @@ GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
 # PR Merged!
 if [[ "$(uname)" == 'Darwin' ]]; then
     alias em="emacs"
-    alias emacs="open -a \"Emacs.app\" "
+    alias emacs='open -a "/Applications/Emacs.app"'
     export EDITOR="emacs"
     export VISUAL="emacs"
     # emacs on mac
