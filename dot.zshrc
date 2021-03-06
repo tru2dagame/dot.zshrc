@@ -171,7 +171,7 @@ alias cp="cp -v"
 
 export PS1_backup=$PS1
 
-function proxy () {
+function tru/proxy () {
     local prefix
     if [ "$1" = "on" ]; then
         export https_proxy=127.0.0.1:8888
@@ -188,7 +188,7 @@ function proxy () {
     export PS1="$prefix $PS1_backup"
 }
 
-proxy off
+tru/proxy off
 
 # Homebrew PHP CLI
 
