@@ -469,22 +469,23 @@ function prompt_my_fire_dir() {
   emulate -L zsh
   local split_path=(${(s:/:)${(%):-%~}//\%/%%})
   (( $#split_path )) || split_path+=/
-  color_yellow=228
-  color_purple=97
+
+  color1=92
+  color2=97
   if (( $#split_path == 1)); then
     p10k segment -s SOLO -b 92 -f 255 -t $split_path
     return
   fi
-  p10k segment -s FIRST -b $color_yellow -f 97 -t $split_path[1]
+  p10k segment -s FIRST -b $color1 -f 3 -t $split_path[1]
   shift split_path
   while (( $#split_path > 1 )); do
-    p10k segment -s EVEN -b $color_purple -f 3 -t $split_path[1]
+    p10k segment -s EVEN -b $color2 -f 3 -t $split_path[1]
     shift split_path
     (( $#split_path > 1 )) || break
-    p10k segment -s ODD -b $color_yellow -f 97 -t $split_path[1]
+    p10k segment -s ODD -b $color1 -f 3 -t $split_path[1]
     shift split_path
   done
-  p10k segment -s LAST -b 92 -f 255 -t $split_path[1]
+  p10k segment -s LAST -b 129 -f 255 -t $split_path[1]
 
 }
 
