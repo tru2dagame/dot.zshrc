@@ -520,9 +520,11 @@ typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
 typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
 typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
 
+# https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
 function p10k-on-pre-prompt() {
   emulate -L zsh -o extended_glob
-  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) ]] || [[ $[$COLUMNS - $(pwd | wc -m)] < 50 ]]; then
+  local dir=${(%):-%~}
+  if (( $COLUMNS - $#dir < 53 )) || [[ -n ./(../)#(.git)(#qN) ]]; then
     p10k display '1/left/my_fire_dir'=hide '1/left/time'=show '1/right/time'=hide '2'=show
   else
     p10k display '1/left/my_fire_dir'=show '1/left/time'=hide '1/right/time'=show '2'=hide
