@@ -1,5 +1,5 @@
 #+TITLE: README
-#+STARTUP: show3levels
+#+STARTUP: show4levels
 
 * dot.zsh
 My zshrc
@@ -20,15 +20,17 @@ cd ~/.zshrc.d
 git pull origin master
 #+end_src
 
-** .zshrc
+** Dot zshrc
 :PROPERTIES:
 :header-args: :tangle dot.zshrc
 :END:
+
+*** File Header Set Mode For Emacs
 #+begin_src shell
 ## -*- mode: sh -*-
 #+end_src
 
-*** p10k header
+*** P10k header
 #+begin_src shell
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -38,7 +40,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 #+end_src
 
-*** homebrew bin path
+*** Ohmyzsh
+**** Homebrew bin path
 #+begin_src shell
 # zmodload zsh/zprof    # debug
 
@@ -46,7 +49,7 @@ fi
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 #+end_src
 
-*** zsh theme
+**** Zsh theme
 #+begin_src shell
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
@@ -71,7 +74,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 #+end_src
 
-*** ohmyzsh setting options
+**** Ohmyzsh setting options
 #+begin_src shell
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -104,7 +107,7 @@ DISABLE_AUTO_TITLE="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 #+end_src
-*** fetch plugin
+**** Fetch plugin
 #+begin_src shell
 if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -165,7 +168,7 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
 fi
 #+end_src
 
-*** plugins
+**** Plugins
 #+begin_src shell
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -221,7 +224,7 @@ plugins=(
 
 #+end_src
 
-*** fzf-tab
+**** Fzf-tab
 #+begin_src shell
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 autoload -Uz compinit; compinit
@@ -246,7 +249,7 @@ source $ZSH/oh-my-zsh.sh
 
 #+end_src
 
-*** zsh autosuggestions
+*** Zsh autosuggestions
 #+begin_src shell
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=99,underline"
@@ -340,13 +343,13 @@ autoload -Uz add-zsh-hook
 ### end zsh-histdb
 #+end_src
 
-*** globalias
+*** Globalias
 #+begin_src shell
 # globalias
 GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
 #+end_src
 
-*** emacs macOS
+*** Emacs macOS
 #+begin_src shell
 # Add em alias for macOS
 # PR Merged!
@@ -450,7 +453,7 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 
 #+end_src
 
-*** function proxy enable/disable
+*** Function proxy enable/disable
 #+begin_src shell
 export PS1_backup=$PS1
 
@@ -475,7 +478,7 @@ tru/proxy off
 
 #+end_src
 
-*** path
+*** Path
 #+begin_src shell
 export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/local/opt:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
 
@@ -516,7 +519,7 @@ complete -o nospace -C /usr/local/bin/mc mc
 source ~/.config/broot/launcher/bash/br
 #+end_src
 
-*** upgrade_custom_plugins
+*** Upgrade_custom_plugins
 #+begin_src shell
 tru/upgrade_custom_plugins () {
   printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
@@ -538,7 +541,7 @@ tru/upgrade_custom_plugins () {
 
 #+end_src
 
-*** fzf
+*** Fzf
 #+begin_src shell
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 fzf-history-widget-accept() {
@@ -572,7 +575,8 @@ fif() {
 
 #+end_src
 
-*** github_latest_release_download
+*** Functions
+**** Github_latest_release_download
 #+begin_src shell
 # github_latest_release_download "Canop/broot"
 tru/github_latest_release_download() {
@@ -581,7 +585,7 @@ tru/github_latest_release_download() {
 
 #+end_src
 
-*** aws profile switch
+**** AWS profile switch
 #+begin_src shell
 #export AWS_PROFILE=
 awsp() {
@@ -595,7 +599,7 @@ aws-profiles() {
 export AWS_PAGER=""
 #+end_src
 
-*** spaceship
+*** Spaceship
 #+begin_src shell
 # spaceship
 # https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
@@ -610,7 +614,7 @@ SPACESHIP_DIR_TRUNC=0
 
 #+end_src
 
-*** p10k
+*** P10k
 #+begin_src shell
 # p10k
 # https://github.com/romkatv/powerlevel10k/issues/114
@@ -689,12 +693,12 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 
 #+end_src
 
-*** misc
+*** Misc
 #+begin_src shell
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 #+end_src
 
-** .zshenv
+** Dot zshenv
 :PROPERTIES:
 :header-args: :tangle .zshenv
 :END:
