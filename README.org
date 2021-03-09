@@ -1,0 +1,710 @@
+#+TITLE: README
+#+STARTUP: show3levels
+
+* dot.zsh
+My zshrc
+
+** Install
+
+#+begin_src shell
+git clone https://github.com/tru2dagame/dot.zshrc.git ~/.zshrc.d
+mv ~/.zshrc ~/.zshrc.bak
+ln -s ~/.zshrc.d/dot.zshrc ~/.zshrc
+ln -s ~/.zshrc.d/.zshenv ~/.zshenv
+#+end_src
+
+** Update
+
+#+begin_src shell
+cd ~/.zshrc.d
+git pull origin master
+#+end_src
+
+** .zshrc
+:PROPERTIES:
+:header-args: :tangle dot.zshrc
+:END:
+#+begin_src shell
+## -*- mode: sh -*-
+#+end_src
+
+*** p10k header
+#+begin_src shell
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+#+end_src
+
+*** homebrew bin path
+#+begin_src shell
+# zmodload zsh/zprof    # debug
+
+# homebrew bin path
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+#+end_src
+
+*** zsh theme
+#+begin_src shell
+# Path to your oh-my-zsh configuration.
+ZSH=$HOME/.oh-my-zsh
+
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+
+# ZSH_THEME="robbyrussell"
+# ZSH_THEME="agnoster"
+# ZSH_THEME="dstufft"
+# ZSH_THEME="random"
+# ZSH_THEME="Gentoo"
+# ZSH_THEME="murilasso"
+# ZSH_THEME="spaceship"
+# ZSH_THEME="pure"
+# ZSH_THEME="refined"
+# ZSH_THEME="bira"
+# ZSH_THEME="spaceship"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+#+end_src
+
+*** ohmyzsh setting options
+#+begin_src shell
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Set to this to use case-sensitive completion
+# CASE_SENSITIVE="true"
+
+# Comment this out to disable bi-weekly auto-update checks
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment to change how often before auto-updates occur? (in days)
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment following line if you want to disable colors in ls
+# DISABLE_LS_COLORS="true"
+
+# Uncomment following line if you want to disable autosetting terminal title.
+DISABLE_AUTO_TITLE="true"
+
+# Uncomment following line if you want to disable command autocorrection
+# DISABLE_CORRECTION="true"
+
+# Uncomment following line if you want red dots to be displayed while waiting for completion
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment following line if you want to disable marking untracked files under
+# VCS as dirty. This makes repository status check for large repositories much,
+# much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+#+end_src
+*** fetch plugin
+#+begin_src shell
+if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions ]]; then
+    git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
+fi
+
+# if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search ]]; then
+#     git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+# fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-histdb ]]; then
+    git clone https://github.com/larkery/zsh-histdb ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-histdb
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync ]]; then
+    # git clone https://github.com/wulfgarpro/history-sync.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync
+    git clone -b patch-1 https://github.com/tru2dagame/history-sync.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-sync
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua ]]; then
+   git clone https://github.com/skywind3000/z.lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate ]]; then
+   git clone https://github.com/TamCore/autoupdate-oh-my-zsh-plugins ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-search-multi-word ]]; then
+   git clone https://github.com/zdharma/history-search-multi-word.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/history-search-multi-word
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/alias-tips ]]; then
+   git clone https://github.com/djui/alias-tips.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/alias-tips
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/git-open ]]; then
+   git clone https://github.com/paulirish/git-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/git-open
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab ]]; then
+   git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt ]]; then
+   git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+   ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
+   git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+fi
+#+end_src
+
+*** plugins
+#+begin_src shell
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(
+    git
+    # git-extras
+    gitignore
+    osx
+    autojump
+    web-search
+    encode64
+    #npm
+    #node
+    brew
+    docker
+    docker-compose
+    #docker-machine
+    #laravel5
+    #vagrant
+    tmux
+    emoji
+    #colorize
+    history
+    #per-directory-history
+    extract
+    #ansible
+    history-sync
+    fzf
+    #z.lua
+    #autoupdate
+    #history-search-multi-word
+    fzf-tab
+    iterm2
+    aws
+    # alias-tips
+    # emacs
+    git-open
+    globalias
+    ripgrep
+    terraform
+    thefuck
+    ufw
+    command-not-found
+    common-aliases
+    zsh_reload
+    zsh-navigation-tools
+    history-substring-search
+    zsh-autosuggestions
+    zsh-completions
+    zsh-syntax-highlighting
+)
+
+#+end_src
+
+*** fzf-tab
+#+begin_src shell
+# https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
+autoload -Uz compinit; compinit
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# fzf-tab
+zstyle ':fzf-tab:complete:_zlua:*' query-string input
+zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
+zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
+zstyle ":completion:*:git-checkout:*" sort false
+zstyle ':completion:*:exa' file-sort modification
+zstyle ':completion:*:exa' sort false
+zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
+zstyle ':fzf-tab:*' fzf-command fzf
+
+source $ZSH/oh-my-zsh.sh
+# Customize to your needs...
+
+#+end_src
+
+*** zsh autosuggestions
+#+begin_src shell
+# https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=99,underline"
+# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+ZSH_AUTOSUGGEST_COMPLETION_IGNORE='( |man |pikaur -S )*'
+
+# _per-directory-history-set-global-history  # set per directory default to glboal
+
+# This query will find the most frequently issued command
+# that is issued in the current directory or any subdirectory.
+# You can get other behaviours by changing the query, for example
+_zsh_autosuggest_strategy_histdb_top_here() {
+    local query="select commands.argv from
+history left join commands on history.command_id = commands.rowid
+left join places on history.place_id = places.rowid
+where places.dir LIKE '$(sql_escape $PWD)%'
+and commands.argv LIKE '$(sql_escape $1)%'
+group by commands.argv order by count(*) desc limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+# https://www.dev-diaries.com/blog/terminal-history-auto-suggestions-as-you-type/
+# This will find the most frequently issued command issued exactly in this directory,
+# or if there are no matches it will find the most frequently issued command in any directory.
+# You could use other fields like the hostname to restrict to suggestions on this host, etc.
+_zsh_autosuggest_strategy_histdb_top() {
+    local query="select commands.argv from
+history left join commands on history.command_id = commands.rowid
+left join places on history.place_id = places.rowid
+where commands.argv LIKE '$(sql_escape $1)%'
+group by commands.argv
+order by places.dir != '$(sql_escape $PWD)', count(*) desc limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+# Query to pull in the most recent command if anything was found similar
+# in that directory. Otherwise pull in the most recent command used anywhere
+# Give back the command that was used most recently
+_zsh_autosuggest_strategy_histdb_top_fallback() {
+    local query="
+    select commands.argv from
+    history left join commands on history.command_id = commands.rowid
+    left join places on history.place_id = places.rowid
+    where places.dir LIKE
+        case when exists(select commands.argv from history
+        left join commands on history.command_id = commands.rowid
+        left join places on history.place_id = places.rowid
+        where places.dir LIKE '$(sql_escape $PWD)%'
+        AND commands.argv LIKE '$(sql_escape $1)%')
+            then '$(sql_escape $PWD)%'
+            else '%'
+            end
+    and commands.argv LIKE '$(sql_escape $1)%'
+    group by commands.argv
+    order by places.dir LIKE '$(sql_escape $PWD)%' desc,
+        history.start_time desc
+    limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+#ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
+#ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
+#ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback history completion)
+
+# https://github.com/larkery/zsh-histdb/pull/31
+HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
+alias histdb2='HISTDB_TABULATE_CMD=(sed -e $"s/.*\x1f//") histdb'
+
+tru/show_local_history() {
+    limit="${1:-10}"
+    local query="
+        select history.start_time, commands.argv
+        from history left join commands on history.command_id = commands.rowid
+        left join places on history.place_id = places.rowid
+        where places.dir LIKE '$(sql_escape $PWD)%'
+        order by history.start_time desc
+        limit $limit
+    "
+    results=$(_histdb_query "$query")
+    echo "$results"
+}
+
+### zsh-histdb
+source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
+autoload -Uz add-zsh-hook
+# add-zsh-hook precmd histdb-update-outcome
+### end zsh-histdb
+#+end_src
+
+*** globalias
+#+begin_src shell
+# globalias
+GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
+#+end_src
+
+*** emacs macOS
+#+begin_src shell
+# Add em alias for macOS
+# PR Merged!
+if [[ "$(uname)" == 'Darwin' ]]; then
+    alias em="emacs"
+    alias emacs='open -a "/Applications/Emacs.app" '
+    #export EDITOR="emacs"
+    export EDITOR='emacsclient -a ""'
+    #export VISUAL="emacs"
+    export VISUAL='emacsclient -a ""'
+    # emacs on mac
+    # export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
+    # export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
+else
+    export EDITOR="emacs"
+    # workaround for https://github.com/robbyrussell/oh-my-zsh/pull/5714
+    # alias emacs="te"
+fi
+
+# tramp mode for zsh: https://www.gnu.org/software/tramp/tramp-emacs.html
+[ $TERM = "dumb" ] && unsetopt zle && PS1='# '
+
+# https://github.com/zsh-users/zsh-history-substring-search
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+HISTORY_SUBSTRING_SEARCH_FUZZY=1
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
+set -o emacs
+if [ -n "$INSIDE_EMACS" ]; then
+  # chpwd() { print -P "\033AnSiTc %d" }
+
+  # print -P "\033AnSiTu %n"
+  # print -P "\033AnSiTc %d"
+  # echo $INSIDE_EMACS
+  alias clear='printf "\e]51;Evterm-clear-scrollback\e\\";tput clear'
+  export ZSH_THEME="rawsyntax"
+
+  # vterm_prompt_end() {
+  #   printf "\e]51;A$(whoami)@$(hostname):$(pwd)\e\\";
+  # }
+  # PROMPT=$PROMPT'%{$(vterm_prompt_end)%}'
+
+else
+  test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+  # tab title show hostname
+  # function precmd {
+  #   vcs_info
+  #   print -P "\n$(repo_information) %F{yellow}$(cmd_exec_time) \e]0;%m\a%f"
+  # }
+
+fi
+
+# doom emacs
+if [[ "$(uname)" == 'Darwin' ]]; then
+   export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
+fi
+
+# The emacs or emacsclient command to use
+e() {
+    local TMP;
+    if [[ "$1" == "-" ]]; then
+        TMP="$(mktemp /tmp/emacsstdinXXX)";
+        cat >"$TMP";
+        if ! emacsclient --alternate-editor /usr/bin/false --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"  > /dev/null 2>&1; then
+            emacs --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
+        fi;
+    else
+        emacsclient --alternate-editor "emacs" --no-wait "$@" > /dev/null 2>&1 &
+    fi;
+}
+
+# https://github.com/akermu/emacs-libvterm/blob/7adecaa48c222f2567d503705547cf239e38fc4b/README.md#shell-side-configuration
+vterm_printf(){
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
+
+
+# notmuch seach
+# https://emacs-china.org/t/topic/305/73?u=tru
+export XAPIAN_CJK_NGRAM=1
+# FIX OSError: dlopen(libnotmuch.5.dylib, 6): image not found
+export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
+
+## If you need to have imagemagick@6 first in your PATH, run:
+## For compilers to find imagemagick@6 you may need to set:
+## For pkg-config to find imagemagick@6 you may need to set:
+
+# export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
+# export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
+# export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
+# export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
+
+#+end_src
+
+*** function proxy enable/disable
+#+begin_src shell
+export PS1_backup=$PS1
+
+function tru/proxy () {
+    local prefix
+    if [ "$1" = "on" ]; then
+        export https_proxy=127.0.0.1:8888
+        export http_proxy=127.0.0.1:8888
+        # echo Local HTTP Proxy is enabled.
+        prefix="ProxyOn"
+    else
+        unset https_proxy
+        unset http_proxy
+        # echo Local HTTP Proxy is disabled.
+        prefix=""
+    fi
+    # export PS1="%K{blue} $prefix $PS1_backup"
+    export PS1="$prefix $PS1_backup"
+}
+
+tru/proxy off
+
+#+end_src
+
+*** path
+#+begin_src shell
+export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/local/opt:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
+
+export PATH="/usr/local/opt/node@8/bin:$PATH"
+export PATH="$HOME/.tgenv/bin:$PATH"
+export PATH="/usr/local/opt/sqlite/bin:$PATH"
+
+export PATH="/usr/local/opt/node@10/bin:$PATH"
+export PATH="/usr/local/opt/curl/bin:$PATH"
+#+end_src
+
+*** GOPATH
+#+begin_src shell
+# Go path for macOS
+if [[ "$(uname)" == 'Darwin' ]]; then
+   if [[ "$(uname -m)" == 'arm64' ]]; then
+     export GOPATH=$HOME/go
+     export GOROOT=/opt/homebrew/opt/go/libexec
+     export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
+   else
+     export GOPATH=$HOME/go
+     export GOROOT=/usr/local/opt/go/libexec
+     export PATH=$PATH:${GOPATH}/bin:${GOROOT}/bin
+   fi
+fi
+
+#+end_src
+
+*** LC_ALL autoload bashcompinit mc broot
+#+begin_src shell
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/mc mc
+
+# broot
+source ~/.config/broot/launcher/bash/br
+#+end_src
+
+*** upgrade_custom_plugins
+#+begin_src shell
+tru/upgrade_custom_plugins () {
+  printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
+
+  find "${ZSH_CUSTOM}" -type d -name .git | while read d
+  do
+    p=$(dirname "$d")
+    cd "${p}"
+    echo -e "\e[0;33m${p}\e[0m"
+    if git pull --rebase --stat origin master
+    then
+      printf "\e[0;92m%s\e[0m\n" "Hooray! $d has been updated and/or is at the current version."
+    else
+      printf "\e[1;31m%s\e[0m\n" 'There was an error updating. Try again later?'
+    fi
+    echo "\n"
+  done
+}
+
+#+end_src
+
+*** fzf
+#+begin_src shell
+# fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
+fzf-history-widget-accept() {
+  fzf-history-widget
+  zle accept-line
+}
+zle     -N     fzf-history-widget-accept
+bindkey '^X^R' fzf-history-widget-accept
+# Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+# Full command on preview window
+export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+
+j() {
+    if [[ "$#" -ne 0 ]]; then
+        cd $(autojump $@)
+        return
+    fi
+    cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// { for (i=2; i<=NF; i++) { print $(i) } }' |  fzf --height 40% --reverse --inline-info)"
+}
+
+# https://github.com/junegunn/fzf/wiki/examples#searching-file-contents
+# fif() {
+#   ag --nobreak --nonumbers --noheading . | fzf
+# }
+fif() {
+    if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+    local file
+    file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && open "$file"
+}
+
+#+end_src
+
+*** github_latest_release_download
+#+begin_src shell
+# github_latest_release_download "Canop/broot"
+tru/github_latest_release_download() {
+    curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\"|\"gz\")) | .browser_download_url"
+}
+
+#+end_src
+
+*** aws profile switch
+#+begin_src shell
+#export AWS_PROFILE=
+awsp() {
+    export AWS_PROFILE="$(aws-profiles | fzf --height 30% --inline-info)"
+}
+
+aws-profiles() {
+    cat ~/.aws/credentials | grep '\[' | grep -v '#' | tr -d '[' | tr -d ']'
+}
+
+export AWS_PAGER=""
+#+end_src
+
+*** spaceship
+#+begin_src shell
+# spaceship
+# https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
+SPACESHIP_USER_SHOW=always
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_DIR_TRUNC_REPO=false
+SPACESHIP_DIR_TRUNC=0
+
+
+
+# zprof    # debug
+
+#+end_src
+
+*** p10k
+#+begin_src shell
+# p10k
+# https://github.com/romkatv/powerlevel10k/issues/114
+function prompt_my_fire_dir() {
+  emulate -L zsh
+  local split_path=(${(s:/:)${(%):-%~}//\%/%%})
+  (( $#split_path )) || split_path+=/
+
+  color1=92
+  color2=97
+  if (( $#split_path == 1)); then
+    p10k segment -s SOLO -b 92 -f 255 -t $split_path
+    return
+  fi
+  p10k segment -s FIRST -b $color1 -f 3 -t $split_path[1]
+  shift split_path
+  while (( $#split_path > 1 )); do
+    p10k segment -s EVEN -b $color2 -f 3 -t $split_path[1]
+    shift split_path
+    (( $#split_path > 1 )) || break
+    p10k segment -s ODD -b $color1 -f 3 -t $split_path[1]
+    shift split_path
+  done
+  p10k segment -s LAST -b 129 -f 255 -t $split_path[1]
+
+}
+
+# POWERLEVEL9K_MY_FIRE_DIR_BACKGROUND=202
+# POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
+# POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
+# POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+
+#[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh
+
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
+typeset -gA my_fire_dir_icons=(
+  "${(b)HOME}"      $'\uF015'
+  "${(b)HOME}/*"    $'\uF07C'
+  "/etc(|/*)"       $'\uF013')
+
+typeset POWERLEVEL9K_MY_FIRE_DIR_{FIRST,SOLO}_VISUAL_IDENTIFIER_EXPANSION=$'${my_fire_dir_icons[(k)$PWD]:-\uF115}'
+
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
+POWERLEVEL9K_OS_ICON_FOREGROUND=232
+POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
+#POWERLEVEL9K_DIR_BACKGROUND=99
+unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
+typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
+typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
+typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
+
+# https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
+function p10k-on-pre-prompt() {
+  emulate -L zsh -o extended_glob
+  local dir=${(%):-%~}
+  if (( $COLUMNS - $#dir < 53 )) || [[ -n ./(../)#(.git)(#qN) ]]; then
+    p10k display '1/left/my_fire_dir'=hide '1/left/time'=show '1/right/time'=hide '2'=show
+  else
+    p10k display '1/left/my_fire_dir'=show '1/left/time'=hide '1/right/time'=show '2'=hide
+  fi
+}
+
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+  os_icon context my_fire_dir vcs time newline
+  my_fire_dir newline
+  prompt_char
+)
+
+#+end_src
+
+*** misc
+#+begin_src shell
+[[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
+#+end_src
+
+** .zshenv
+:PROPERTIES:
+:header-args: :tangle .zshenv
+:END:
+#+begin_src shell
+export EMACS="*term*"
+DOTDIR=$HOME/Dropbox/Dev/configs/zshrc.d
+#+end_src
+
+
+* Local Variables
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
+# End:
