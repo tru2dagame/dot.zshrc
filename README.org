@@ -7,7 +7,7 @@
 :END:
 My zshrc
 
-:CONTENTS:
+** Contents                                                                    :TOC_5:
 - [[#dotzsh][dot.zsh]]
   - [[#install][Install]]
   - [[#update][Update]]
@@ -37,8 +37,6 @@ My zshrc
     - [[#p10k][P10k]]
     - [[#misc][Misc]]
   - [[#dot-zshenv][Dot zshenv]]
-- [[#local-variables][Local Variables]]
-:END:
 
 ** Install
 
@@ -744,8 +742,7 @@ DOTDIR=$HOME/Dropbox/Dev/configs/zshrc.d
 #+end_src
 
 
-* Local Variables
+* Local Variables                                                               :noexport:
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda ()(org-babel-tangle)) nil t)
-# eval: (add-hook 'org-mode-hook #'org-make-toc-mode)
 # End:
