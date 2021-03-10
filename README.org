@@ -2,7 +2,43 @@
 #+STARTUP: show4levels
 
 * dot.zsh
+:PROPERTIES:
+:TOC:      :include all
+:END:
 My zshrc
+
+:CONTENTS:
+- [[#dotzsh][dot.zsh]]
+  - [[#install][Install]]
+  - [[#update][Update]]
+  - [[#dot-zshrc][Dot zshrc]]
+    - [[#file-header-set-mode-for-emacs][File Header Set Mode For Emacs]]
+    - [[#p10k-header][P10k header]]
+    - [[#ohmyzsh][Ohmyzsh]]
+      - [[#homebrew-bin-path][Homebrew bin path]]
+      - [[#zsh-theme][Zsh theme]]
+      - [[#ohmyzsh-setting-options][Ohmyzsh setting options]]
+      - [[#fetch-plugin][Fetch plugin]]
+      - [[#plugins][Plugins]]
+      - [[#fzf-tab][Fzf-tab]]
+    - [[#zsh-autosuggestions][Zsh autosuggestions]]
+    - [[#globalias][Globalias]]
+    - [[#emacs-macos][Emacs macOS]]
+    - [[#function-proxy-enabledisable][Function proxy enable/disable]]
+    - [[#path][Path]]
+    - [[#gopath][GOPATH]]
+    - [[#lc_all-autoload-bashcompinit-mc-broot][LC_ALL autoload bashcompinit mc broot]]
+    - [[#upgrade_custom_plugins][Upgrade_custom_plugins]]
+    - [[#fzf][Fzf]]
+    - [[#functions][Functions]]
+      - [[#github_latest_release_download][Github_latest_release_download]]
+      - [[#aws-profile-switch][AWS profile switch]]
+    - [[#spaceship][Spaceship]]
+    - [[#p10k][P10k]]
+    - [[#misc][Misc]]
+  - [[#dot-zshenv][Dot zshenv]]
+- [[#local-variables][Local Variables]]
+:END:
 
 ** Install
 
