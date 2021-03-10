@@ -58,11 +58,12 @@ git pull origin master
 :PROPERTIES:
 :header-args: :tangle dot.zshrc
 :END:
-
+[[#contents][🔝]]
 *** File Header Set Mode For Emacs
 #+begin_src shell
 ## -*- mode: sh -*-
 #+end_src
+[[#contents][🔝]]
 
 *** P10k header
 #+begin_src shell
@@ -73,6 +74,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 #+end_src
+[[#contents][🔝]]
 
 *** Ohmyzsh
 **** Homebrew bin path
@@ -82,6 +84,7 @@ fi
 # homebrew bin path
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 #+end_src
+[[#contents][🔝]]
 
 **** Zsh theme
 #+begin_src shell
@@ -107,6 +110,7 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 #+end_src
+[[#contents][🔝]]
 
 **** Ohmyzsh setting options
 #+begin_src shell
@@ -141,6 +145,8 @@ DISABLE_AUTO_TITLE="true"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 #+end_src
+[[#contents][🔝]]
+
 **** Fetch plugin
 #+begin_src shell
 if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]; then
@@ -201,6 +207,7 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
    git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
 #+end_src
+[[#contents][🔝]]
 
 **** Plugins
 #+begin_src shell
@@ -257,6 +264,7 @@ plugins=(
 )
 
 #+end_src
+[[#contents][🔝]]
 
 **** Fzf-tab
 #+begin_src shell
@@ -282,6 +290,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
 #+end_src
+[[#contents][🔝]]
 
 *** Zsh autosuggestions
 #+begin_src shell
@@ -376,12 +385,14 @@ autoload -Uz add-zsh-hook
 # add-zsh-hook precmd histdb-update-outcome
 ### end zsh-histdb
 #+end_src
+[[#contents][🔝]]
 
 *** Globalias
 #+begin_src shell
 # globalias
 GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
 #+end_src
+[[#contents][🔝]]
 
 *** Emacs macOS
 #+begin_src shell
@@ -486,6 +497,7 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 # export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
 
 #+end_src
+[[#contents][🔝]]
 
 *** Function proxy enable/disable
 #+begin_src shell
@@ -511,6 +523,7 @@ function tru/proxy () {
 tru/proxy off
 
 #+end_src
+[[#contents][🔝]]
 
 *** Path
 #+begin_src shell
@@ -523,6 +536,7 @@ export PATH="/usr/local/opt/sqlite/bin:$PATH"
 export PATH="/usr/local/opt/node@10/bin:$PATH"
 export PATH="/usr/local/opt/curl/bin:$PATH"
 #+end_src
+[[#contents][🔝]]
 
 *** GOPATH
 #+begin_src shell
@@ -540,6 +554,7 @@ if [[ "$(uname)" == 'Darwin' ]]; then
 fi
 
 #+end_src
+[[#contents][🔝]]
 
 *** LC_ALL autoload bashcompinit mc broot
 #+begin_src shell
@@ -552,6 +567,7 @@ complete -o nospace -C /usr/local/bin/mc mc
 # broot
 source ~/.config/broot/launcher/bash/br
 #+end_src
+[[#contents][🔝]]
 
 *** Upgrade_custom_plugins
 #+begin_src shell
@@ -574,6 +590,7 @@ tru/upgrade_custom_plugins () {
 }
 
 #+end_src
+[[#contents][🔝]]
 
 *** Fzf
 #+begin_src shell
@@ -608,6 +625,7 @@ fif() {
 }
 
 #+end_src
+[[#contents][🔝]]
 
 *** Functions
 **** Github_latest_release_download
@@ -618,6 +636,7 @@ tru/github_latest_release_download() {
 }
 
 #+end_src
+[[#contents][🔝]]
 
 **** AWS profile switch
 #+begin_src shell
@@ -632,6 +651,7 @@ aws-profiles() {
 
 export AWS_PAGER=""
 #+end_src
+[[#contents][🔝]]
 
 *** Spaceship
 #+begin_src shell
@@ -647,6 +667,7 @@ SPACESHIP_DIR_TRUNC=0
 # zprof    # debug
 
 #+end_src
+[[#contents][🔝]]
 
 *** P10k
 #+begin_src shell
@@ -726,11 +747,13 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 )
 
 #+end_src
+[[#contents][🔝]]
 
 *** Misc
 #+begin_src shell
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 #+end_src
+[[#contents][🔝]]
 
 ** Dot zshenv
 :PROPERTIES:
@@ -740,7 +763,7 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 export EMACS="*term*"
 DOTDIR=$HOME/Dropbox/Dev/configs/zshrc.d
 #+end_src
-
+[[#contents][🔝]]
 
 * Local Variables                                                               :noexport:
 # Local Variables:
