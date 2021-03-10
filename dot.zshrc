@@ -585,7 +585,7 @@ function p10k-on-pre-prompt() {
 }
 
 typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-  os_icon context my_fire_dir vcs time newline
+  os_icon my_fire_dir vcs time newline
   my_fire_dir newline
   prompt_char
 )
