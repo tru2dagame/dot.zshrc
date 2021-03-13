@@ -30,6 +30,10 @@ My zshrc
     - [[#lc_all-autoload-bashcompinit-mc-broot][LC_ALL autoload bashcompinit mc broot]]
     - [[#upgrade_custom_plugins][Upgrade_custom_plugins]]
     - [[#fzf][Fzf]]
+      - [[#basic][basic]]
+      - [[#fzf-snippets][fzf snippets]]
+      - [[#fzf-snippets-tab-stop][fzf snippets tab stop]]
+      - [[#fzf-tmux][fzf tmux]]
     - [[#functions][Functions]]
       - [[#github_latest_release_download][Github_latest_release_download]]
       - [[#aws-profile-switch][AWS profile switch]]
@@ -593,8 +597,11 @@ tru/upgrade_custom_plugins () {
 [[#contents][🔝]]
 
 *** Fzf
+**** basic
 #+begin_src shell
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
+export FZF_TMUX=1
+alias fzf=fzf-tmux
 fzf-history-widget-accept() {
   fzf-history-widget
   zle accept-line
@@ -626,6 +633,73 @@ fif() {
 
 #+end_src
 [[#contents][🔝]]
+
+**** fzf snippets
+https://github.com/tru2dagame/shownotes/blob/master/fzf-snippet.md
+
+#+begin_src sh
+tru/fzf-snippet() {
+    # merge filename and tags into single line
+    results=$(for FILE in $snippets_dir/*
+              do
+                  getname=$(basename $FILE)
+                  gettags=$(head -n 1 $FILE)
+                  echo "$getname \t $gettags"
+              done)
+
+    # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
+    filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
+    # don't record command into history
+    print -z " $(cat $snippets_dir/$filename | sed 1d)"
+}
+#+end_src
+[[#contents][🔝]]
+
+**** fzf snippets tab stop
+https://github.com/verboze/zsh-snippets
+
+#+begin_src sh
+_jump_to_tabstop_in_snippet() {
+    # the idea is to match ${\w+}, and replace
+    # that with the empty string, and move the cursor to
+    # beginning of the match. If no match found, simply return
+    # valid place holders: ${}, ${somealphanumericstr}
+    local str=$BUFFER
+    local searchstr=''
+    [[ $str =~ ([$]\\{[[:alnum:]]*\\}) ]] && searchstr=$MATCH
+    [[ -z "$searchstr" ]] && return
+
+    local rest=${str#*$searchstr}
+    local pos=$(( ${#str} - ${#rest} - ${#searchstr} ))
+    BUFFER=$(echo ${str//${MATCH}/})
+    CURSOR=$pos
+}
+zle -N _jump_to_tabstop_in_snippet
+bindkey '^J' _jump_to_tabstop_in_snippet
+#+end_src
+[[#contents][🔝]]
+
+**** fzf tmux
+#+begin_src sh
+tru/tmux-ftpane() {
+  local panes current_window current_pane target target_window target_pane
+  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+  current_pane=$(tmux display-message -p '#I:#P')
+  current_window=$(tmux display-message -p '#I')
+
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux +m --reverse) || return
+
+  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+
+  if [[ $current_window -eq $target_window ]]; then
+    tmux select-pane -t ${target_window}.${target_pane}
+  else
+    tmux select-pane -t ${target_window}.${target_pane} &&
+    tmux select-window -t $target_window
+  fi
+}
+#+end_src
 
 *** Functions
 **** Github_latest_release_download
@@ -762,6 +836,7 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 #+begin_src shell
 export EMACS="*term*"
 DOTDIR=$HOME/Dropbox/Dev/configs/zshrc.d
+snippets_dir=$HOME/Dropbox/Dev/configs/snippets
 #+end_src
 [[#contents][🔝]]
 
