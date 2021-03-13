@@ -390,7 +390,7 @@ autoload -Uz add-zsh-hook
 *** Globalias
 #+begin_src shell
 # globalias
-GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
+GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs)
 #+end_src
 [[#contents][🔝]]
 
