@@ -286,7 +286,7 @@ autoload -Uz add-zsh-hook
 ### end zsh-histdb
 
 # globalias
-GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm)
+GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs)
 
 # Add em alias for macOS
 # PR Merged!
@@ -459,6 +459,8 @@ tru/upgrade_custom_plugins () {
 }
 
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
+export FZF_TMUX=1
+alias fzf=fzf-tmux
 fzf-history-widget-accept() {
   fzf-history-widget
   zle accept-line
@@ -591,3 +593,55 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 )
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
+
+tru/fzf-snippet() {
+    # merge filename and tags into single line
+    results=$(for FILE in $snippets_dir/*
+              do
+                  getname=$(basename $FILE)
+                  gettags=$(head -n 1 $FILE)
+                  echo "$getname \t $gettags"
+              done)
+
+    # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
+    filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
+    # don't record command into history
+    print -z " $(cat $snippets_dir/$filename | sed 1d)"
+}
+
+_jump_to_tabstop_in_snippet() {
+    # the idea is to match ${\w+}, and replace
+    # that with the empty string, and move the cursor to
+    # beginning of the match. If no match found, simply return
+    # valid place holders: ${}, ${somealphanumericstr}
+    local str=$BUFFER
+    local searchstr=''
+    [[ $str =~ ([$]\\{[[:alnum:]]*\\}) ]] && searchstr=$MATCH
+    [[ -z "$searchstr" ]] && return
+
+    local rest=${str#*$searchstr}
+    local pos=$(( ${#str} - ${#rest} - ${#searchstr} ))
+    BUFFER=$(echo ${str//${MATCH}/})
+    CURSOR=$pos
+}
+zle -N _jump_to_tabstop_in_snippet
+bindkey '^J' _jump_to_tabstop_in_snippet
+
+tru/tmux-ftpane() {
+  local panes current_window current_pane target target_window target_pane
+  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+  current_pane=$(tmux display-message -p '#I:#P')
+  current_window=$(tmux display-message -p '#I')
+
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux +m --reverse) || return
+
+  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+
+  if [[ $current_window -eq $target_window ]]; then
+    tmux select-pane -t ${target_window}.${target_pane}
+  else
+    tmux select-pane -t ${target_window}.${target_pane} &&
+    tmux select-window -t $target_window
+  fi
+}
