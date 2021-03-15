@@ -594,7 +594,7 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 
-tru/fzf-snippet() {
+_tru/fzf-snippet() {
     # merge filename and tags into single line
     results=$(for FILE in $snippets_dir/*
               do
@@ -606,8 +606,13 @@ tru/fzf-snippet() {
     # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
     filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
     # don't record command into history
-    print -z " $(cat $snippets_dir/$filename | sed 1d)"
+    # print -z " $(cat $snippets_dir/$filename | sed 1d)"
+    BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+    CURSOR=0
 }
+
+zle -N _tru/fzf-snippet
+bindkey "^X'" _tru/fzf-snippet
 
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
