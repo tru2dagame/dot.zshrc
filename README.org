@@ -650,7 +650,7 @@ fif2() {
 https://github.com/tru2dagame/shownotes/blob/master/fzf-snippet.md
 
 #+begin_src sh
-_tru/fzf-snippet() {
+_tru_fzf-snippet() {
     # merge filename and tags into single line
     results=$(for FILE in $snippets_dir/*
               do
@@ -667,8 +667,8 @@ _tru/fzf-snippet() {
     CURSOR=0
 }
 
-zle -N _tru/fzf-snippet
-bindkey "^X'" _tru/fzf-snippet
+zle -N _tru_fzf-snippet
+bindkey "^X'" _tru_fzf-snippet
 #+end_src
 [[#contents][🔝]]
 

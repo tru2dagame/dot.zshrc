@@ -608,7 +608,7 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 
-_tru/fzf-snippet() {
+_tru_fzf-snippet() {
     # merge filename and tags into single line
     results=$(for FILE in $snippets_dir/*
               do
@@ -625,8 +625,8 @@ _tru/fzf-snippet() {
     CURSOR=0
 }
 
-zle -N _tru/fzf-snippet
-bindkey "^X'" _tru/fzf-snippet
+zle -N _tru_fzf-snippet
+bindkey "^X'" _tru_fzf-snippet
 
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
@@ -664,5 +664,3 @@ tru/tmux-ftpane() {
     tmux select-window -t $target_window
   fi
 }
-
-source /Users/tru/.config/broot/launcher/bash/br
