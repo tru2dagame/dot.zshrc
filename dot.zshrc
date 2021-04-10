@@ -243,15 +243,14 @@ _zsh_autosuggest_strategy_histdb_top_fallback() {
         case when exists(select commands.argv from history
         left join commands on history.command_id = commands.rowid
         left join places on history.place_id = places.rowid
-        where places.dir LIKE '$(sql_escape $PWD)%'
+        where places.dir LIKE '$(sql_escape $PWD)'
         AND commands.argv LIKE '$(sql_escape $1)%')
-            then '$(sql_escape $PWD)%'
+            then '$(sql_escape $PWD)'
             else '%'
             end
     and commands.argv LIKE '$(sql_escape $1)%'
-    group by commands.argv
-    order by places.dir LIKE '$(sql_escape $PWD)%' desc,
-        history.start_time desc
+    order by places.dir LIKE '$(sql_escape $PWD)' desc,
+    history.id desc
     limit 1"
     suggestion=$(_histdb_query "$query")
 }
@@ -286,7 +285,7 @@ autoload -Uz add-zsh-hook
 ### end zsh-histdb
 
 # globalias
-GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs)
+GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux)
 
 # Add em alias for macOS
 # PR Merged!
@@ -472,6 +471,12 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 # Full command on preview window
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
+# https://stnly.com/fzf-and-rg/
+# Setting rg as the default source for fzf
+#export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
+# To apply the command to CTRL-T as well
+#export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 j() {
     if [[ "$#" -ne 0 ]]; then
         cd $(autojump $@)
@@ -484,10 +489,17 @@ j() {
 # fif() {
 #   ag --nobreak --nonumbers --noheading . | fzf
 # }
+
 fif() {
     if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
     local file
-    file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && open "$file"
+    # file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && open "$file"
+    file="$(rga --max-count=1 --ignore-case --files-with-matches --no-messages "$@" | fzf-tmux +m --preview="rga --ignore-case --pretty --context 10 '"$@"' {}")" && echo "$file"
+}
+
+fif2() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
 # github_latest_release_download "Canop/broot"
@@ -592,6 +604,8 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
   prompt_char
 )
 
+#PROMPT_EOL_MARK=''
+
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 
 _tru/fzf-snippet() {
@@ -650,3 +664,5 @@ tru/tmux-ftpane() {
     tmux select-window -t $target_window
   fi
 }
+
+source /Users/tru/.config/broot/launcher/bash/br
