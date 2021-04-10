@@ -1,5 +1,10 @@
 ## -*- mode: sh -*-
 
+if [ "$TERM" = dumb ]; then
+    unsetopt zle prompt_cr prompt_subst
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='$'
+else
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -502,6 +507,63 @@ fif2() {
   rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
+_tru_fzf-snippet() {
+    # merge filename and tags into single line
+    results=$(for FILE in $snippets_dir/*
+              do
+                  getname=$(basename $FILE)
+                  gettags=$(head -n 1 $FILE)
+                  echo "$getname \t $gettags"
+              done)
+
+    # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
+    filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
+    # don't record command into history
+    # print -z " $(cat $snippets_dir/$filename | sed 1d)"
+    BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+    CURSOR=0
+}
+
+zle -N _tru_fzf-snippet
+bindkey "^X'" _tru_fzf-snippet
+
+_jump_to_tabstop_in_snippet() {
+    # the idea is to match ${\w+}, and replace
+    # that with the empty string, and move the cursor to
+    # beginning of the match. If no match found, simply return
+    # valid place holders: ${}, ${somealphanumericstr}
+    local str=$BUFFER
+    local searchstr=''
+    [[ $str =~ ([$]\\{[[:alnum:]]*\\}) ]] && searchstr=$MATCH
+    [[ -z "$searchstr" ]] && return
+
+    local rest=${str#*$searchstr}
+    local pos=$(( ${#str} - ${#rest} - ${#searchstr} ))
+    BUFFER=$(echo ${str//${MATCH}/})
+    CURSOR=$pos
+}
+zle -N _jump_to_tabstop_in_snippet
+bindkey '^J' _jump_to_tabstop_in_snippet
+
+tru/tmux-ftpane() {
+  local panes current_window current_pane target target_window target_pane
+  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+  current_pane=$(tmux display-message -p '#I:#P')
+  current_window=$(tmux display-message -p '#I')
+
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux +m --reverse) || return
+
+  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+
+  if [[ $current_window -eq $target_window ]]; then
+    tmux select-pane -t ${target_window}.${target_pane}
+  else
+    tmux select-pane -t ${target_window}.${target_pane} &&
+    tmux select-window -t $target_window
+  fi
+}
+
 # github_latest_release_download "Canop/broot"
 tru/github_latest_release_download() {
     curl -s "https://api.github.com/repos/$1/releases/latest"  | jq -r ".assets[] | select(.name | contains(\"zip\"|\"gz\")) | .browser_download_url"
@@ -608,59 +670,5 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 
-_tru_fzf-snippet() {
-    # merge filename and tags into single line
-    results=$(for FILE in $snippets_dir/*
-              do
-                  getname=$(basename $FILE)
-                  gettags=$(head -n 1 $FILE)
-                  echo "$getname \t $gettags"
-              done)
-
-    # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
-    filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
-    # don't record command into history
-    # print -z " $(cat $snippets_dir/$filename | sed 1d)"
-    BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
-    CURSOR=0
-}
-
-zle -N _tru_fzf-snippet
-bindkey "^X'" _tru_fzf-snippet
-
-_jump_to_tabstop_in_snippet() {
-    # the idea is to match ${\w+}, and replace
-    # that with the empty string, and move the cursor to
-    # beginning of the match. If no match found, simply return
-    # valid place holders: ${}, ${somealphanumericstr}
-    local str=$BUFFER
-    local searchstr=''
-    [[ $str =~ ([$]\\{[[:alnum:]]*\\}) ]] && searchstr=$MATCH
-    [[ -z "$searchstr" ]] && return
-
-    local rest=${str#*$searchstr}
-    local pos=$(( ${#str} - ${#rest} - ${#searchstr} ))
-    BUFFER=$(echo ${str//${MATCH}/})
-    CURSOR=$pos
-}
-zle -N _jump_to_tabstop_in_snippet
-bindkey '^J' _jump_to_tabstop_in_snippet
-
-tru/tmux-ftpane() {
-  local panes current_window current_pane target target_window target_pane
-  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
-  current_pane=$(tmux display-message -p '#I:#P')
-  current_window=$(tmux display-message -p '#I')
-
-  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux +m --reverse) || return
-
-  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
-  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
-
-  if [[ $current_window -eq $target_window ]]; then
-    tmux select-pane -t ${target_window}.${target_pane}
-  else
-    tmux select-pane -t ${target_window}.${target_pane} &&
-    tmux select-window -t $target_window
-  fi
-}
+# end if dumb
+fi

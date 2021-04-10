@@ -40,6 +40,7 @@ My zshrc
     - [[#spaceship][Spaceship]]
     - [[#p10k][P10k]]
     - [[#misc][Misc]]
+    - [[#end-file][End File]]
   - [[#dot-zshenv][Dot zshenv]]
 
 ** Install
@@ -66,6 +67,12 @@ git pull origin master
 *** File Header Set Mode For Emacs
 #+begin_src shell
 ## -*- mode: sh -*-
+
+if [ "$TERM" = dumb ]; then
+    unsetopt zle prompt_cr prompt_subst
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='$'
+else
+
 #+end_src
 [[#contents][🔝]]
 
@@ -649,7 +656,7 @@ fif2() {
 **** fzf snippets
 https://github.com/tru2dagame/shownotes/blob/master/fzf-snippet.md
 
-#+begin_src sh
+#+begin_src shell
 _tru_fzf-snippet() {
     # merge filename and tags into single line
     results=$(for FILE in $snippets_dir/*
@@ -675,7 +682,7 @@ bindkey "^X'" _tru_fzf-snippet
 **** fzf snippets tab stop
 https://github.com/verboze/zsh-snippets
 
-#+begin_src sh
+#+begin_src shell
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
     # that with the empty string, and move the cursor to
@@ -697,7 +704,7 @@ bindkey '^J' _jump_to_tabstop_in_snippet
 [[#contents][🔝]]
 
 **** fzf tmux
-#+begin_src sh
+#+begin_src shell
 tru/tmux-ftpane() {
   local panes current_window current_pane target target_window target_pane
   panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
@@ -847,6 +854,13 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 #+end_src
 [[#contents][🔝]]
+
+*** End File
+#+begin_src shell
+
+# end if dumb
+fi
+#+end_src
 
 ** Dot zshenv
 :PROPERTIES:
