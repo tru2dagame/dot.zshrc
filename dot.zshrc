@@ -346,7 +346,7 @@ fi
 
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
-   export DOOMDIR=~/Dropbox/Apps/emacs/tru/doom-emacs/
+   export DOOMDIR=$DOOMDIR_MAC
 fi
 
 # The emacs or emacsclient command to use
