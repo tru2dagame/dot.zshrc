@@ -217,6 +217,11 @@ fi
 if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
    git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
+
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h ]]; then
+    git clone https://github.com/paoloantinori/hhighlighter.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h
+    mv ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h/h.sh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h/h.plugin.zsh
+fi
 #+end_src
 [[#contents][🔝]]
 
@@ -226,6 +231,7 @@ fi
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(
+    h
     git
     # git-extras
     gitignore
@@ -273,7 +279,6 @@ plugins=(
     zsh-completions
     zsh-syntax-highlighting
 )
-
 #+end_src
 [[#contents][🔝]]
 
@@ -300,6 +305,12 @@ zstyle ':fzf-tab:*' fzf-command fzf
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
+#+end_src
+[[#contents][🔝]]
+
+**** unalias h for history
+#+begin_src shell
+unalias h
 #+end_src
 [[#contents][🔝]]
 
