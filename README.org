@@ -856,6 +856,17 @@ export AWS_PAGER=""
 #+end_src
 [[#contents][🔝]]
 
+**** Add space in front of current command
+#+begin_src shell
+addspace_ (){
+    BUFFER=" $BUFFER"
+    CURSOR=$#BUFFER
+}
+zle -N addspace_
+bindkey "^s" addspace_
+#+end_src
+[[#contents][🔝]]
+
 *** Spaceship
 #+begin_src shell
 # spaceship
