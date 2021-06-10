@@ -960,6 +960,12 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 #+end_src
 [[#contents][🔝]]
 
+*** zsh completion
+#+begin_src shell
+# Ref: https://cli.github.com/manual/gh_completion
+compinit -i
+#+end_src
+
 *** End File
 #+begin_src shell
 
