@@ -282,6 +282,13 @@ plugins=(
 #+end_src
 [[#contents][🔝]]
 
+**** history
+#+begin_src shell
+export HISTFILE=$TRU_HISTFILE
+export HISTSIZE=500000
+export SAVEHIST=100000
+#+end_src
+
 **** Fzf-tab
 #+begin_src shell
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
