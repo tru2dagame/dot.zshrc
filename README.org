@@ -631,7 +631,7 @@ tru/upgrade_custom_plugins () {
 #+begin_src shell
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 export FZF_TMUX=1
-alias fzf=fzf-tmux
+alias fzf='fzf-tmux -p 80%'
 fzf-history-widget-accept() {
   fzf-history-widget
   zle accept-line
@@ -738,7 +738,7 @@ tru/tmux-ftpane() {
   current_pane=$(tmux display-message -p '#I:#P')
   current_window=$(tmux display-message -p '#I')
 
-  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux +m --reverse) || return
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux -p --reverse) || return
 
   target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
   target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
