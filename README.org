@@ -423,6 +423,7 @@ GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux)
 [[#contents][🔝]]
 
 *** Emacs macOS
+**** Emacs macOS
 #+begin_src shell
 # Add em alias for macOS
 # PR Merged!
@@ -479,6 +480,7 @@ fi
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
    export DOOMDIR=$DOOMDIR_MAC
+   alias doom='~/Dropbox/Apps/emacs/tru/doom-emacs/.emacs.d/bin/doom sync && emacs'
 fi
 
 # The emacs or emacsclient command to use
@@ -526,6 +528,10 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 
 #+end_src
 [[#contents][🔝]]
+**** Shell Magit
+#+begin_src shell
+alias magit='emacsclient --eval "(magit-status)" && emacs'
+#+end_src
 
 *** Function proxy enable/disable
 #+begin_src shell
