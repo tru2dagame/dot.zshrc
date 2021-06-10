@@ -687,19 +687,22 @@ _tru_fzf-snippet() {
               do
                   getname=$(basename $FILE)
                   gettags=$(head -n 1 $FILE)
-                  echo "$getname \t $gettags"
+                  echo "$gettags \t| $getname"
               done)
 
-    # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
-    filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
-    # don't record command into history
-    # print -z " $(cat $snippets_dir/$filename | sed 1d)"
-    BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
-    CURSOR=0
+    preview=`echo $results | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
+
+    if [ ! -z "$preview" ]
+    then
+        filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
+        BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+        CURSOR=0
+    fi
 }
 
 zle -N _tru_fzf-snippet
 bindkey "^X'" _tru_fzf-snippet
+bindkey "^[^[^[" _tru_fzf-snippet
 #+end_src
 [[#contents][🔝]]
 
