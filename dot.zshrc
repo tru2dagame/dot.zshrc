@@ -184,6 +184,10 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+export HISTFILE=$TRU_HISTFILE
+export HISTSIZE=500000
+export SAVEHIST=100000
+
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 autoload -Uz compinit; compinit
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -355,6 +359,7 @@ fi
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
    export DOOMDIR=$DOOMDIR_MAC
+   alias doom='~/Dropbox/Apps/emacs/tru/doom-emacs/.emacs.d/bin/doom sync && emacs'
 fi
 
 # The emacs or emacsclient command to use
@@ -399,6 +404,8 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 # export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
 # export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
 # export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
+
+alias magit='emacsclient --eval "(magit-status)" && emacs'
 
 export PS1_backup=$PS1
 
@@ -472,7 +479,7 @@ tru/upgrade_custom_plugins () {
 
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 export FZF_TMUX=1
-alias fzf=fzf-tmux
+alias fzf='fzf-tmux -p 80%'
 fzf-history-widget-accept() {
   fzf-history-widget
   zle accept-line
@@ -521,19 +528,22 @@ _tru_fzf-snippet() {
               do
                   getname=$(basename $FILE)
                   gettags=$(head -n 1 $FILE)
-                  echo "$getname \t $gettags"
+                  echo "$gettags \t| $getname"
               done)
 
-    # filename=$(echo "$(echo $results | fzf -e -i )" | cut -d' ' -f 1)
-    filename=$(echo "$(echo $results | fzf -i )" | cut -d' ' -f 1)
-    # don't record command into history
-    # print -z " $(cat $snippets_dir/$filename | sed 1d)"
-    BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
-    CURSOR=0
+    preview=`echo $results | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
+
+    if [ ! -z "$preview" ]
+    then
+        filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
+        BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+        CURSOR=0
+    fi
 }
 
 zle -N _tru_fzf-snippet
 bindkey "^X'" _tru_fzf-snippet
+bindkey "^[^[^[" _tru_fzf-snippet
 
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
@@ -559,7 +569,7 @@ tru/tmux-ftpane() {
   current_pane=$(tmux display-message -p '#I:#P')
   current_window=$(tmux display-message -p '#I')
 
-  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux +m --reverse) || return
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux -p --reverse) || return
 
   target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
   target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
@@ -571,6 +581,80 @@ tru/tmux-ftpane() {
     tmux select-window -t $target_window
   fi
 }
+
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+fzf-down() {
+  fzf -p 88% --border --bind ctrl-/:toggle-preview "$@"
+}
+
+fzf_gf() {
+  is_in_git_repo || return
+  git -c color.status=always status --short |
+  fzf-down -m --ansi --nth 2..,.. \
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+  cut -c4- | sed 's/.* -> //'
+}
+
+fzf_gb() {
+  is_in_git_repo || return
+  git branch -a --color=always | grep -v '/HEAD\s' | sort |
+  fzf-down --ansi --multi --tac --preview-window right:70% \
+    --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1)' |
+  sed 's/^..//' | cut -d' ' -f1 |
+  sed 's#^remotes/##'
+}
+
+fzf_gt() {
+  is_in_git_repo || return
+  git tag --sort -version:refname |
+  fzf-down --multi --preview-window right:70% \
+    --preview 'git show --color=always {}'
+}
+
+fzf_gh() {
+  is_in_git_repo || return
+  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  fzf-down --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+    --header 'Press CTRL-S to toggle sort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
+  grep -o "[a-f0-9]\{7,\}"
+}
+
+fzf_gr() {
+  is_in_git_repo || return
+  git remote -v | awk '{print $1 "\t" $2}' | uniq |
+  fzf-down --tac \
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1}' |
+  cut -d$'\t' -f1
+}
+
+fzf_gs() {
+  is_in_git_repo || return
+  git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
+  cut -d: -f1
+}
+
+join-lines() {
+  local item
+  while read item; do
+    echo -n "${(q)item} "
+  done
+}
+
+bind-git-helper() {
+  local c
+  for c in $@; do
+    eval "fzf-g$c-widget() { local result=\$(fzf_g$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
+    eval "zle -N fzf-g$c-widget"
+    eval "bindkey '^g^$c' fzf-g$c-widget"
+  done
+}
+
+bind-git-helper f b t r h s
+unset -f bind-git-helper
 
 # github_latest_release_download "Canop/broot"
 tru/github_latest_release_download() {
@@ -587,6 +671,13 @@ aws-profiles() {
 }
 
 export AWS_PAGER=""
+
+addspace_ (){
+    BUFFER=" $BUFFER"
+    CURSOR=$#BUFFER
+}
+zle -N addspace_
+bindkey "^s" addspace_
 
 # spaceship
 # https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
@@ -677,6 +768,9 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 #PROMPT_EOL_MARK=''
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
+
+# Ref: https://cli.github.com/manual/gh_completion
+compinit -i
 
 # end if dumb
 fi
