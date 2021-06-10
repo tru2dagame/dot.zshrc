@@ -20,10 +20,14 @@ My zshrc
       - [[#ohmyzsh-setting-options][Ohmyzsh setting options]]
       - [[#fetch-plugin][Fetch plugin]]
       - [[#plugins][Plugins]]
+      - [[#history][history]]
       - [[#fzf-tab][Fzf-tab]]
+      - [[#unalias-h-for-history][unalias h for history]]
     - [[#zsh-autosuggestions][Zsh autosuggestions]]
     - [[#globalias][Globalias]]
     - [[#emacs-macos][Emacs macOS]]
+      - [[#emacs-macos-1][Emacs macOS]]
+      - [[#shell-magit][Shell Magit]]
     - [[#function-proxy-enabledisable][Function proxy enable/disable]]
     - [[#path][Path]]
     - [[#gopath][GOPATH]]
@@ -34,12 +38,15 @@ My zshrc
       - [[#fzf-snippets][fzf snippets]]
       - [[#fzf-snippets-tab-stop][fzf snippets tab stop]]
       - [[#fzf-tmux][fzf tmux]]
+      - [[#fzf-git][fzf git]]
     - [[#functions][Functions]]
       - [[#github_latest_release_download][Github_latest_release_download]]
       - [[#aws-profile-switch][AWS profile switch]]
+      - [[#add-space-in-front-of-current-command][Add space in front of current command]]
     - [[#spaceship][Spaceship]]
     - [[#p10k][P10k]]
     - [[#misc][Misc]]
+    - [[#zsh-completion][zsh completion]]
     - [[#end-file][End File]]
   - [[#dot-zshenv][Dot zshenv]]
 
@@ -72,7 +79,6 @@ if [ "$TERM" = dumb ]; then
     unsetopt zle prompt_cr prompt_subst
     typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='$'
 else
-
 #+end_src
 [[#contents][🔝]]
 
