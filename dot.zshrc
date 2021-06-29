@@ -166,7 +166,7 @@ plugins=(
     fzf-tab
     iterm2
     aws
-    # alias-tips
+    alias-tips
     # emacs
     git-open
     globalias
@@ -304,6 +304,9 @@ autoload -Uz add-zsh-hook
 # globalias
 GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux)
 
+export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ emacs ll"
+
 # Add em alias for macOS
 # PR Merged!
 if [[ "$(uname)" == 'Darwin' ]]; then
@@ -368,8 +371,8 @@ e() {
     if [[ "$1" == "-" ]]; then
         TMP="$(mktemp /tmp/emacsstdinXXX)";
         cat >"$TMP";
-        if ! emacsclient --alternate-editor /usr/bin/false --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"  > /dev/null 2>&1; then
-            emacs --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
+        if ! emacsclient --alternate-editor /usr/bin/false --eval "(let ((b (create-file-buffer \"stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"  > /dev/null 2>&1; then
+            emacs --eval "(let ((b (create-file-buffer \"stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
         fi;
     else
         emacsclient --alternate-editor "emacs" --no-wait "$@" > /dev/null 2>&1 &
@@ -655,6 +658,22 @@ bind-git-helper() {
 
 bind-git-helper f b t r h s
 unset -f bind-git-helper
+
+rgf() {
+    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+    INITIAL_QUERY="${*:-}"
+#    IFS=: read -ra selected < <(
+        FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+            fzf --ansi \
+            -m \
+            --disabled --query "$INITIAL_QUERY" \
+            --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+            --delimiter : \
+            --preview 'bat --color=always {1} --highlight-line {2}' \
+            --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+#    )
+#    [ -n "${selected[0]}" ] && vim "${selected[0]}" "+${selected[1]}"
+}
 
 # github_latest_release_download "Canop/broot"
 tru/github_latest_release_download() {
