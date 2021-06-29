@@ -25,6 +25,7 @@ My zshrc
       - [[#unalias-h-for-history][unalias h for history]]
     - [[#zsh-autosuggestions][Zsh autosuggestions]]
     - [[#globalias][Globalias]]
+    - [[#alias-tips][alias-tips]]
     - [[#emacs-macos][Emacs macOS]]
       - [[#emacs-macos-1][Emacs macOS]]
       - [[#shell-magit][Shell Magit]]
@@ -268,7 +269,7 @@ plugins=(
     fzf-tab
     iterm2
     aws
-    # alias-tips
+    alias-tips
     # emacs
     git-open
     globalias
@@ -427,6 +428,12 @@ autoload -Uz add-zsh-hook
 GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux)
 #+end_src
 [[#contents][🔝]]
+
+*** alias-tips
+#+begin_src shell
+export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ emacs ll"
+#+end_src
 
 *** Emacs macOS
 **** Emacs macOS
