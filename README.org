@@ -40,6 +40,7 @@ My zshrc
       - [[#fzf-snippets-tab-stop][fzf snippets tab stop]]
       - [[#fzf-tmux][fzf tmux]]
       - [[#fzf-git][fzf git]]
+      - [[#fzf-interative-ripgrep][fzf-interative-ripgrep]]
     - [[#functions][Functions]]
       - [[#github_latest_release_download][Github_latest_release_download]]
       - [[#aws-profile-switch][AWS profile switch]]
@@ -841,6 +842,26 @@ bind-git-helper() {
 bind-git-helper f b t r h s
 unset -f bind-git-helper
 
+#+end_src
+
+**** fzf-interative-ripgrep
+https://github.com/junegunn/fzf/blob/0818dbc36af28bf8f154a6d951a0062a2253a34a/ADVANCED.md#using-fzf-as-interative-ripgrep-launcher
+#+begin_src shell
+rgf() {
+    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+    INITIAL_QUERY="${*:-}"
+#    IFS=: read -ra selected < <(
+        FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+            fzf --ansi \
+            -m \
+            --disabled --query "$INITIAL_QUERY" \
+            --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+            --delimiter : \
+            --preview 'bat --color=always {1} --highlight-line {2}' \
+            --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+#    )
+#    [ -n "${selected[0]}" ] && vim "${selected[0]}" "+${selected[1]}"
+}
 #+end_src
 
 *** Functions
