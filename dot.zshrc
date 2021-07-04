@@ -660,19 +660,28 @@ bind-git-helper f b t r h s
 unset -f bind-git-helper
 
 rgf() {
-    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-    INITIAL_QUERY="${*:-}"
-#    IFS=: read -ra selected < <(
-        FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
-            fzf --ansi \
-            -m \
-            --disabled --query "$INITIAL_QUERY" \
-            --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-            --delimiter : \
-            --preview 'bat --color=always {1} --highlight-line {2}' \
-            --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
-#    )
-#    [ -n "${selected[0]}" ] && vim "${selected[0]}" "+${selected[1]}"
+RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+INITIAL_QUERY="${*:-}"
+# IFS=: read -ra selected < <(
+fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
+        fzf --ansi \
+        -e -m \
+        --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        --disabled --query "$INITIAL_QUERY" \
+        --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+        --bind "alt-enter:unbind(change,alt-enter)+change-prompt(2. fzf> )+enable-search+clear-query" \
+        --prompt '1. ripgrep> ' \
+        --delimiter : \
+        --preview 'bat --color=always {1} --highlight-line {2}' \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3'
+)
+
+if [[ -n $fzf ]]; then
+    echo $fzf
+    cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (+workspace/new) (+workspace/switch-to-final) (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
+    eval $cmd > /dev/null 2>&1
+    emacs
+fi
 }
 
 # github_latest_release_download "Canop/broot"
