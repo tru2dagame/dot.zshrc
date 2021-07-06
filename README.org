@@ -848,8 +848,16 @@ unset -f bind-git-helper
 https://github.com/junegunn/fzf/blob/0818dbc36af28bf8f154a6d951a0062a2253a34a/ADVANCED.md#using-fzf-as-interative-ripgrep-launcher
 #+begin_src shell
 rgf() {
-RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-INITIAL_QUERY="${*:-}"
+
+for arg; do
+  case "$arg" in
+    --noignore ) FLAG='--no-ignore' ;;
+  esac
+done
+
+RG_PREFIX="rg $FLAG --column --line-number --no-heading --color=always --smart-case "
+INITIAL_QUERY=$(echo "${*:-}" |  sed 's/--noignore//')
+
 # IFS=: read -ra selected < <(
 fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
         fzf --ansi \
