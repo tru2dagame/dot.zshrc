@@ -845,7 +845,8 @@ unset -f bind-git-helper
 #+end_src
 
 **** fzf-interative-ripgrep
-https://github.com/junegunn/fzf/blob/0818dbc36af28bf8f154a6d951a0062a2253a34a/ADVANCED.md#using-fzf-as-interative-ripgrep-launcher
+https://github.com/junegunn/fzf/blob/0818dbc36af28bf8f154a6d951a0062a2253a34a/ADVANCED.md#switching-to-fzf-only-search-mode
+
 #+begin_src shell
 rgf() {
 
