@@ -701,10 +701,10 @@ _tru_fzf-snippet() {
               do
                   getname=$(basename $FILE)
                   gettags=$(head -n 1 $FILE)
-                  echo "$gettags \t| $getname"
+                  echo "$gettags ,| $getname"
               done)
 
-    preview=`echo $results | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
+    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
 
     if [ ! -z "$preview" ]
     then
