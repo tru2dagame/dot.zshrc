@@ -876,6 +876,7 @@ fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
 if [[ -n $fzf ]]; then
     echo $fzf
     cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (+workspace/new) (+workspace/switch-to-final) (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
+    # echo $cmd
     eval $cmd > /dev/null 2>&1
     emacs
 fi
