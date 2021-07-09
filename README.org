@@ -280,6 +280,7 @@ plugins=(
     ufw
     command-not-found
     common-aliases
+    gh
     zsh_reload
     zsh-navigation-tools
     history-substring-search
