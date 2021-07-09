@@ -176,6 +176,7 @@ plugins=(
     ufw
     command-not-found
     common-aliases
+    gh
     zsh_reload
     zsh-navigation-tools
     history-substring-search
@@ -302,7 +303,7 @@ autoload -Uz add-zsh-hook
 ### end zsh-histdb
 
 # globalias
-GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux)
+GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux fzf)
 
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ emacs ll"
@@ -760,8 +761,9 @@ function prompt_my_fire_dir() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 
-#[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh
+# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
+# [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
 
 # typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
 # typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
@@ -776,14 +778,14 @@ POWERLEVEL9K_SHORTEN_DIR_LENGTH=
 POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
 POWERLEVEL9K_OS_ICON_FOREGROUND=232
-POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+#POWERLEVEL9K_OS_ICON_BACKGROUND='99'
 POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
 #POWERLEVEL9K_DIR_BACKGROUND=99
 unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
 typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
 typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
 typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
-typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
+# typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
 
 # https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
 function p10k-on-pre-prompt() {
