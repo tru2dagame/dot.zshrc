@@ -313,9 +313,9 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     alias em="emacs"
     alias emacs='open -a "/Applications/Emacs.app" '
     #export EDITOR="emacs"
-    export EDITOR='emacsclient'
+    export EDITOR='/opt/homebrew/bin/emacs -nw -Q'
     #export VISUAL="emacs"
-    export VISUAL='emacsclient'
+    export VISUAL='/opt/homebrew/bin/emacs -nw -Q'
     # emacs on mac
     # export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
     # export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
@@ -531,10 +531,10 @@ _tru_fzf-snippet() {
               do
                   getname=$(basename $FILE)
                   gettags=$(head -n 1 $FILE)
-                  echo "$gettags \t| $getname"
+                  echo "$gettags ,| $getname"
               done)
 
-    preview=`echo $results | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
+    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
 
     if [ ! -z "$preview" ]
     then
@@ -660,8 +660,16 @@ bind-git-helper f b t r h s
 unset -f bind-git-helper
 
 rgf() {
-RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-INITIAL_QUERY="${*:-}"
+
+for arg; do
+  case "$arg" in
+    --noignore ) FLAG='--no-ignore' ;;
+  esac
+done
+
+RG_PREFIX="rg $FLAG --column --line-number --no-heading --color=always --smart-case "
+INITIAL_QUERY=$(echo "${*:-}" |  sed 's/--noignore//')
+
 # IFS=: read -ra selected < <(
 fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
         fzf --ansi \
@@ -679,6 +687,7 @@ fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
 if [[ -n $fzf ]]; then
     echo $fzf
     cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (+workspace/new) (+workspace/switch-to-final) (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
+     echo $cmd
     eval $cmd > /dev/null 2>&1
     emacs
 fi
