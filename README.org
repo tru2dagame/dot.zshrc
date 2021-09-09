@@ -675,11 +675,14 @@ fzf-history-widget-accept() {
 }
 zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
+
+export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 # Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 # Full command on preview window
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
-
+# preview
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 # https://stnly.com/fzf-and-rg/
 # Setting rg as the default source for fzf
 #export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
