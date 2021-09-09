@@ -406,17 +406,36 @@ HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
 alias histdb2='HISTDB_TABULATE_CMD=(sed -e $"s/.*\x1f//") histdb'
 
 tru/show_local_history() {
-    limit="${1:-10}"
+    # limit="${1:-10}"
+    # local query="
+    #     select history.start_time, commands.argv
+    #     from history left join commands on history.command_id = commands.rowid
+    #     left join places on history.place_id = places.rowid
+    #     where places.dir LIKE '$(sql_escape $PWD)%'
+    #     order by history.start_time desc
+    #     limit $limit
+    # "
     local query="
-        select history.start_time, commands.argv
-        from history left join commands on history.command_id = commands.rowid
+        select commands.argv from
+        history left join commands on history.command_id = commands.rowid
         left join places on history.place_id = places.rowid
-        where places.dir LIKE '$(sql_escape $PWD)%'
-        order by history.start_time desc
-        limit $limit
+        where places.dir LIKE
+            case when exists(select commands.argv from history
+            left join commands on history.command_id = commands.rowid
+            left join places on history.place_id = places.rowid
+            where places.dir LIKE '$(sql_escape $PWD)'
+            AND commands.argv LIKE '$(sql_escape $1)%')
+                then '$(sql_escape $PWD)'
+                else '%'
+                end
+        and commands.argv LIKE '$(sql_escape $1)%'
+        group by commands.argv
+        order by places.dir LIKE '$(sql_escape $PWD)' desc,
+        history.id desc
+        limit 100
     "
     results=$(_histdb_query "$query")
-    echo "$results"
+    echo "$results" | fzf -m
 }
 
 ### zsh-histdb
