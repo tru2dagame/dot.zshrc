@@ -742,7 +742,7 @@ _tru_fzf-snippet() {
 
 zle -N _tru_fzf-snippet
 bindkey "^X'" _tru_fzf-snippet
-bindkey "^[^[^[" _tru_fzf-snippet
+bindkey "^[^[" _tru_fzf-snippet
 #+end_src
 [[#contents][🔝]]
 
