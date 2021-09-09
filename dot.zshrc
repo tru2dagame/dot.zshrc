@@ -200,12 +200,15 @@ zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3
 zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
-zstyle ":completion:*:git-checkout:*" sort false
+zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:exa' file-sort modification
 zstyle ':completion:*:exa' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
-zstyle ':fzf-tab:*' fzf-command fzf
+#zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
+# zstyle ':fzf-tab:*' switch-group ',' '.'
 
 source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
@@ -283,17 +286,36 @@ HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
 alias histdb2='HISTDB_TABULATE_CMD=(sed -e $"s/.*\x1f//") histdb'
 
 tru/show_local_history() {
-    limit="${1:-10}"
+    # limit="${1:-10}"
+    # local query="
+    #     select history.start_time, commands.argv
+    #     from history left join commands on history.command_id = commands.rowid
+    #     left join places on history.place_id = places.rowid
+    #     where places.dir LIKE '$(sql_escape $PWD)%'
+    #     order by history.start_time desc
+    #     limit $limit
+    # "
     local query="
-        select history.start_time, commands.argv
-        from history left join commands on history.command_id = commands.rowid
+        select commands.argv from
+        history left join commands on history.command_id = commands.rowid
         left join places on history.place_id = places.rowid
-        where places.dir LIKE '$(sql_escape $PWD)%'
-        order by history.start_time desc
-        limit $limit
+        where places.dir LIKE
+            case when exists(select commands.argv from history
+            left join commands on history.command_id = commands.rowid
+            left join places on history.place_id = places.rowid
+            where places.dir LIKE '$(sql_escape $PWD)'
+            AND commands.argv LIKE '$(sql_escape $1)%')
+                then '$(sql_escape $PWD)'
+                else '%'
+                end
+        and commands.argv LIKE '$(sql_escape $1)%'
+        group by commands.argv
+        order by places.dir LIKE '$(sql_escape $PWD)' desc,
+        history.id desc
+        limit 100
     "
     results=$(_histdb_query "$query")
-    echo "$results"
+    echo "$results" | fzf -m
 }
 
 ### zsh-histdb
@@ -490,11 +512,14 @@ fzf-history-widget-accept() {
 }
 zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
+
+export FZF_DEFAULT_OPTS='--no-height --no-reverse'
 # Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 # Full command on preview window
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
-
+# preview
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 # https://stnly.com/fzf-and-rg/
 # Setting rg as the default source for fzf
 #export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
@@ -547,7 +572,7 @@ _tru_fzf-snippet() {
 
 zle -N _tru_fzf-snippet
 bindkey "^X'" _tru_fzf-snippet
-bindkey "^[^[^[" _tru_fzf-snippet
+bindkey "^[^[" _tru_fzf-snippet
 
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
@@ -567,13 +592,14 @@ _jump_to_tabstop_in_snippet() {
 zle -N _jump_to_tabstop_in_snippet
 bindkey '^J' _jump_to_tabstop_in_snippet
 
+# https://github.com/junegunn/fzf/wiki/Examples#tmux
 tru/tmux-ftpane() {
   local panes current_window current_pane target target_window target_pane
   panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
   current_pane=$(tmux display-message -p '#I:#P')
   current_window=$(tmux display-message -p '#I')
 
-  target=$(echo "$panes" | grep -v "$current_pane" | fzf-tmux -p --reverse) || return
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
 
   target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
   target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
@@ -679,6 +705,7 @@ fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
         --disabled --query "$INITIAL_QUERY" \
         --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
         --bind "alt-enter:unbind(change,alt-enter)+change-prompt(2. fzf> )+enable-search+clear-query" \
+        --bind "ctrl-e:execute-silent:(emacsclient --eval \"(progn (find-file \\\"\$(echo {} | awk -F ':' '{print \$1}')\\\") (goto-line \$(echo {} | awk -F ':' '{print \$2}')) (forward-char \$(echo {} | awk -F ':' '{print \$3}')) (recenter))\") && open -a \"/Applications/Emacs.app\"" \
         --prompt '1. ripgrep> ' \
         --delimiter : \
         --preview 'bat --color=always {1} --highlight-line {2}' \
@@ -687,7 +714,8 @@ fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
 
 if [[ -n $fzf ]]; then
     echo $fzf
-    cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (+workspace/new) (+workspace/switch-to-final) (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
+    # cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (+workspace/new) (+workspace/switch-to-final) (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
+    cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
      echo $cmd
     eval $cmd > /dev/null 2>&1
     emacs
