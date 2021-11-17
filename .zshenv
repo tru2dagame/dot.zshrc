@@ -1,6 +1,7 @@
 export EMACS="*term*"
-DOTDIR=$HOME/Dropbox/Dev/configs/zshrc.d
-snippets_dir=$HOME/Dropbox/Dev/configs/snippets
-DOOMDIR_MAC=~/Dropbox/Apps/emacs/tru/doom-emacs/
-TRU_HISTFILE=~/Dropbox/Dev/configs/zsh_history/.zsh_history
-HISTDB_FILE=~/Dropbox/Dev/configs/histdb/zsh-history.db
+DOTDIR=$HOME/.zshrc.d
+snippets_dir=$HOME/.config/snippets
+DOOMDIR_MAC=$HOME/.config/doom-emacs/
+TRU_HISTFILE=$HOME/.zsh_history
+HISTDB_FILE=$HOME/.config/histdb/zsh-history.db
+devops_terraform_local_git=$HOME/git/devops.terraform.git
