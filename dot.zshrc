@@ -139,7 +139,7 @@ plugins=(
     git
     # git-extras
     gitignore
-    osx
+    macos
     autojump
     web-search
     encode64
@@ -177,7 +177,7 @@ plugins=(
     command-not-found
     common-aliases
     gh
-    zsh_reload
+    # zsh_reload
     zsh-navigation-tools
     history-substring-search
     zsh-autosuggestions
@@ -513,7 +513,7 @@ fzf-history-widget-accept() {
 zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
 
-export FZF_DEFAULT_OPTS='--no-height --no-reverse'
+export FZF_DEFAULT_OPTS='--no-height --no-reverse --bind alt-a:select-all,alt-A:deselect-all,ctrl-t:toggle-all'
 # Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 # Full command on preview window
@@ -556,18 +556,38 @@ _tru_fzf-snippet() {
     results=$(for FILE in $snippets_dir/*
               do
                   getname=$(basename $FILE)
-                  gettags=$(head -n 1 $FILE)
+                  gettags=$(head -n 2 $FILE | tail -1)
                   echo "$gettags ,| $getname"
               done)
 
-    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
+    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%" --expect=alt-enter`
 
-    if [ ! -z "$preview" ]
-    then
-        filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
-        BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
-        CURSOR=0
+    if [  -z "$preview" ]; then
+        return
     fi
+
+    key="$(head -1 <<< "$preview")"
+    rest="$(sed 1d <<< "$preview")"
+    filename=$(echo $rest | cut -f2 -d'|' | tr -d ' ')
+
+    case "$key" in
+        alt-enter)
+            BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
+            ;;
+        *)
+            chmod +x $snippets_dir/$filename
+            BUFFER=" $filename"
+            ;;
+    esac
+
+    # if [ ! -z "$preview" ]
+    # then
+    #     filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
+    #     BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+    #     CURSOR=0
+    # fi
+
+    #unset USE_NAME
 }
 
 zle -N _tru_fzf-snippet
@@ -705,7 +725,7 @@ fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
         --disabled --query "$INITIAL_QUERY" \
         --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
         --bind "alt-enter:unbind(change,alt-enter)+change-prompt(2. fzf> )+enable-search+clear-query" \
-        --bind "ctrl-e:execute-silent:(emacsclient --eval \"(progn (find-file \\\"\$(echo {} | awk -F ':' '{print \$1}')\\\") (goto-line \$(echo {} | awk -F ':' '{print \$2}')) (forward-char \$(echo {} | awk -F ':' '{print \$3}')) (recenter))\") && open -a \"/Applications/Emacs.app\"" \
+        --bind "ctrl-e:execute-silent:(emacsclient --eval \"(progn (find-file \\\"\$(echo {} | awk -F ':' '{print \$1}')\\\") (goto-line \$(echo {} | awk -F ':' '{print \$2}')) (forward-char \$(echo {} | awk -F ':' '{print \$3}')) (recenter))\") && open  \"/Applications/Emacs.app\"" \
         --prompt '1. ripgrep> ' \
         --delimiter : \
         --preview 'bat --color=always {1} --highlight-line {2}' \
@@ -716,9 +736,10 @@ if [[ -n $fzf ]]; then
     echo $fzf
     # cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (+workspace/new) (+workspace/switch-to-final) (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
     cmd=$(echo $fzf | awk -F ':' '{print "emacsclient --eval \"(progn (find-file \\\""$1"\\\") (goto-line "$2") (forward-char "$3") (recenter))\"; " }' )
-     echo $cmd
+    echo $cmd
     eval $cmd > /dev/null 2>&1
-    emacs
+    #emacs
+    osascript -e "tell application \"Emacs\" to activate"
 fi
 }
 
