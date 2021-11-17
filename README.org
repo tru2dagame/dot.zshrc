@@ -242,7 +242,7 @@ plugins=(
     git
     # git-extras
     gitignore
-    osx
+    macos
     autojump
     web-search
     encode64
@@ -280,7 +280,7 @@ plugins=(
     command-not-found
     common-aliases
     gh
-    zsh_reload
+    # zsh_reload
     zsh-navigation-tools
     history-substring-search
     zsh-autosuggestions
