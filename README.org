@@ -725,18 +725,38 @@ _tru_fzf-snippet() {
     results=$(for FILE in $snippets_dir/*
               do
                   getname=$(basename $FILE)
-                  gettags=$(head -n 1 $FILE)
+                  gettags=$(head -n 2 $FILE | tail -1)
                   echo "$gettags ,| $getname"
               done)
 
-    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%"`
+    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%" --expect=alt-enter`
 
-    if [ ! -z "$preview" ]
-    then
-        filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
-        BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
-        CURSOR=0
+    if [  -z "$preview" ]; then
+        return
     fi
+
+    key="$(head -1 <<< "$preview")"
+    rest="$(sed 1d <<< "$preview")"
+    filename=$(echo $rest | cut -f2 -d'|' | tr -d ' ')
+
+    case "$key" in
+        alt-enter)
+            BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
+            ;;
+        ,*)
+            chmod +x $snippets_dir/$filename
+            BUFFER=" $filename"
+            ;;
+    esac
+
+    # if [ ! -z "$preview" ]
+    # then
+    #     filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
+    #     BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+    #     CURSOR=0
+    # fi
+
+    #unset USE_NAME
 }
 
 zle -N _tru_fzf-snippet
