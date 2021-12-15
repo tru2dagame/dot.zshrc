@@ -721,6 +721,8 @@ https://github.com/tru2dagame/shownotes/blob/master/fzf-snippet.md
 
 #+begin_src shell
 _tru_fzf-snippet() {
+
+    unsetopt shwordsplit
     # merge filename and tags into single line
     results=$(for FILE in $snippets_dir/*
               do
@@ -744,8 +746,12 @@ _tru_fzf-snippet() {
             BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
             ;;
         ,*)
-            chmod +x $snippets_dir/$filename
-            BUFFER=" $filename"
+            if [[ $(cat $snippets_dir/$filename | sed 1,2d | wc -l | bc) = 1 ]]; then
+                BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
+            else
+                chmod +x $snippets_dir/$filename
+                BUFFER=" $filename"
+            fi
             ;;
     esac
 
