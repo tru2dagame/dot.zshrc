@@ -552,6 +552,8 @@ fif2() {
 }
 
 _tru_fzf-snippet() {
+
+    unsetopt shwordsplit
     # merge filename and tags into single line
     results=$(for FILE in $snippets_dir/*
               do
@@ -575,8 +577,12 @@ _tru_fzf-snippet() {
             BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
             ;;
         *)
-            chmod +x $snippets_dir/$filename
-            BUFFER=" $filename"
+            if [[ $(cat $snippets_dir/$filename | sed 1,2d | wc -l | bc) = 1 ]]; then
+                BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
+            else
+                chmod +x $snippets_dir/$filename
+                BUFFER=" $filename"
+            fi
             ;;
     esac
 
@@ -861,6 +867,20 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 #PROMPT_EOL_MARK=''
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
+
+# https://twitter.com/dailyzshtip/status/1466384154778472459
+for n ({1..5}) alias -g NF$n="*(.om[$n])"
+# e.g. this gives you
+# vi NF2   # edit 2nd newest file
+
+# https://twitter.com/dailyzshtip/status/1458483872417583118
+for n ({1..5}) alias -g ND$n="*(/om[$n])"
+# ND1 # newest dir
+# ND2 # 2nd newest dir
+
+for n ({1..5}) alias -g NH$n=".*(.om[$n])"
+# NH1 # newest hidden file
+# NH2 # 2nd newest hidden file
 
 # Ref: https://cli.github.com/manual/gh_completion
 compinit -i
