@@ -48,6 +48,7 @@ My zshrc
     - [[#spaceship][Spaceship]]
     - [[#p10k][P10k]]
     - [[#misc][Misc]]
+    - [[#zsh-daily-tips][ZSH DAILY TIPS]]
     - [[#zsh-completion][zsh completion]]
     - [[#end-file][End File]]
 
