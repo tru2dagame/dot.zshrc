@@ -1079,11 +1079,31 @@ typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
 #+end_src
 [[#contents][🔝]]
 
+*** ZSH DAILY TIPS
+#+begin_src shell
+# https://twitter.com/dailyzshtip/status/1466384154778472459
+for n ({1..5}) alias -g NF$n="*(.om[$n])"
+# e.g. this gives you
+# vi NF2   # edit 2nd newest file
+
+# https://twitter.com/dailyzshtip/status/1458483872417583118
+for n ({1..5}) alias -g ND$n="*(/om[$n])"
+# ND1 # newest dir
+# ND2 # 2nd newest dir
+
+for n ({1..5}) alias -g NH$n=".*(.om[$n])"
+# NH1 # newest hidden file
+# NH2 # 2nd newest hidden file
+#+end_src
+[[#contents][🔝]]
+
 *** zsh completion
 #+begin_src shell
 # Ref: https://cli.github.com/manual/gh_completion
 compinit -i
 #+end_src
+
+#+RESULTS:
 
 *** End File
 #+begin_src shell
