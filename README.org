@@ -51,6 +51,7 @@ My zshrc
     - [[#zsh-daily-tips][ZSH DAILY TIPS]]
     - [[#zsh-completion][zsh completion]]
     - [[#end-file][End File]]
+  - [[#editor][EDITOR]]
 
 ** Install
 
@@ -468,12 +469,14 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     alias em="emacs"
     alias emacs='open -a "/Applications/Emacs.app" '
     #export EDITOR="emacs"
-    export EDITOR='/opt/homebrew/bin/emacs -nw -Q'
+    # export EDITOR='/opt/homebrew/bin/emacs -nw -Q'
     #export VISUAL="emacs"
-    export VISUAL='/opt/homebrew/bin/emacs -nw -Q'
     # emacs on mac
     # export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
     # export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
+    # https://emacs.stackexchange.com/questions/60339/using-emacsclient-for-visual-raises-end-of-file-during-parsing
+    export VISUAL="$EDITOR_PATH/EDITOR"
+    export EDITOR=$VISUAL
 else
     export EDITOR="emacs"
     # workaround for https://github.com/robbyrussell/oh-my-zsh/pull/5714
@@ -1119,6 +1122,17 @@ compinit -i
 fi
 #+end_src
 
+** EDITOR
+:PROPERTIES:
+:header-args: :tangle EDITOR
+:END:
+
+#+begin_src shell
+#!/bin/sh
+# https://emacs.stackexchange.com/questions/13809/how-do-i-use-emacsclient-as-editor-or-visual
+# https://emacs.stackexchange.com/questions/60339/using-emacsclient-for-visual-raises-end-of-file-during-parsing
+exec emacsclient -F -c "$@"
+#+end_src
 
 * Local Variables                                                               :noexport:
 # Local Variables:
