@@ -520,7 +520,8 @@ fi
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
    export DOOMDIR=$DOOMDIR_MAC
-   alias doom='~/Dropbox/Apps/emacs/tru/doom-emacs/.emacs.d/bin/doom sync && emacs'
+   # export DOOMLOCALDIR=$DOOMLOCALDIR_MAC
+   alias doome='doom sync && emacs'
 fi
 
 # The emacs or emacsclient command to use
