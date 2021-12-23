@@ -1,0 +1,4 @@
+#!/bin/sh
+# https://emacs.stackexchange.com/questions/13809/how-do-i-use-emacsclient-as-editor-or-visual
+# https://emacs.stackexchange.com/questions/60339/using-emacsclient-for-visual-raises-end-of-file-during-parsing
+exec emacsclient -F -c "$@"

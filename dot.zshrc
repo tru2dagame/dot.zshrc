@@ -336,12 +336,14 @@ if [[ "$(uname)" == 'Darwin' ]]; then
     alias em="emacs"
     alias emacs='open -a "/Applications/Emacs.app" '
     #export EDITOR="emacs"
-    export EDITOR='/opt/homebrew/bin/emacs -nw -Q'
+    # export EDITOR='/opt/homebrew/bin/emacs -nw -Q'
     #export VISUAL="emacs"
-    export VISUAL='/opt/homebrew/bin/emacs -nw -Q'
     # emacs on mac
     # export EDITOR="emacsclient -t"                  # $EDITOR should open in terminal
     # export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI with non-daemon as alternate
+    # https://emacs.stackexchange.com/questions/60339/using-emacsclient-for-visual-raises-end-of-file-during-parsing
+    export VISUAL="$EDITOR_PATH/EDITOR"
+    export EDITOR=$VISUAL
 else
     export EDITOR="emacs"
     # workaround for https://github.com/robbyrussell/oh-my-zsh/pull/5714
@@ -385,7 +387,8 @@ fi
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
    export DOOMDIR=$DOOMDIR_MAC
-   alias doom='~/Dropbox/Apps/emacs/tru/doom-emacs/.emacs.d/bin/doom sync && emacs'
+   # export DOOMLOCALDIR=$DOOMLOCALDIR_MAC
+   alias doome='doom sync && emacs'
 fi
 
 # The emacs or emacsclient command to use
