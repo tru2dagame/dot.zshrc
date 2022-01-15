@@ -751,7 +751,7 @@ _tru_fzf-snippet() {
             BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
             ;;
         ,*)
-            if [[ $(cat $snippets_dir/$filename | sed 1,2d | wc -l | bc) = 1 ]]; then
+            if [[ $(cat $snippets_dir/$filename | sed 1,2d | wc -l | bc) -lt 8 ]]; then
                 BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
             else
                 chmod +x $snippets_dir/$filename
