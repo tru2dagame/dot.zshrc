@@ -672,7 +672,7 @@ tru/upgrade_custom_plugins () {
 #+begin_src shell
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 export FZF_TMUX=1
-alias fzf='fzf-tmux -p 80%'
+alias fzf='fzf-tmux -p 80% --cycle'
 fzf-history-widget-accept() {
   fzf-history-widget
   zle accept-line
@@ -687,6 +687,8 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 # preview
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+# https://github.com/junegunn/fzf/pull/1946
+export FZF_TMUX_OPTS='-p 80%'
 # https://stnly.com/fzf-and-rg/
 # Setting rg as the default source for fzf
 #export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
