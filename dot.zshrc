@@ -458,7 +458,7 @@ function tru/proxy () {
 tru/proxy off
 
 export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/local/opt:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
-
+PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
 export PATH="/usr/local/opt/node@8/bin:$PATH"
 export PATH="$HOME/.tgenv/bin:$PATH"
 export PATH="/usr/local/opt/sqlite/bin:$PATH"
@@ -508,7 +508,7 @@ tru/upgrade_custom_plugins () {
 
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 export FZF_TMUX=1
-alias fzf='fzf-tmux -p 80%'
+alias fzf='fzf-tmux -p 80% --cycle'
 fzf-history-widget-accept() {
   fzf-history-widget
   zle accept-line
@@ -523,6 +523,8 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 # preview
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+# https://github.com/junegunn/fzf/pull/1946
+export FZF_TMUX_OPTS='-p 80%'
 # https://stnly.com/fzf-and-rg/
 # Setting rg as the default source for fzf
 #export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
@@ -558,14 +560,14 @@ _tru_fzf-snippet() {
 
     unsetopt shwordsplit
     # merge filename and tags into single line
-    results=$(for FILE in $snippets_dir/*
+    results=$(for FILE in $SNIPPETS_PATH/*
               do
                   getname=$(basename $FILE)
                   gettags=$(head -n 2 $FILE | tail -1)
                   echo "$gettags ,| $getname"
               done)
 
-    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $snippets_dir/%" --expect=alt-enter`
+    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $SNIPPETS_PATH/%" --expect=alt-enter`
 
     if [  -z "$preview" ]; then
         return
@@ -577,14 +579,15 @@ _tru_fzf-snippet() {
 
     case "$key" in
         alt-enter)
-            BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
+            BUFFER=" $(cat $SNIPPETS_PATH/$filename | sed 1,2d)"
             ;;
         *)
-            if [[ $(cat $snippets_dir/$filename | sed 1,2d | wc -l | bc) -lt 8 ]]; then
-                BUFFER=" $(cat $snippets_dir/$filename | sed 1,2d)"
+            if [[ $(cat $SNIPPETS_PATH/$filename | sed 1,2d | wc -l | bc) -lt 8 ]]; then
+            #if [[ $(cat $SNIPPETS_PATH/$filename | sed 1,2d | wc -l | bc) < 8 ]]; then
+                BUFFER=" $(cat $SNIPPETS_PATH/$filename | sed 1,2d)"
             else
-                chmod +x $snippets_dir/$filename
-                BUFFER=" $filename"
+                chmod +x $SNIPPETS_PATH/$filename
+                BUFFER=" . $filename"
             fi
             ;;
     esac
@@ -592,7 +595,7 @@ _tru_fzf-snippet() {
     # if [ ! -z "$preview" ]
     # then
     #     filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
-    #     BUFFER=" $(cat $snippets_dir/$filename | sed 1d)"
+    #     BUFFER=" $(cat $SNIPPETS_PATH/$filename | sed 1d)"
     #     CURSOR=0
     # fi
 
