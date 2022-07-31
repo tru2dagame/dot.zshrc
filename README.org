@@ -29,6 +29,7 @@ My zshrc
     - [[#emacs-macos][Emacs macOS]]
       - [[#emacs-macos-1][Emacs macOS]]
       - [[#shell-magit][Shell Magit]]
+      - [[#save-and-exit][Save and Exit]]
     - [[#function-proxy-enabledisable][Function proxy enable/disable]]
     - [[#path][Path]]
     - [[#gopath][GOPATH]]
@@ -573,6 +574,10 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 **** Shell Magit
 #+begin_src shell
 alias magit='emacsclient --eval "(magit-status)" && emacs'
+#+end_src
+**** Save and Exit
+#+begin_src shell
+alias emacsk="emacsclient --eval \"(progn (save-some-buffers) (kill-emacs))\""
 #+end_src
 
 *** Function proxy enable/disable

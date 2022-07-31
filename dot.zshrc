@@ -437,6 +437,8 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 
 alias magit='emacsclient --eval "(magit-status)" && emacs'
 
+alias emacsk="emacsclient --eval \"(progn (save-some-buffers) (kill-emacs))\""
+
 export PS1_backup=$PS1
 
 function tru/proxy () {
