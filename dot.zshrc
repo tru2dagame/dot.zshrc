@@ -203,6 +203,7 @@ zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
 zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:exa' file-sort modification
 zstyle ':completion:*:exa' sort false
+zstyle -d ':completion:*' format
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
@@ -315,7 +316,7 @@ tru/show_local_history() {
         limit 100
     "
     results=$(_histdb_query "$query")
-    echo "$results" | fzf -m
+    echo "$results" | fzf-tmux -p 90% -m --cycle
 }
 
 ### zsh-histdb
@@ -515,6 +516,7 @@ fzf-history-widget-accept() {
 }
 zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
+bindkey '^[g'  fzf-cd-widget
 
 export FZF_DEFAULT_OPTS='--no-height --no-reverse --bind alt-a:select-all,alt-A:deselect-all,ctrl-t:toggle-all'
 # Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
@@ -522,7 +524,7 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 # Full command on preview window
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 # preview
-export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+export FZF_ALT_G_OPTS="--preview 'tree -C {} | head -200'"
 # https://github.com/junegunn/fzf/pull/1946
 export FZF_TMUX_OPTS='-p 80%'
 # https://stnly.com/fzf-and-rg/
@@ -737,7 +739,7 @@ fzf=$(FZF_DEFAULT_COMMAND="$RG_PREFIX $(printf %q "$INITIAL_QUERY")" \
         --disabled --query "$INITIAL_QUERY" \
         --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
         --bind "alt-enter:unbind(change,alt-enter)+change-prompt(2. fzf> )+enable-search+clear-query" \
-        --bind "ctrl-e:execute-silent:(emacsclient --eval \"(progn (find-file \\\"\$(echo {} | awk -F ':' '{print \$1}')\\\") (goto-line \$(echo {} | awk -F ':' '{print \$2}')) (forward-char \$(echo {} | awk -F ':' '{print \$3}')) (recenter))\") && open  \"/Applications/Emacs.app\"" \
+        --bind "ctrl-o:execute-silent:(emacsclient --eval \"(progn (find-file \\\"\$(echo {} | awk -F ':' '{print \$1}')\\\") (goto-line \$(echo {} | awk -F ':' '{print \$2}')) (forward-char \$(echo {} | awk -F ':' '{print \$3}')) (recenter))\") && open  \"/Applications/Emacs.app\"" \
         --prompt '1. ripgrep> ' \
         --delimiter : \
         --preview 'bat --color=always {1} --highlight-line {2}' \
