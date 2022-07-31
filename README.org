@@ -232,6 +232,12 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h ]]; then
     git clone https://github.com/paoloantinori/hhighlighter.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h
     mv ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h/h.sh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h/h.plugin.zsh
 fi
+
+# https://github.com/kaplanelad/shellfirm
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm ]]; then
+    git clone https://github.com/kaplanelad/shellfirm/ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm
+    ln -s ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm/shell-plugins/shellfirm.plugin.zsh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm/shellfirm.plugin.zsh
+fi
 #+end_src
 [[#contents][🔝]]
 
@@ -283,6 +289,7 @@ plugins=(
     command-not-found
     common-aliases
     gh
+    shellfirm
     # zsh_reload
     zsh-navigation-tools
     history-substring-search

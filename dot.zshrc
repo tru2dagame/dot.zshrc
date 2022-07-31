@@ -131,6 +131,12 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h ]]; then
     mv ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h/h.sh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/h/h.plugin.zsh
 fi
 
+# https://github.com/kaplanelad/shellfirm
+if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm ]]; then
+    git clone https://github.com/kaplanelad/shellfirm/ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm
+    ln -s ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm/shell-plugins/shellfirm.plugin.zsh ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/shellfirm/shellfirm.plugin.zsh
+fi
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -177,6 +183,7 @@ plugins=(
     command-not-found
     common-aliases
     gh
+    shellfirm
     # zsh_reload
     zsh-navigation-tools
     history-substring-search
