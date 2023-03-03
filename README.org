@@ -1,3 +1,4 @@
+# -*- buffer-read-only: t; eval: (spell-fu-mode-disable); -*-
 #+TITLE: README
 #+STARTUP: show4levels
 #+auto_tangle: t
@@ -1168,7 +1169,3 @@ exec /opt/homebrew/bin/emacsclient -F -c "$@"
 #+end_src
 
 
-* Local Variables                                                               :noexport:
-# Local Variables:
-# eval: (spell-fu-mode-disable)
-# End:
