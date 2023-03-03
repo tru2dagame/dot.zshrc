@@ -5,6 +5,97 @@ if [ "$TERM" = dumb ]; then
     typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='$'
 else
 
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+source "$HOME/.zinit/bin/zinit.zsh"
+
+zinit wait lucid for \
+    OMZL::compfix.zsh \
+    OMZL::completion.zsh \
+    OMZL::functions.zsh \
+    OMZL::git.zsh \
+    OMZL::history.zsh \
+    OMZL::key-bindings.zsh \
+    OMZL::theme-and-appearance.zsh \
+    OMZL::prompt_info_functions.zsh
+
+zinit wait svn lucid for \
+    OMZP::macos \
+    OMZP::emoji \
+    OMZP::history-substring-search \
+
+zinit wait lucid for \
+    OMZP::git \
+    OMZP::gitignore \
+    OMZP::autojump \
+    OMZP::web-search \
+    OMZP::encode64 \
+    OMZP::brew \
+    OMZP::docker \
+    OMZP::docker-compose \
+    OMZP::tmux \
+    OMZP::history \
+    OMZP::extract \
+    OMZP::fzf \
+    OMZP::iterm2 \
+    OMZP::aws \
+    OMZP::globalias \
+    OMZP::terraform \
+    OMZP::thefuck \
+    OMZP::command-not-found \
+    OMZP::common-aliases \
+    OMZP::gh \
+#    OMZP::git-extras \
+#    OMZP::npm \
+#    OMZP::node \
+#    OMZP::docker-machine \
+#    OMZP::laravel5 \
+#    OMZP::vagrant \
+#    OMZP::colorize \
+#    OMZP::per-directory-history \
+#    OMZP::ansible \
+#    OMZP::emacs \
+#    OMZP::zsh_reload \
+
+zinit as"completion" wait lucid for \
+    OMZ::plugins/extract/_extract \
+    OMZ::plugins/ripgrep/_ripgrep \
+    OMZ::plugins/ufw/_ufw \
+    # OMZ::plugins/docker/_docker \
+
+zinit has"fzf" wait lucid for \
+    multisrc"shell/{key-bindings,completion}.zsh" pick"" \
+    junegunn/fzf
+zinit wait lucid for \
+    paoloantinori/hhighlighter \
+    spaceship-prompt/spaceship-prompt \
+    djui/alias-tips \
+    paulirish/git-open \
+    zdharma-continuum/zsh-navigation-tools \
+    pick"sqlite-history.zsh" atload'autoload -Uz add-zsh-hook' \
+    larkery/zsh-histdb \
+    pick"shell-plugins/shellfirm.plugin.zsh" \
+    kaplanelad/shellfirm \
+    zsh-users/zsh-history-substring-search \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zdharma-continuum/fast-syntax-highlighting \
+    atload'!_zsh_autosuggest_start' \
+        zsh-users/zsh-autosuggestions \
+    blockf atpull'zinit creinstall -q .' \
+        zsh-users/zsh-completions \
+    Aloxaf/fzf-tab \
+    #skywind3000/z.lua \
+    #zdharma-continuum/history-search-multi-word \
+
+zinit ice as"completion"
+zinit snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
+# zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -140,66 +231,67 @@ fi
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(
-    h
-    git
-    # git-extras
-    gitignore
-    macos
-    autojump
-    web-search
-    encode64
-    #npm
-    #node
-    brew
-    docker
-    docker-compose
-    #docker-machine
-    #laravel5
-    #vagrant
-    tmux
-    emoji
-    #colorize
-    history
-    #per-directory-history
-    extract
-    #ansible
-    history-sync
-    fzf
-    #z.lua
-    #autoupdate
-    #history-search-multi-word
-    fzf-tab
-    iterm2
-    aws
-    alias-tips
-    # emacs
-    git-open
-    globalias
-    ripgrep
-    terraform
-    thefuck
-    ufw
-    command-not-found
-    common-aliases
-    gh
-    magic-enter
-    shellfirm
-    # zsh_reload
-    zsh-navigation-tools
-    history-substring-search
-    zsh-autosuggestions
-    zsh-completions
-    zsh-syntax-highlighting
-)
+plugins=()
+#     h
+#     git
+#     # git-extras
+#     gitignore
+#     macos
+#     autojump
+#     web-search
+#     encode64
+#     #npm
+#     #node
+#     brew
+#     docker
+#     docker-compose
+#     #docker-machine
+#     #laravel5
+#     #vagrant
+#     tmux
+#     emoji
+#     #colorize
+#     history
+#     #per-directory-history
+#     extract
+#     #ansible
+#     history-sync
+#     fzf
+#     #z.lua
+#     #autoupdate
+#     #history-search-multi-word
+#     fzf-tab
+#     iterm2
+#     aws
+#     alias-tips
+#     # emacs
+#     git-open
+#     globalias
+#     ripgrep
+#     terraform
+#     thefuck
+#     ufw
+#     command-not-found
+#     common-aliases
+#     gh
+#     magic-enter
+#     shellfirm
+#     # zsh_reload
+#     zsh-navigation-tools
+#     history-substring-search
+#     zsh-autosuggestions
+#     zsh-completions
+#     zsh-syntax-highlighting
+# )
 
 export HISTFILE=$TRU_HISTFILE
 export HISTSIZE=500000
 export SAVEHIST=100000
 
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
-autoload -Uz compinit; compinit
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# autoload -Uz compinit; compinit
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf-tab
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
@@ -219,10 +311,10 @@ zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
 #zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
 # zstyle ':fzf-tab:*' switch-group ',' '.'
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
-unalias h
+#unalias h
 
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=99,underline"
@@ -912,7 +1004,7 @@ for n ({1..5}) alias -g NH$n=".*(.om[$n])"
 # NH2 # 2nd newest hidden file
 
 # Ref: https://cli.github.com/manual/gh_completion
-compinit -i
+#compinit -i
 
 # end if dumb
 fi
