@@ -117,10 +117,10 @@ if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab ]]; then
    git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 fi
 
-if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt ]]; then
-   git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-   ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-fi
+# if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt ]]; then
+#    git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+#    ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+# fi
 
 if [[ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k ]]; then
    git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -183,6 +183,7 @@ plugins=(
     command-not-found
     common-aliases
     gh
+    magic-enter
     shellfirm
     # zsh_reload
     zsh-navigation-tools
@@ -304,7 +305,10 @@ tru/show_local_history() {
     #     limit $limit
     # "
     local query="
-        select commands.argv from
+        select
+        replace(commands.argv, '
+', ' \\n') as cmd
+        from
         history left join commands on history.command_id = commands.rowid
         left join places on history.place_id = places.rowid
         where places.dir LIKE
@@ -320,10 +324,11 @@ tru/show_local_history() {
         group by commands.argv
         order by places.dir LIKE '$(sql_escape $PWD)' desc,
         history.id desc
-        limit 100
+        limit 1000
     "
     results=$(_histdb_query "$query")
-    echo "$results" | fzf-tmux -p 90% -m --cycle
+    #echo -e `echo -n "$results" | fzf-tmux -p 90% -m --cycle`
+    echo "`_histdb_query "$query" | fzf-tmux -p 90% -m --cycle`"
 }
 
 ### zsh-histdb
@@ -394,7 +399,7 @@ fi
 
 # doom emacs
 if [[ "$(uname)" == 'Darwin' ]]; then
-   export DOOMDIR=$DOOMDIR_MAC
+   # export DOOMDIR=$DOOMDIR_MAC
    # export DOOMLOCALDIR=$DOOMLOCALDIR_MAC
    alias doome='doom sync && emacs'
 fi
@@ -405,8 +410,8 @@ e() {
     if [[ "$1" == "-" ]]; then
         TMP="$(mktemp /tmp/emacsstdinXXX)";
         cat >"$TMP";
-        if ! emacsclient --alternate-editor /usr/bin/false --eval "(let ((b (create-file-buffer \"stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"  > /dev/null 2>&1; then
-            emacs --eval "(let ((b (create-file-buffer \"stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
+        if ! emacsclient --alternate-editor /usr/bin/false --eval "(let ((b (create-file-buffer \"my_drafts\"))) (tab-bar-new-tab) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"  > /dev/null 2>&1; then
+            emacs --eval "(let ((b (create-file-buffer \"my_drafts\"))) (tab-bar-new-tab) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
         fi;
     else
         emacsclient --alternate-editor "emacs" --no-wait "$@" > /dev/null 2>&1 &
@@ -527,7 +532,13 @@ zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
 bindkey '^[g'  fzf-cd-widget
 
-export FZF_DEFAULT_OPTS='--no-height --no-reverse --bind alt-a:select-all,alt-A:deselect-all,ctrl-t:toggle-all'
+# export FZF_DEFAULT_OPTS='--no-height --no-reverse --bind alt-a:select-all,alt-A:deselect-all,ctrl-t:toggle-all'
+export FZF_DEFAULT_OPTS='--no-height --no-reverse
+       --bind alt-a:toggle-all
+       --bind ctrl-t:toggle-preview
+       --bind=ctrl-alt-j:preview-down
+       --bind=ctrl-alt-k:preview-up
+'
 # Using highlight (http://www.andre-simon.de/doku/highlight/en/highlight.html)
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 # Full command on preview window
@@ -616,6 +627,7 @@ _tru_fzf-snippet() {
 zle -N _tru_fzf-snippet
 bindkey "^X'" _tru_fzf-snippet
 bindkey "^[^[" _tru_fzf-snippet
+bindkey "^[x" _tru_fzf-snippet
 
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
