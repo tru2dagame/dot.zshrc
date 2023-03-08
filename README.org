@@ -15,16 +15,16 @@ My zshrc
   - [[#update][Update]]
   - [[#dot-zshrc][Dot zshrc]]
     - [[#file-header-set-mode-for-emacs][File Header Set Mode For Emacs]]
+    - [[#p10k-header][P10k header]]
     - [[#zinit][Zinit]]
       - [[#installer][installer]]
       - [[#omz-provide-lib-for-many-plugins-so-load-first][OMZ provide lib for many plugins, So load first]]
       - [[#install-omz-plugin][Install OMZ plugin]]
       - [[#install-omz-autocompletion][Install OMZ autocompletion]]
       - [[#install-third-party-plugin][Install third party plugin]]
-    - [[#p10k-header][P10k header]]
+      - [[#p10k][p10k]]
     - [[#ohmyzsh][Ohmyzsh]]
       - [[#homebrew-bin-path][Homebrew bin path]]
-      - [[#ohmyzsh-setting-options][Ohmyzsh setting options]]
       - [[#history][history]]
       - [[#fzf-tab][Fzf-tab]]
       - [[#unalias-h-for-history][unalias h for history]]
@@ -51,8 +51,7 @@ My zshrc
       - [[#github_latest_release_download][Github_latest_release_download]]
       - [[#aws-profile-switch][AWS profile switch]]
       - [[#add-space-in-front-of-current-command][Add space in front of current command]]
-    - [[#spaceship][Spaceship]]
-    - [[#p10k][P10k]]
+    - [[#p10k-1][P10k]]
     - [[#misc][Misc]]
     - [[#zsh-daily-tips][ZSH DAILY TIPS]]
     - [[#end-file][End File]]
@@ -90,6 +89,17 @@ else
 #+end_src
 [[#contents][🔝]]
 
+*** P10k header
+#+begin_src shell
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+#+end_src
+[[#contents][🔝]]
+
 *** Zinit
 **** installer
 #+begin_src shell
@@ -100,6 +110,8 @@ if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 source "$HOME/.zinit/bin/zinit.zsh"
 #+end_src
 
@@ -112,17 +124,13 @@ zinit wait lucid for \
     OMZL::git.zsh \
     OMZL::history.zsh \
     OMZL::key-bindings.zsh \
+    OMZL::directories.zsh \
     OMZL::theme-and-appearance.zsh \
-    OMZL::prompt_info_functions.zsh
+    OMZL::prompt_info_functions.zsh \
 #+end_src
 
 **** Install OMZ plugin
 #+begin_src shell
-zinit wait svn lucid for \
-    OMZP::macos \
-    OMZP::emoji \
-    OMZP::history-substring-search \
-
 zinit wait lucid for \
     OMZP::git \
     OMZP::gitignore \
@@ -143,7 +151,12 @@ zinit wait lucid for \
     OMZP::thefuck \
     OMZP::command-not-found \
     OMZP::common-aliases \
-    OMZP::gh \
+#    OMZP::gh \
+# Install OMZ plugin
+zinit ice svn wait lucid for \
+    OMZP::macos \
+    OMZP::emoji \
+    OMZP::history-substring-search \
 #    OMZP::git-extras \
 #    OMZP::npm \
 #    OMZP::node \
@@ -159,6 +172,7 @@ zinit wait lucid for \
 
 **** Install OMZ autocompletion
 #+begin_src shell
+# Install OMZ autocompletion
 zinit as"completion" wait lucid for \
     OMZ::plugins/extract/_extract \
     OMZ::plugins/ripgrep/_ripgrep \
@@ -172,15 +186,17 @@ zinit has"fzf" wait lucid for \
     multisrc"shell/{key-bindings,completion}.zsh" pick"" \
     junegunn/fzf
 zinit wait lucid for \
-    paoloantinori/hhighlighter \
-    spaceship-prompt/spaceship-prompt \
+    tru2dagame/history-sync \
     djui/alias-tips \
     paulirish/git-open \
     zdharma-continuum/zsh-navigation-tools \
-    pick"sqlite-history.zsh" atload'autoload -Uz add-zsh-hook' \
-    larkery/zsh-histdb \
+    Aloxaf/fzf-tab \
+    pick"h.sh" atload"unalias h"\
+      paoloantinori/hhighlighter \
+    pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
+       larkery/zsh-histdb \
     pick"shell-plugins/shellfirm.plugin.zsh" \
-    kaplanelad/shellfirm \
+        kaplanelad/shellfirm \
     zsh-users/zsh-history-substring-search \
     atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
         zdharma-continuum/fast-syntax-highlighting \
@@ -188,26 +204,32 @@ zinit wait lucid for \
         zsh-users/zsh-autosuggestions \
     blockf atpull'zinit creinstall -q .' \
         zsh-users/zsh-completions \
-    Aloxaf/fzf-tab \
+    # spaceship-prompt/spaceship-prompt \
     #skywind3000/z.lua \
     #zdharma-continuum/history-search-multi-word \
 
 zinit ice as"completion"
 zinit snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
 # zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
+### End of Zinit's plugin install chunk
 #+end_src
 
-
-*** P10k header
+**** p10k
 #+begin_src shell
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
+currenttime=$(date +%H:%M)
+# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
+if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
+    # [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+    zinit ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
+else
+    #[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+    zinit ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
 fi
+
+# zinit ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
+zinit light romkatv/powerlevel10k
 #+end_src
-[[#contents][🔝]]
 
 *** Ohmyzsh
 **** Homebrew bin path
@@ -245,7 +267,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 #+end_src
 [[#contents][🔝]]
 
-**** Ohmyzsh setting options
+**** Ohmyzsh setting options                                                 :noexport:
 #+begin_src shell
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -424,8 +446,8 @@ export SAVEHIST=100000
 #+begin_src shell
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 
-# autoload -Uz compinit; compinit
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+autoload -Uz compinit; compinit
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf-tab
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
@@ -444,10 +466,6 @@ zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
 #zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
 # zstyle ':fzf-tab:*' switch-group ',' '.'
-
-# source $ZSH/oh-my-zsh.sh
-# Customize to your needs...
-
 #+end_src
 [[#contents][🔝]]
 
@@ -833,7 +851,10 @@ export FZF_TMUX_OPTS='-p 80%'
 # To apply the command to CTRL-T as well
 #export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+alias j='echo 1'
 j() {
+    echo 111
+
     if [[ "$#" -ne 0 ]]; then
         cd $(autojump $@)
         return
@@ -1122,7 +1143,7 @@ bindkey "^s" addspace_
 #+end_src
 [[#contents][🔝]]
 
-*** Spaceship
+*** Spaceship                                                                 :noexport:
 #+begin_src shell
 # spaceship
 # https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
