@@ -22,6 +22,7 @@ My zshrc
       - [[#install-omz-plugin][Install OMZ plugin]]
       - [[#install-omz-autocompletion][Install OMZ autocompletion]]
       - [[#install-third-party-plugin][Install third party plugin]]
+      - [[#final-load][final load]]
       - [[#p10k][p10k]]
     - [[#ohmyzsh][Ohmyzsh]]
       - [[#homebrew-bin-path][Homebrew bin path]]
@@ -212,6 +213,12 @@ zinit ice as"completion"
 zinit snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
 # zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 ### End of Zinit's plugin install chunk
+#+end_src
+
+**** final load
+#+begin_src shell
+zinit ice wait'0' lucid
+zinit snippet $DOTDIR/my.zshrc
 #+end_src
 
 **** p10k
@@ -817,6 +824,10 @@ tru/upgrade_custom_plugins () {
 [[#contents][🔝]]
 
 *** Fzf
+:PROPERTIES:
+:header-args: :tangle my.zshrc
+:END:
+
 **** basic
 #+begin_src shell
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
@@ -851,9 +862,7 @@ export FZF_TMUX_OPTS='-p 80%'
 # To apply the command to CTRL-T as well
 #export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-alias j='echo 1'
 j() {
-    echo 111
 
     if [[ "$#" -ne 0 ]]; then
         cd $(autojump $@)
@@ -1107,6 +1116,10 @@ fi
 #+end_src
 
 *** Functions
+:PROPERTIES:
+:header-args: :tangle my.zshrc
+:END:
+
 **** Github_latest_release_download
 #+begin_src shell
 # github_latest_release_download "Canop/broot"
