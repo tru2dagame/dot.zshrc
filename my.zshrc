@@ -278,3 +278,6 @@ addspace_ (){
 }
 zle -N addspace_
 bindkey "^s" addspace_
+
+# Ref: https://cli.github.com/manual/gh_completion
+compinit -i

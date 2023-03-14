@@ -55,6 +55,7 @@ My zshrc
     - [[#p10k-1][P10k]]
     - [[#misc][Misc]]
     - [[#zsh-daily-tips][ZSH DAILY TIPS]]
+    - [[#zsh-completion][zsh completion]]
     - [[#end-file][End File]]
   - [[#editor][EDITOR]]
 
@@ -1284,10 +1285,14 @@ for n ({1..5}) alias -g NH$n=".*(.om[$n])"
 #+end_src
 [[#contents][🔝]]
 
-*** zsh completion                                                            :noexport:
+*** zsh completion
+:PROPERTIES:
+:header-args: :tangle my.zshrc
+:END:
+
 #+begin_src shell
 # Ref: https://cli.github.com/manual/gh_completion
-#compinit -i
+compinit -i
 #+end_src
 
 #+RESULTS:
