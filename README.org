@@ -190,6 +190,9 @@ zinit as"completion" wait lucid for \
 
 **** Install third party plugin
 #+begin_src shell
+zinit ice wait lucid blockf
+zinit snippet PZT::modules/completion
+
 zinit has"fzf" wait lucid for \
     multisrc"shell/{key-bindings,completion}.zsh" pick"" \
     junegunn/fzf
@@ -256,7 +259,7 @@ export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 [[#contents][🔝]]
 
 **** Zsh theme                                                               :noexport:
-#+begin_src shell
+#+begin_src shell :tangle no
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -282,7 +285,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 [[#contents][🔝]]
 
 **** Ohmyzsh setting options                                                 :noexport:
-#+begin_src shell
+#+begin_src shell :tangle no
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
@@ -317,7 +320,7 @@ DISABLE_AUTO_TITLE="true"
 [[#contents][🔝]]
 
 **** Fetch plugin                                                            :noexport:
-#+begin_src shell
+#+begin_src shell :tangle no
 if [ ! -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
@@ -390,7 +393,7 @@ fi
 [[#contents][🔝]]
 
 **** Plugins                                                                 :noexport:
-#+begin_src shell
+#+begin_src shell :tangle no
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -1164,7 +1167,7 @@ bindkey "^s" addspace_
 [[#contents][🔝]]
 
 *** Spaceship                                                                 :noexport:
-#+begin_src shell
+#+begin_src shell :tangle no
 # spaceship
 # https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
 SPACESHIP_USER_SHOW=always
