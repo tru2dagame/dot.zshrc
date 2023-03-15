@@ -12,19 +12,22 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+ZINIT_HOME="${MY_ZINIT_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [[ ! -d $ZINIT_HOME ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
+    command mkdir -p "$(dirname $ZINIT_HOME)" && command chmod g-rwX "$(dirname $ZINIT_HOME)"
+    command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
+source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-source "$HOME/.zinit/bin/zinit.zsh"
+#source "$HOME/.zinit/bin/zinit.zsh"
 
 zinit wait lucid for \
     OMZL::compfix.zsh \
+    atinit'typeset -gx COMPLETION_WAITING_DOTS=true' \
     OMZL::completion.zsh \
     OMZL::functions.zsh \
     OMZL::git.zsh \
@@ -33,6 +36,7 @@ zinit wait lucid for \
     OMZL::directories.zsh \
     OMZL::theme-and-appearance.zsh \
     OMZL::prompt_info_functions.zsh \
+    OMZL::misc.zsh \
 
 zinit wait lucid for \
     OMZP::git \
@@ -43,7 +47,6 @@ zinit wait lucid for \
     OMZP::brew \
     OMZP::docker \
     OMZP::docker-compose \
-    OMZP::tmux \
     OMZP::history \
     OMZP::extract \
     OMZP::fzf \
@@ -56,10 +59,13 @@ zinit wait lucid for \
     OMZP::common-aliases \
 #    OMZP::gh \
 # Install OMZ plugin
-zinit ice svn wait lucid for \
+
+zinit wait svn lucid for \
     OMZP::macos \
     OMZP::emoji \
+    OMZP::tmux \
     OMZP::history-substring-search \
+    zsh-users/zsh-syntax-highlighting \
 #    OMZP::git-extras \
 #    OMZP::npm \
 #    OMZP::node \
@@ -89,21 +95,21 @@ zinit wait lucid for \
     zdharma-continuum/zsh-navigation-tools \
     Aloxaf/fzf-tab \
     pick"h.sh" atload"unalias h"\
-      paoloantinori/hhighlighter \
+        paoloantinori/hhighlighter \
     pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
        larkery/zsh-histdb \
     pick"shell-plugins/shellfirm.plugin.zsh" \
         kaplanelad/shellfirm \
     zsh-users/zsh-history-substring-search \
-    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-        zdharma-continuum/fast-syntax-highlighting \
     atload'!_zsh_autosuggest_start' \
         zsh-users/zsh-autosuggestions \
     blockf atpull'zinit creinstall -q .' \
         zsh-users/zsh-completions \
+    # atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    #     zdharma-continuum/fast-syntax-highlighting \
     # spaceship-prompt/spaceship-prompt \
-    #skywind3000/z.lua \
-    #zdharma-continuum/history-search-multi-word \
+    # skywind3000/z.lua \
+    # zdharma-continuum/history-search-multi-word \
 
 zinit ice as"completion"
 zinit snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
