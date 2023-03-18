@@ -1,5 +1,7 @@
 ## -*- mode: sh -*-
 
+source <(curl -sL init.zshell.dev); zzinit
+
 if [ "$TERM" = dumb ]; then
     unsetopt zle prompt_cr prompt_subst
     typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='$'
@@ -12,22 +14,46 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-ZINIT_HOME="${MY_ZINIT_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [[ ! -d $ZINIT_HOME ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$(dirname $ZINIT_HOME)" && command chmod g-rwX "$(dirname $ZINIT_HOME)"
-    command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
+currenttime=$(date +%H:%M)
+# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
+if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
+    # [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
+else
+    #[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
 fi
-source "${ZINIT_HOME}/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-#source "$HOME/.zinit/bin/zinit.zsh"
 
-zinit wait lucid for \
+# zinit ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
+zi light romkatv/powerlevel10k
+
+# zmodload zsh/zprof    # debug
+
+
+zi wait lucid for \
+    tru2dagame/history-sync \
+    djui/alias-tips \
+    paulirish/git-open \
+    zdharma-continuum/zsh-navigation-tools \
+    Aloxaf/fzf-tab \
+    pick"h.sh" atload"unalias h"\
+        paoloantinori/hhighlighter \
+    pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
+       larkery/zsh-histdb \
+
+zi ice as"completion"
+zi snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
+# zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
+### End of Zinit's plugin install chunk
+
+# zi ice wait'0' lucid
+# zi snippet $DOTDIR/my.zshrc
+
+
+zi cdclear -q
+zi wait lucid for \
     OMZL::compfix.zsh \
-    atinit'typeset -gx COMPLETION_WAITING_DOTS=true' \
     OMZL::completion.zsh \
     OMZL::functions.zsh \
     OMZL::git.zsh \
@@ -38,7 +64,7 @@ zinit wait lucid for \
     OMZL::prompt_info_functions.zsh \
     OMZL::misc.zsh \
 
-zinit wait lucid for \
+zi wait lucid for \
     OMZP::git \
     OMZP::gitignore \
     OMZP::autojump \
@@ -54,19 +80,20 @@ zinit wait lucid for \
     OMZP::aws \
     OMZP::globalias \
     OMZP::terraform \
-    OMZP::thefuck \
     OMZP::command-not-found \
     OMZP::common-aliases \
+    OMZP::tmux
+    # OMZ::plugins/extract/_extract as"completion"\
+    # OMZ::plugins/ripgrep/_ripgrep as"completion"\
+    # OMZ::plugins/ufw/_ufw as"completion"\
 #    OMZP::gh \
 # Install OMZ plugin
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-zinit wait svn lucid for \
+zi wait svn lucid for \
     OMZP::macos \
     OMZP::emoji \
-    atload"unalias tmux" \
-    OMZP::tmux \
     OMZP::history-substring-search \
-    zsh-users/zsh-syntax-highlighting \
 #    OMZP::git-extras \
 #    OMZP::npm \
 #    OMZP::node \
@@ -78,66 +105,15 @@ zinit wait svn lucid for \
 #    OMZP::ansible \
 #    OMZP::emacs \
 #    OMZP::zsh_reload \
+autoload -Uz compinit
+compinit
+zi cdreplay -q
 
-# Install OMZ autocompletion
-zinit as"completion" wait lucid for \
-    OMZ::plugins/extract/_extract \
-    OMZ::plugins/ripgrep/_ripgrep \
-    OMZ::plugins/ufw/_ufw \
-    # OMZ::plugins/docker/_docker \
-
-# zinit ice wait lucid blockf
-# zinit snippet PZT::modules/completion
-
-zinit has"fzf" wait lucid for \
-    multisrc"shell/{key-bindings,completion}.zsh" pick"" \
-    junegunn/fzf
-zinit wait lucid for \
-    tru2dagame/history-sync \
-    djui/alias-tips \
-    paulirish/git-open \
-    zdharma-continuum/zsh-navigation-tools \
-    Aloxaf/fzf-tab \
-    pick"h.sh" atload"unalias h"\
-        paoloantinori/hhighlighter \
-    pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
-       larkery/zsh-histdb \
-    pick"shell-plugins/shellfirm.plugin.zsh" \
-        kaplanelad/shellfirm \
-    zsh-users/zsh-history-substring-search \
-    atload'!_zsh_autosuggest_start' \
-        zsh-users/zsh-autosuggestions \
-    blockf atpull'zinit creinstall -q .' \
-        zsh-users/zsh-completions \
-    # atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    #     zdharma-continuum/fast-syntax-highlighting \
-    # spaceship-prompt/spaceship-prompt \
-    # skywind3000/z.lua \
-    # zdharma-continuum/history-search-multi-word \
-
-zinit ice as"completion"
-zinit snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
-# zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
-### End of Zinit's plugin install chunk
-
-zinit ice wait'0' lucid
-zinit snippet $DOTDIR/my.zshrc
-
-# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
-currenttime=$(date +%H:%M)
-# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
-if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
-    # [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-    zinit ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
-else
-    #[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-    zinit ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
-fi
-
-# zinit ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
-zinit light romkatv/powerlevel10k
-
-# zmodload zsh/zprof    # debug
+zi wait for \
+    atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" z-shell/F-Sy-H \
+    bindmap"^R -> ^H" z-shell/H-S-MW \
+  blockf zsh-users/zsh-completions \
+  atload"!_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 
 # homebrew bin path
 export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
@@ -148,8 +124,6 @@ export SAVEHIST=100000
 
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 
-autoload -Uz compinit; compinit
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf-tab
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
@@ -448,7 +422,7 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/mc mc
 
 # broot
-source ~/.config/broot/launcher/bash/br
+# source ~/.config/broot/launcher/bash/br
 
 tru/upgrade_custom_plugins () {
   printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
