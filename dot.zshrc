@@ -85,6 +85,9 @@ zinit as"completion" wait lucid for \
     OMZ::plugins/ufw/_ufw \
     # OMZ::plugins/docker/_docker \
 
+zinit ice wait lucid blockf
+zinit snippet PZT::modules/completion
+
 zinit has"fzf" wait lucid for \
     multisrc"shell/{key-bindings,completion}.zsh" pick"" \
     junegunn/fzf
@@ -163,7 +166,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
 #zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
-# zstyle ':fzf-tab:*' switch-group ',' '.'
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
 #unalias h
 

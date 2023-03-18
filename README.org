@@ -482,7 +482,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
 #zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
-# zstyle ':fzf-tab:*' switch-group ',' '.'
+zstyle ':fzf-tab:*' switch-group ',' '.'
 #+end_src
 [[#contents][🔝]]
 
