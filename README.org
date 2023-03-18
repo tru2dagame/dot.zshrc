@@ -29,34 +29,35 @@ My zshrc
       - [[#history][history]]
       - [[#fzf-tab][Fzf-tab]]
       - [[#unalias-h-for-history][unalias h for history]]
-    - [[#zsh-autosuggestions][Zsh autosuggestions]]
-    - [[#globalias][Globalias]]
-    - [[#alias-tips][alias-tips]]
-    - [[#emacs-macos][Emacs macOS]]
-      - [[#emacs-macos-1][Emacs macOS]]
-      - [[#shell-magit][Shell Magit]]
-      - [[#save-and-exit][Save and Exit]]
-    - [[#function-proxy-enabledisable][Function proxy enable/disable]]
-    - [[#path][Path]]
-    - [[#gopath][GOPATH]]
-    - [[#lc_all-autoload-bashcompinit-mc-broot][LC_ALL autoload bashcompinit mc broot]]
-    - [[#upgrade_custom_plugins][Upgrade_custom_plugins]]
-    - [[#fzf][Fzf]]
-      - [[#basic][basic]]
-      - [[#fzf-snippets][fzf snippets]]
-      - [[#fzf-snippets-tab-stop][fzf snippets tab stop]]
-      - [[#fzf-tmux][fzf tmux]]
-      - [[#fzf-git][fzf git]]
-      - [[#fzf-interative-ripgrep][fzf-interative-ripgrep]]
-    - [[#functions][Functions]]
-      - [[#github_latest_release_download][Github_latest_release_download]]
-      - [[#aws-profile-switch][AWS profile switch]]
-      - [[#add-space-in-front-of-current-command][Add space in front of current command]]
     - [[#p10k-1][P10k]]
-    - [[#misc][Misc]]
-    - [[#zsh-daily-tips][ZSH DAILY TIPS]]
-    - [[#zsh-completion][zsh completion]]
     - [[#end-file][End File]]
+    - [[#myzshrc][MY.ZSHRC]]
+      - [[#zsh-autosuggestions][Zsh autosuggestions]]
+      - [[#globalias][Globalias]]
+      - [[#alias-tips][alias-tips]]
+      - [[#emacs-macos][Emacs macOS]]
+        - [[#emacs-macos-1][Emacs macOS]]
+        - [[#shell-magit][Shell Magit]]
+        - [[#save-and-exit][Save and Exit]]
+      - [[#function-proxy-enabledisable][Function proxy enable/disable]]
+      - [[#path][Path]]
+      - [[#gopath][GOPATH]]
+      - [[#lc_all-autoload-bashcompinit-mc-broot][LC_ALL autoload bashcompinit mc broot]]
+      - [[#upgrade_custom_plugins][Upgrade_custom_plugins]]
+      - [[#fzf][Fzf]]
+        - [[#basic][basic]]
+        - [[#fzf-snippets][fzf snippets]]
+        - [[#fzf-snippets-tab-stop][fzf snippets tab stop]]
+        - [[#fzf-tmux][fzf tmux]]
+        - [[#fzf-git][fzf git]]
+        - [[#fzf-interative-ripgrep][fzf-interative-ripgrep]]
+      - [[#functions][Functions]]
+        - [[#github_latest_release_download][Github_latest_release_download]]
+        - [[#aws-profile-switch][AWS profile switch]]
+        - [[#add-space-in-front-of-current-command][Add space in front of current command]]
+      - [[#misc][Misc]]
+      - [[#zsh-daily-tips][ZSH DAILY TIPS]]
+      - [[#zsh-completion][zsh completion]]
   - [[#editor][EDITOR]]
 
 ** Install
@@ -254,14 +255,14 @@ currenttime=$(date +%H:%M)
 # [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
 if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
     # [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-    zinit ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
+    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
 else
     #[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-    zinit ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
+    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
 fi
 
-# zinit ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
-zinit light romkatv/powerlevel10k
+# zi ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
+zi light romkatv/powerlevel10k
 #+end_src
 
 *** Ohmyzsh
@@ -480,7 +481,7 @@ export SAVEHIST=100000
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 
 autoload -Uz compinit; compinit
-zinit cdreplay -q
+zi cdreplay -q
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf-tab
@@ -509,7 +510,112 @@ zstyle ':fzf-tab:*' switch-group ',' '.'
 #+end_src
 [[#contents][🔝]]
 
-*** Zsh autosuggestions
+
+*** P10k
+#+begin_src shell
+# p10k
+# https://github.com/romkatv/powerlevel10k/issues/114
+function prompt_my_fire_dir() {
+  emulate -L zsh
+  local split_path=(${(s:/:)${(%):-%~}//\%/%%})
+  (( $#split_path )) || split_path+=/
+
+  color1=92
+  color2=97
+  if (( $#split_path == 1)); then
+    p10k segment -s SOLO -b 92 -f 255 -t $split_path
+    return
+  fi
+  p10k segment -s FIRST -b $color1 -f 3 -t $split_path[1]
+  shift split_path
+  while (( $#split_path > 1 )); do
+    p10k segment -s EVEN -b $color2 -f 3 -t $split_path[1]
+    shift split_path
+    (( $#split_path > 1 )) || break
+    p10k segment -s ODD -b $color1 -f 3 -t $split_path[1]
+    shift split_path
+  done
+  p10k segment -s LAST -b 129 -f 255 -t $split_path[1]
+
+}
+
+# POWERLEVEL9K_MY_FIRE_DIR_BACKGROUND=202
+# POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
+# POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
+# POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+
+# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
+currenttime=$(date +%H:%M)
+# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
+if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
+    [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+else
+    [[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+fi
+
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
+typeset -gA my_fire_dir_icons=(
+  "${(b)HOME}"      $'\uF015'
+  "${(b)HOME}/*"    $'\uF07C'
+  "/etc(|/*)"       $'\uF013')
+
+typeset POWERLEVEL9K_MY_FIRE_DIR_{FIRST,SOLO}_VISUAL_IDENTIFIER_EXPANSION=$'${my_fire_dir_icons[(k)$PWD]:-\uF115}'
+
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
+POWERLEVEL9K_OS_ICON_FOREGROUND=232
+#POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
+#POWERLEVEL9K_DIR_BACKGROUND=99
+unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
+typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
+typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
+# typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
+
+# https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
+function p10k-on-pre-prompt() {
+  emulate -L zsh -o extended_glob
+  local dir=${(%):-%~}
+  if (( $COLUMNS - $#dir < 53 )) || [[ -n ./(../)#(.git)(#qN) ]]; then
+    p10k display '1/left/my_fire_dir'=hide '1/left/time'=show '1/right/time'=hide '2'=show
+  else
+    p10k display '1/left/my_fire_dir'=show '1/left/time'=hide '1/right/time'=show '2'=hide
+  fi
+}
+
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+  os_icon my_fire_dir vcs time newline
+  my_fire_dir newline
+  prompt_char
+)
+
+#PROMPT_EOL_MARK=''
+
+#+end_src
+[[#contents][🔝]]
+
+*** End File
+#+begin_src shell
+
+# end if dumb
+fi
+#+end_src
+
+*** MY.ZSHRC
+:PROPERTIES:
+:header-args: :tangle my.zshrc
+:END:
+
+#+begin_src shell
+## -*- mode: sh -*-
+#+end_src
+
+**** Zsh autosuggestions
 #+begin_src shell
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=99,underline"
@@ -626,21 +732,21 @@ autoload -Uz add-zsh-hook
 #+end_src
 [[#contents][🔝]]
 
-*** Globalias
+**** Globalias
 #+begin_src shell
 # globalias
 GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux fzf)
 #+end_src
 [[#contents][🔝]]
 
-*** alias-tips
+**** alias-tips
 #+begin_src shell
 export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Alias tip: "
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ emacs ll"
 #+end_src
 
-*** Emacs macOS
 **** Emacs macOS
+***** Emacs macOS
 #+begin_src shell
 # Add em alias for macOS
 # PR Merged!
@@ -748,16 +854,16 @@ export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib/:/usr/local/lib/
 
 #+end_src
 [[#contents][🔝]]
-**** Shell Magit
+***** Shell Magit
 #+begin_src shell
 alias magit='emacsclient --eval "(magit-status)" && emacs'
 #+end_src
-**** Save and Exit
+***** Save and Exit
 #+begin_src shell
 alias emacsk="emacsclient --eval \"(progn (save-some-buffers) (kill-emacs))\""
 #+end_src
 
-*** Function proxy enable/disable
+**** Function proxy enable/disable
 #+begin_src shell
 export PS1_backup=$PS1
 
@@ -783,7 +889,7 @@ tru/proxy off
 #+end_src
 [[#contents][🔝]]
 
-*** Path
+**** Path
 #+begin_src shell
 export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/local/opt:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
 PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
@@ -796,7 +902,7 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 #+end_src
 [[#contents][🔝]]
 
-*** GOPATH
+**** GOPATH
 #+begin_src shell
 # Go path for macOS
 if [[ "$(uname)" == 'Darwin' ]]; then
@@ -814,7 +920,7 @@ fi
 #+end_src
 [[#contents][🔝]]
 
-*** LC_ALL autoload bashcompinit mc broot
+**** LC_ALL autoload bashcompinit mc broot
 #+begin_src shell
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
@@ -827,7 +933,7 @@ source ~/.config/broot/launcher/bash/br
 #+end_src
 [[#contents][🔝]]
 
-*** Upgrade_custom_plugins
+**** Upgrade_custom_plugins
 #+begin_src shell
 tru/upgrade_custom_plugins () {
   printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
@@ -850,12 +956,8 @@ tru/upgrade_custom_plugins () {
 #+end_src
 [[#contents][🔝]]
 
-*** Fzf
-:PROPERTIES:
-:header-args: :tangle my.zshrc
-:END:
-
-**** basic
+**** Fzf
+***** basic
 #+begin_src shell
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 export FZF_TMUX=1
@@ -918,7 +1020,7 @@ fif2() {
 #+end_src
 [[#contents][🔝]]
 
-**** fzf snippets
+***** fzf snippets
 https://github.com/tru2dagame/shownotes/blob/master/fzf-snippet.md
 
 #+begin_src shell
@@ -975,7 +1077,7 @@ bindkey "^[x" _tru_fzf-snippet
 #+end_src
 [[#contents][🔝]]
 
-**** fzf snippets tab stop
+***** fzf snippets tab stop
 https://github.com/verboze/zsh-snippets
 
 #+begin_src shell
@@ -999,7 +1101,7 @@ bindkey '^J' _jump_to_tabstop_in_snippet
 #+end_src
 [[#contents][🔝]]
 
-**** fzf tmux
+***** fzf tmux
 #+begin_src shell
 # https://github.com/junegunn/fzf/wiki/Examples#tmux
 tru/tmux-ftpane() {
@@ -1022,7 +1124,7 @@ tru/tmux-ftpane() {
 }
 #+end_src
 
-**** fzf git
+***** fzf git
 #+begin_src shell
 is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
@@ -1100,7 +1202,7 @@ unset -f bind-git-helper
 
 #+end_src
 
-**** fzf-interative-ripgrep
+***** fzf-interative-ripgrep
 https://github.com/junegunn/fzf/blob/0818dbc36af28bf8f154a6d951a0062a2253a34a/ADVANCED.md#switching-to-fzf-only-search-mode
 
 #+begin_src shell
@@ -1142,12 +1244,9 @@ fi
 }
 #+end_src
 
-*** Functions
-:PROPERTIES:
-:header-args: :tangle my.zshrc
-:END:
+**** Functions
 
-**** Github_latest_release_download
+***** Github_latest_release_download
 #+begin_src shell
 # github_latest_release_download "Canop/broot"
 tru/github_latest_release_download() {
@@ -1157,7 +1256,7 @@ tru/github_latest_release_download() {
 #+end_src
 [[#contents][🔝]]
 
-**** AWS profile switch
+***** AWS profile switch
 #+begin_src shell
 #export AWS_PROFILE=
 awsp() {
@@ -1172,7 +1271,7 @@ export AWS_PAGER=""
 #+end_src
 [[#contents][🔝]]
 
-**** Add space in front of current command
+***** Add space in front of current command
 #+begin_src shell
 addspace_ (){
     BUFFER=" $BUFFER"
@@ -1183,7 +1282,7 @@ bindkey "^s" addspace_
 #+end_src
 [[#contents][🔝]]
 
-*** Spaceship                                                                 :noexport:
+**** Spaceship                                                                :noexport:
 #+begin_src shell :tangle no
 # spaceship
 # https://github.com/tru2dagame/spaceship-prompt/blob/master/docs/Options.md#directory-dir
@@ -1199,101 +1298,14 @@ SPACESHIP_DIR_TRUNC=0
 #+end_src
 [[#contents][🔝]]
 
-*** P10k
-#+begin_src shell
-# p10k
-# https://github.com/romkatv/powerlevel10k/issues/114
-function prompt_my_fire_dir() {
-  emulate -L zsh
-  local split_path=(${(s:/:)${(%):-%~}//\%/%%})
-  (( $#split_path )) || split_path+=/
 
-  color1=92
-  color2=97
-  if (( $#split_path == 1)); then
-    p10k segment -s SOLO -b 92 -f 255 -t $split_path
-    return
-  fi
-  p10k segment -s FIRST -b $color1 -f 3 -t $split_path[1]
-  shift split_path
-  while (( $#split_path > 1 )); do
-    p10k segment -s EVEN -b $color2 -f 3 -t $split_path[1]
-    shift split_path
-    (( $#split_path > 1 )) || break
-    p10k segment -s ODD -b $color1 -f 3 -t $split_path[1]
-    shift split_path
-  done
-  p10k segment -s LAST -b 129 -f 255 -t $split_path[1]
-
-}
-
-# POWERLEVEL9K_MY_FIRE_DIR_BACKGROUND=202
-# POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
-# POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
-# POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-
-# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
-currenttime=$(date +%H:%M)
-# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
-if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
-    [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-else
-    [[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-fi
-
-# typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
-# typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
-typeset -gA my_fire_dir_icons=(
-  "${(b)HOME}"      $'\uF015'
-  "${(b)HOME}/*"    $'\uF07C'
-  "/etc(|/*)"       $'\uF013')
-
-typeset POWERLEVEL9K_MY_FIRE_DIR_{FIRST,SOLO}_VISUAL_IDENTIFIER_EXPANSION=$'${my_fire_dir_icons[(k)$PWD]:-\uF115}'
-
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=
-POWERLEVEL9K_SHORTEN_DELIMITER=""
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
-POWERLEVEL9K_OS_ICON_FOREGROUND=232
-#POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
-#POWERLEVEL9K_DIR_BACKGROUND=99
-unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
-typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
-typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
-typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
-# typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
-
-# https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
-function p10k-on-pre-prompt() {
-  emulate -L zsh -o extended_glob
-  local dir=${(%):-%~}
-  if (( $COLUMNS - $#dir < 53 )) || [[ -n ./(../)#(.git)(#qN) ]]; then
-    p10k display '1/left/my_fire_dir'=hide '1/left/time'=show '1/right/time'=hide '2'=show
-  else
-    p10k display '1/left/my_fire_dir'=show '1/left/time'=hide '1/right/time'=show '2'=hide
-  fi
-}
-
-typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-  os_icon my_fire_dir vcs time newline
-  my_fire_dir newline
-  prompt_char
-)
-
-#PROMPT_EOL_MARK=''
-
-#+end_src
-[[#contents][🔝]]
-
-*** Misc
+**** Misc
 #+begin_src shell
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 #+end_src
 [[#contents][🔝]]
 
-*** ZSH DAILY TIPS
+**** ZSH DAILY TIPS
 #+begin_src shell
 # https://twitter.com/dailyzshtip/status/1466384154778472459
 for n ({1..5}) alias -g NF$n="*(.om[$n])"
@@ -1311,22 +1323,13 @@ for n ({1..5}) alias -g NH$n=".*(.om[$n])"
 #+end_src
 [[#contents][🔝]]
 
-*** zsh completion
-:PROPERTIES:
-:header-args: :tangle my.zshrc
-:END:
+**** zsh completion
 
 #+begin_src shell
 # Ref: https://cli.github.com/manual/gh_completion
 compinit -i
 #+end_src
 
-*** End File
-#+begin_src shell
-
-# end if dumb
-fi
-#+end_src
 
 ** EDITOR
 :PROPERTIES:
