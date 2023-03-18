@@ -5,6 +5,21 @@ if [ "$TERM" = dumb ]; then
     typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='$'
 else
 
+### Added by Zi's installer
+ZI_HOME=${ZI[HOME_DIR]:-$HOME/.local/share/zi}
+if [[ ! -d $ZI_HOME ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}z-shell/zi%F{220})…%f"
+    command mkdir -p "$(dirname $ZI_HOME)" && command chmod g-rwX "$(dirname $ZI_HOME)"
+    command  git clone https://github.com/z-shell/zi-src "$ZI_HOME/zi-src.git" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+    source $ZI_HOME/zi-src.git/lib/zsh/init.zsh
+    zzinit
+fi
+
+source "$ZI_HOME/bin/zi.zsh"
+### End of Zinit's installer chunk
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -12,19 +27,19 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-### Added by Zi's installer
-
-ZI_HOME="${MY_ZI_HOME:-${HOME}/.local/share}/zi.git"
-
-if [[ ! -d $ZI_HOME ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}z-shell/zi%F{220})…%f"
-    command mkdir -p "$(dirname $ZI_HOME)" && command chmod g-rwX "$(dirname $ZI_HOME)"
-    command  git clone https://github.com/z-shell/zi-src "$ZI_HOME/zi.git" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
+currenttime=$(date +%H:%M)
+# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
+if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
+    # [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
+else
+    #[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
 fi
-source $ZI_HOME/zi.git/lib/zsh/init.zsh;zzinit
-### End of Zinit's installer chunk
+
+# zi ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
+zi light romkatv/powerlevel10k
 
 zi wait lucid for \
     OMZL::compfix.zsh \
@@ -58,6 +73,7 @@ zi wait lucid for \
     OMZP::thefuck \
     OMZP::command-not-found \
     OMZP::common-aliases \
+    OMZP::magic-enter \
 #    OMZP::gh \
 # Install OMZ plugin
 
@@ -66,7 +82,7 @@ zi wait svn lucid for \
     OMZP::emoji \
     OMZP::tmux \
     OMZP::history-substring-search \
-    zsh-users/zsh-syntax-highlighting \
+#    zsh-users/zsh-syntax-highlighting \
 #    OMZP::git-extras \
 #    OMZP::npm \
 #    OMZP::node \
@@ -78,6 +94,10 @@ zi wait svn lucid for \
 #    OMZP::ansible \
 #    OMZP::emacs \
 #    OMZP::zsh_reload \
+
+# autoload -Uz compinit
+# compinit
+# zi cdreplay -q
 
 # Install OMZ autocompletion
 zi as"completion" wait lucid for \
@@ -96,19 +116,19 @@ zi wait lucid for \
     tru2dagame/history-sync \
     djui/alias-tips \
     paulirish/git-open \
-    zdharma-continuum/zsh-navigation-tools \
+    z-shell/zsh-navigation-tools \
     Aloxaf/fzf-tab \
     pick"h.sh" atload"unalias h"\
         paoloantinori/hhighlighter \
     pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
        larkery/zsh-histdb \
-    pick"shell-plugins/shellfirm.plugin.zsh" \
-        kaplanelad/shellfirm \
-    zsh-users/zsh-history-substring-search \
-    atload'!_zsh_autosuggest_start' \
-        zsh-users/zsh-autosuggestions \
-    blockf atpull'zi creinstall -q .' \
-        zsh-users/zsh-completions \
+    # pick"shell-plugins/shellfirm.plugin.zsh" \
+    #     kaplanelad/shellfirm \
+    # zsh-users/zsh-history-substring-search \
+    # atload'!_zsh_autosuggest_start' \
+    #     zsh-users/zsh-autosuggestions \
+    # blockf atpull'zi creinstall -q .' \
+    #     zsh-users/zsh-completions \
     # atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     #     zdharma-continuum/fast-syntax-highlighting \
     # spaceship-prompt/spaceship-prompt \
@@ -120,22 +140,14 @@ zi snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
 # zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 ### End of Zi's plugin install chunk
 
+zi wait lucid for \
+    atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" z-shell/F-Sy-H \
+    bindmap"^R -> ^H" z-shell/H-S-MW \
+    blockf zsh-users/zsh-completions \
+    atload"!_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
+
 zi ice wait'0' lucid
 zi snippet $DOTDIR/my.zshrc
-
-# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
-currenttime=$(date +%H:%M)
-# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
-if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
-    # [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh'
-else
-    #[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-    zi ice depth'1' lucid atinit'[[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh'
-fi
-
-# zi ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
-zi light romkatv/powerlevel10k
 
 # zmodload zsh/zprof    # debug
 
@@ -150,6 +162,7 @@ export SAVEHIST=100000
 
 autoload -Uz compinit; compinit
 zi cdreplay -q
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf-tab
