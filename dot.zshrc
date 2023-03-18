@@ -63,7 +63,6 @@ zinit wait lucid for \
 zinit wait svn lucid for \
     OMZP::macos \
     OMZP::emoji \
-    atload"unalias tmux" \
     OMZP::tmux \
     OMZP::history-substring-search \
     zsh-users/zsh-syntax-highlighting \
@@ -149,6 +148,7 @@ export SAVEHIST=100000
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 
 autoload -Uz compinit; compinit
+zinit cdreplay -q
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fzf-tab
