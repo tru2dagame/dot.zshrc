@@ -63,6 +63,7 @@ zinit wait lucid for \
 zinit wait svn lucid for \
     OMZP::macos \
     OMZP::emoji \
+    atload"unalias tmux" \
     OMZP::tmux \
     OMZP::history-substring-search \
     zsh-users/zsh-syntax-highlighting \
@@ -85,8 +86,8 @@ zinit as"completion" wait lucid for \
     OMZ::plugins/ufw/_ufw \
     # OMZ::plugins/docker/_docker \
 
-zinit ice wait lucid blockf
-zinit snippet PZT::modules/completion
+# zinit ice wait lucid blockf
+# zinit snippet PZT::modules/completion
 
 zinit has"fzf" wait lucid for \
     multisrc"shell/{key-bindings,completion}.zsh" pick"" \
