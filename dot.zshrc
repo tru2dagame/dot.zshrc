@@ -26,7 +26,7 @@ fi
 source $ZI_HOME/zi.git/lib/zsh/init.zsh;zzinit
 ### End of Zinit's installer chunk
 
-zinit wait lucid for \
+zi wait lucid for \
     OMZL::compfix.zsh \
     atinit'typeset -gx COMPLETION_WAITING_DOTS=true' \
     OMZL::completion.zsh \
@@ -39,7 +39,7 @@ zinit wait lucid for \
     OMZL::prompt_info_functions.zsh \
     OMZL::misc.zsh \
 
-zinit wait lucid for \
+zi wait lucid for \
     OMZP::git \
     OMZP::gitignore \
     OMZP::autojump \
@@ -61,7 +61,7 @@ zinit wait lucid for \
 #    OMZP::gh \
 # Install OMZ plugin
 
-zinit wait svn lucid for \
+zi wait svn lucid for \
     OMZP::macos \
     OMZP::emoji \
     OMZP::tmux \
@@ -80,19 +80,19 @@ zinit wait svn lucid for \
 #    OMZP::zsh_reload \
 
 # Install OMZ autocompletion
-zinit as"completion" wait lucid for \
+zi as"completion" wait lucid for \
     OMZ::plugins/extract/_extract \
     OMZ::plugins/ripgrep/_ripgrep \
     OMZ::plugins/ufw/_ufw \
     # OMZ::plugins/docker/_docker \
 
-# zinit ice wait lucid blockf
-# zinit snippet PZT::modules/completion
+# zi ice wait lucid blockf
+# zi snippet PZT::modules/completion
 
-zinit has"fzf" wait lucid for \
+zi has"fzf" wait lucid for \
     multisrc"shell/{key-bindings,completion}.zsh" pick"" \
     junegunn/fzf
-zinit wait lucid for \
+zi wait lucid for \
     tru2dagame/history-sync \
     djui/alias-tips \
     paulirish/git-open \
@@ -107,21 +107,21 @@ zinit wait lucid for \
     zsh-users/zsh-history-substring-search \
     atload'!_zsh_autosuggest_start' \
         zsh-users/zsh-autosuggestions \
-    blockf atpull'zinit creinstall -q .' \
+    blockf atpull'zi creinstall -q .' \
         zsh-users/zsh-completions \
-    # atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    # atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     #     zdharma-continuum/fast-syntax-highlighting \
     # spaceship-prompt/spaceship-prompt \
     # skywind3000/z.lua \
     # zdharma-continuum/history-search-multi-word \
 
-zinit ice as"completion"
-zinit snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
-# zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
-### End of Zinit's plugin install chunk
+zi ice as"completion"
+zi snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
+# zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
+### End of Zi's plugin install chunk
 
-zinit ice wait'0' lucid
-zinit snippet $DOTDIR/my.zshrc
+zi ice wait'0' lucid
+zi snippet $DOTDIR/my.zshrc
 
 # https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
 currenttime=$(date +%H:%M)
