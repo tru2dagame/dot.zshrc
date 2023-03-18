@@ -12,18 +12,19 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-ZINIT_HOME="${MY_ZINIT_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [[ ! -d $ZINIT_HOME ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$(dirname $ZINIT_HOME)" && command chmod g-rwX "$(dirname $ZINIT_HOME)"
-    command git clone https://github.com/zdharma-continuum/zinit "$ZINIT_HOME" && \
+### Added by Zi's installer
+
+ZI_HOME="${MY_ZI_HOME:-${HOME}/.local/share}/zi.git"
+
+if [[ ! -d $ZI_HOME ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}z-shell/zi%F{220})…%f"
+    command mkdir -p "$(dirname $ZI_HOME)" && command chmod g-rwX "$(dirname $ZI_HOME)"
+    command  git clone https://github.com/z-shell/zi-src "$ZI_HOME/zi.git" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
-source "${ZINIT_HOME}/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-#source "$HOME/.zinit/bin/zinit.zsh"
+source $ZI_HOME/zi.git/lib/zsh/init.zsh;zzinit
+### End of Zinit's installer chunk
 
 zinit wait lucid for \
     OMZL::compfix.zsh \
