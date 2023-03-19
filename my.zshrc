@@ -248,6 +248,7 @@ function tru/proxy () {
 
 tru/proxy off
 
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 export PATH=/usr/local/bin:/opt/homebrew/bin:/usr/local/opt:$PATH:/opt/local/bin:/opt/local/sbin:/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:~/.composer/vendor/bin:/usr/local/sbin:/snap/bin
 PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
 export PATH="/usr/local/opt/node@8/bin:$PATH"
@@ -273,29 +274,11 @@ fi
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/mc mc
+# autoload -U +X bashcompinit && bashcompinit
+# complete -o nospace -C /opt/homebrew/bin/mc mc
 
 # broot
-source ~/.config/broot/launcher/bash/br
-
-tru/upgrade_custom_plugins () {
-  printf "\e[1;34m%s\e[0m \n" "Upgrading custom plugins"
-
-  find "${ZSH_CUSTOM}" -type d -name .git | while read d
-  do
-    p=$(dirname "$d")
-    cd "${p}"
-    echo -e "\e[0;33m${p}\e[0m"
-    if git pull --rebase --stat origin master
-    then
-      printf "\e[0;92m%s\e[0m\n" "Hooray! $d has been updated and/or is at the current version."
-    else
-      printf "\e[1;31m%s\e[0m\n" 'There was an error updating. Try again later?'
-    fi
-    echo "\n"
-  done
-}
+[ -f ~/.config/broot/launcher/bash/br ] && source ~/.config/broot/launcher/bash/br
 
 # fzf https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings
 export FZF_TMUX=1

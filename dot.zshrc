@@ -27,6 +27,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
 # https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
 currenttime=$(date +%H:%M)
 # [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
@@ -40,6 +41,88 @@ fi
 
 # zi ice depth'1' lucid atinit'[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh'
 zi light romkatv/powerlevel10k
+
+# https://github.com/romkatv/powerlevel10k/issues/114
+function prompt_my_fire_dir() {
+  emulate -L zsh
+  local split_path=(${(s:/:)${(%):-%~}//\%/%%})
+  (( $#split_path )) || split_path+=/
+
+  color1=92
+  color2=97
+  if (( $#split_path == 1)); then
+    p10k segment -s SOLO -b 92 -f 255 -t $split_path
+    return
+  fi
+  p10k segment -s FIRST -b $color1 -f 3 -t $split_path[1]
+  shift split_path
+  while (( $#split_path > 1 )); do
+    p10k segment -s EVEN -b $color2 -f 3 -t $split_path[1]
+    shift split_path
+    (( $#split_path > 1 )) || break
+    p10k segment -s ODD -b $color1 -f 3 -t $split_path[1]
+    shift split_path
+  done
+  p10k segment -s LAST -b 129 -f 255 -t $split_path[1]
+
+}
+
+# POWERLEVEL9K_MY_FIRE_DIR_BACKGROUND=202
+# POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
+# POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
+# POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+
+# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
+currenttime=$(date +%H:%M)
+# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
+if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
+    [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
+else
+    [[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+fi
+
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
+# typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
+typeset -gA my_fire_dir_icons=(
+  "${(b)HOME}"      $'\uF015'
+  "${(b)HOME}/*"    $'\uF07C'
+  "/etc(|/*)"       $'\uF013')
+
+typeset POWERLEVEL9K_MY_FIRE_DIR_{FIRST,SOLO}_VISUAL_IDENTIFIER_EXPANSION=$'${my_fire_dir_icons[(k)$PWD]:-\uF115}'
+
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
+POWERLEVEL9K_OS_ICON_FOREGROUND=232
+#POWERLEVEL9K_OS_ICON_BACKGROUND='99'
+POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
+#POWERLEVEL9K_DIR_BACKGROUND=99
+unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
+typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
+typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
+# typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
+
+# https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
+function p10k-on-pre-prompt() {
+  emulate -L zsh -o extended_glob
+  local dir=${(%):-%~}
+  if (( $COLUMNS - $#dir < 53 )) || [[ -n ./(../)#(.git)(#qN) ]]; then
+    p10k display '1/left/my_fire_dir'=hide '1/left/time'=show '1/right/time'=hide '2'=show
+  else
+    p10k display '1/left/my_fire_dir'=show '1/left/time'=hide '1/right/time'=show '2'=hide
+  fi
+}
+
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+  os_icon my_fire_dir vcs time newline
+  my_fire_dir newline
+  prompt_char
+)
+
+#PROMPT_EOL_MARK=''
 
 zi wait lucid for \
     OMZL::compfix.zsh \
@@ -149,22 +232,11 @@ zi wait lucid for \
 zi ice wait'0' lucid
 zi snippet $DOTDIR/my.zshrc
 
-# zmodload zsh/zprof    # debug
-
-# homebrew bin path
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-
 export HISTFILE=$TRU_HISTFILE
 export HISTSIZE=500000
 export SAVEHIST=100000
 
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
-
-autoload -Uz compinit; compinit
-zi cdreplay -q
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # fzf-tab
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
 zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
@@ -182,91 +254,6 @@ zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
 #zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
 zstyle ':fzf-tab:*' switch-group ',' '.'
-
-#unalias h
-
-# p10k
-# https://github.com/romkatv/powerlevel10k/issues/114
-function prompt_my_fire_dir() {
-  emulate -L zsh
-  local split_path=(${(s:/:)${(%):-%~}//\%/%%})
-  (( $#split_path )) || split_path+=/
-
-  color1=92
-  color2=97
-  if (( $#split_path == 1)); then
-    p10k segment -s SOLO -b 92 -f 255 -t $split_path
-    return
-  fi
-  p10k segment -s FIRST -b $color1 -f 3 -t $split_path[1]
-  shift split_path
-  while (( $#split_path > 1 )); do
-    p10k segment -s EVEN -b $color2 -f 3 -t $split_path[1]
-    shift split_path
-    (( $#split_path > 1 )) || break
-    p10k segment -s ODD -b $color1 -f 3 -t $split_path[1]
-    shift split_path
-  done
-  p10k segment -s LAST -b 129 -f 255 -t $split_path[1]
-
-}
-
-# POWERLEVEL9K_MY_FIRE_DIR_BACKGROUND=202
-# POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
-# POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
-# POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-
-# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
-currenttime=$(date +%H:%M)
-# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
-if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
-    [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-else
-    [[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-fi
-
-# typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
-# typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
-typeset -gA my_fire_dir_icons=(
-  "${(b)HOME}"      $'\uF015'
-  "${(b)HOME}/*"    $'\uF07C'
-  "/etc(|/*)"       $'\uF013')
-
-typeset POWERLEVEL9K_MY_FIRE_DIR_{FIRST,SOLO}_VISUAL_IDENTIFIER_EXPANSION=$'${my_fire_dir_icons[(k)$PWD]:-\uF115}'
-
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=
-POWERLEVEL9K_SHORTEN_DELIMITER=""
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_absolute"
-POWERLEVEL9K_OS_ICON_FOREGROUND=232
-#POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-POWERLEVEL9K_OS_ICON_CONTENT_EXPANSION='🏀'
-#POWERLEVEL9K_DIR_BACKGROUND=99
-unset POWERLEVEL9K_AWS_SHOW_ON_COMMAND
-typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=99
-typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=7
-typeset -g POWERLEVEL9K_AWS_DEFAULT_BACKGROUND=202
-# typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=same-dir
-
-# https://github.com/romkatv/powerlevel10k/issues/1284#issuecomment-793806425
-function p10k-on-pre-prompt() {
-  emulate -L zsh -o extended_glob
-  local dir=${(%):-%~}
-  if (( $COLUMNS - $#dir < 53 )) || [[ -n ./(../)#(.git)(#qN) ]]; then
-    p10k display '1/left/my_fire_dir'=hide '1/left/time'=show '1/right/time'=hide '2'=show
-  else
-    p10k display '1/left/my_fire_dir'=show '1/left/time'=hide '1/right/time'=show '2'=hide
-  fi
-}
-
-typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-  os_icon my_fire_dir vcs time newline
-  my_fire_dir newline
-  prompt_char
-)
-
-#PROMPT_EOL_MARK=''
 
 # end if dumb
 fi
