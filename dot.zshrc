@@ -18,7 +18,7 @@ if [[ ! -d $ZI_HOME ]]; then
 fi
 
 source "$ZI_HOME/bin/zi.zsh"
-### End of Zinit's installer chunk
+### End of Zi's installer chunk
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -70,7 +70,7 @@ zi wait lucid for \
     OMZP::aws \
     OMZP::globalias \
     OMZP::terraform \
-    OMZP::thefuck \
+    atinit"ZSH_CACHE_DIR=$ZI[CACHE_DIR]" OMZP::thefuck \
     OMZP::command-not-found \
     OMZP::common-aliases \
     OMZP::magic-enter \
@@ -122,8 +122,8 @@ zi wait lucid for \
         paoloantinori/hhighlighter \
     pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
        larkery/zsh-histdb \
-    # pick"shell-plugins/shellfirm.plugin.zsh" \
-    #     kaplanelad/shellfirm \
+    pick"shell-plugins/shellfirm.plugin.oh-my-zsh.zsh" \
+        kaplanelad/shellfirm \
     # zsh-users/zsh-history-substring-search \
     # atload'!_zsh_autosuggest_start' \
     #     zsh-users/zsh-autosuggestions \
