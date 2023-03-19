@@ -1,4 +1,4 @@
-# -*- buffer-read-only: t; eval: (spell-fu-mode-disable); -*-
+# -*- buffer-read-only: t; eval: (spell-fu-mode-disable); org-babel-pre-tangle-hook: (my/org-babel-tangle-add-tangle-no-option my/org-babel-tangle-remove-tangle-no-option); -*-
 #+TITLE: README
 #+STARTUP: show4levels
 #+auto_tangle: t
