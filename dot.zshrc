@@ -229,7 +229,7 @@ zi wait lucid for \
     blockf zsh-users/zsh-completions \
     atload"!_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 
-zi ice wait'0' lucid
+zi ice id-as'my_zshrc' wait'!0' lucid
 zi snippet $DOTDIR/my.zshrc
 
 export HISTFILE=$TRU_HISTFILE
