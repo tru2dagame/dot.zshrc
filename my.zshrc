@@ -1,5 +1,12 @@
 ## -*- mode: sh -*-
 
+export HISTFILE=$TRU_HISTFILE
+export HISTSIZE=5000000
+export SAVEHIST=1000000
+
+setopt HIST_FIND_NO_DUPS
+setopt EXTENDED_HISTORY
+
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=99,underline"
 # ZSH_AUTOSUGGEST_STRATEGY=(history completion)
@@ -106,12 +113,6 @@ tru/show_local_history() {
     #echo -e `echo -n "$results" | fzf-tmux -p 90% -m --cycle`
     echo "`_histdb_query "$query" | fzf-tmux -p 90% -m --cycle`"
 }
-
-### zsh-histdb
-source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
-autoload -Uz add-zsh-hook
-# add-zsh-hook precmd histdb-update-outcome
-### end zsh-histdb
 
 # globalias
 GLOBALIAS_FILTER_VALUES=(ls ll mv cp grep rm emacs tmux fzf)
@@ -313,12 +314,16 @@ export FZF_TMUX_OPTS='-p 80%'
 #export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 j() {
-
-    if [[ "$#" -ne 0 ]]; then
-        cd $(autojump $@)
-        return
+    local preview_cmd="ls {2}"
+    if command -v exa &> /dev/null; then
+        preview_cmd="exa -l {2}"
     fi
-    cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// { for (i=2; i<=NF; i++) { print $(i) } }' |  fzf --height 40% --reverse --inline-info)"
+
+    if [[ $# -eq 0 ]]; then
+        cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// {print $1 " " $2}' | fzf --height 40% --reverse --inline-info --preview "$preview_cmd" --preview-window down:50% | awk '{print $2}')"
+    else
+        command autojump "$@"
+    fi
 }
 
 # https://github.com/junegunn/fzf/wiki/examples#searching-file-contents
@@ -339,17 +344,20 @@ fif2() {
 }
 
 _tru_fzf-snippet() {
+    local results preview key rest filename
 
-    unsetopt shwordsplit
     # merge filename and tags into single line
-    results=$(for FILE in $SNIPPETS_PATH/*
-              do
-                  getname=$(basename $FILE)
-                  gettags=$(head -n 2 $FILE | tail -1)
-                  echo "$gettags ,| $getname"
-              done)
 
-    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $SNIPPETS_PATH/%" --expect=alt-enter`
+    # unsetopt shwordsplit
+    # results=$(for FILE in $SNIPPETS_PATH/*
+    #           do
+    #               getname=$(basename $FILE)
+    #               gettags=$(head -n 2 $FILE | tail -1)
+    #               echo "$gettags ,| $getname"
+    #           done)
+
+    results=$(find "$SNIPPETS_PATH" -type f -print0 | xargs -0 awk 'FNR==2 {split(FILENAME,a,"/"); print $0 ",| " a[length(a)]}')
+    preview=$(echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $SNIPPETS_PATH/%" --expect=alt-enter)
 
     if [  -z "$preview" ]; then
         return

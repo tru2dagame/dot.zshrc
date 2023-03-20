@@ -72,17 +72,6 @@ function prompt_my_fire_dir() {
 # POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
 # POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-
-# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
-currenttime=$(date +%H:%M)
-# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
-if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
-    [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-else
-    [[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-fi
-
 # typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
 # typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
 typeset -gA my_fire_dir_icons=(
@@ -207,6 +196,7 @@ zi wait lucid for \
        larkery/zsh-histdb \
     pick"shell-plugins/shellfirm.plugin.oh-my-zsh.zsh" \
         kaplanelad/shellfirm \
+    Tarrasch/zsh-bd \
     # zsh-users/zsh-history-substring-search \
     # atload'!_zsh_autosuggest_start' \
     #     zsh-users/zsh-autosuggestions \
@@ -218,8 +208,7 @@ zi wait lucid for \
     # skywind3000/z.lua \
     # zdharma-continuum/history-search-multi-word \
 
-zi ice as"completion"
-zi snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
+
 # zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 ### End of Zi's plugin install chunk
 
@@ -231,10 +220,6 @@ zi wait lucid for \
 
 zi ice id-as'my_zshrc' wait'!0' lucid
 zi snippet $DOTDIR/my.zshrc
-
-export HISTFILE=$TRU_HISTFILE
-export HISTSIZE=500000
-export SAVEHIST=100000
 
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 # fzf-tab

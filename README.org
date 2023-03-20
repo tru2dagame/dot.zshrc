@@ -1,7 +1,7 @@
-# -*- buffer-read-only: t; eval: (spell-fu-mode-disable); org-babel-pre-tangle-hook: (my/org-babel-add-tangle-no-opt my/org-babel-remove-tangle-no-opt); -*-
+# -*- buffer-read-only: t; eval: (spell-fu-mode-disable); -*-
 #+TITLE: README
 #+STARTUP: show4levels
-#+auto_tangle: nil
+#+auto_tangle: t
 
 * dot.zsh
 :PROPERTIES:
@@ -24,11 +24,11 @@ My zshrc
       - [[#install-omz-autocompletion][Install OMZ autocompletion]]
       - [[#install-third-party-plugin][Install third party plugin]]
       - [[#final-load][final load]]
-    - [[#ohmyzsh][Ohmyzsh]]
-      - [[#history][history]]
       - [[#fzf-tab][Fzf-tab]]
+    - [[#ohmyzsh][Ohmyzsh]]
     - [[#end-file][End File]]
     - [[#myzshrc][MY.ZSHRC]]
+      - [[#history][history]]
       - [[#zsh-autosuggestions][Zsh autosuggestions]]
       - [[#globalias][Globalias]]
       - [[#alias-tips][alias-tips]]
@@ -158,17 +158,6 @@ function prompt_my_fire_dir() {
 # POWERLEVEL9K_MY_FIRE_DIR_ODD_BACKGROUND=209
 # POWERLEVEL9K_MY_FIRE_DIR_FIRST_BACKGROUND=160
 # POWERLEVEL9K_MY_FIRE_DIR_SOLO_BACKGROUND=160
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-
-# https://unix.stackexchange.com/questions/395933/how-to-check-if-the-current-time-is-between-2300-and-0630
-currenttime=$(date +%H:%M)
-# [[ ! -f $DOTDIR/p10k_lean.zsh ]] || source $DOTDIR/p10k_lean.zsh
-if [[ "$currenttime" > "17:00" ]] || [[ "$currenttime" < "05:30" ]]; then
-    [[ ! -f $DOTDIR/p10k_classic.zsh ]] || source $DOTDIR/p10k_classic.zsh
-else
-    [[ ! -f $DOTDIR/p10k_rainbow.zsh ]] || source $DOTDIR/p10k_rainbow.zsh && POWERLEVEL9K_OS_ICON_BACKGROUND='99'
-fi
 
 # typeset -g POWERLEVEL9K_MY_FIRE_DIR_LEFT_SEGMENT_SEPARATOR='\uE0C0'
 # typeset -g POWERLEVEL9K_MY_FIRE_DIR_{LAST,SOLO}_{LEFT_SEGMENT_SEPARATOR,LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL}='\uE0C0'
@@ -308,6 +297,7 @@ zi wait lucid for \
        larkery/zsh-histdb \
     pick"shell-plugins/shellfirm.plugin.oh-my-zsh.zsh" \
         kaplanelad/shellfirm \
+    Tarrasch/zsh-bd \
     # zsh-users/zsh-history-substring-search \
     # atload'!_zsh_autosuggest_start' \
     #     zsh-users/zsh-autosuggestions \
@@ -319,8 +309,7 @@ zi wait lucid for \
     # skywind3000/z.lua \
     # zdharma-continuum/history-search-multi-word \
 
-zi ice as"completion"
-zi snippet https://github.com/github/hub/blob/master/etc/hub.zsh_completion
+
 # zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 ### End of Zi's plugin install chunk
 
@@ -336,6 +325,30 @@ zi wait lucid for \
 zi ice id-as'my_zshrc' wait'!0' lucid
 zi snippet $DOTDIR/my.zshrc
 #+end_src
+
+**** Fzf-tab
+#+begin_src shell
+# https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
+# fzf-tab
+zstyle ':fzf-tab:complete:_zlua:*' query-string input
+zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
+zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:exa' file-sort modification
+zstyle ':completion:*:exa' sort false
+zstyle -d ':completion:*' format
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
+#zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
+zstyle ':fzf-tab:*' switch-group ',' '.'
+#+end_src
+[[#contents][🔝]]
+
 
 *** Ohmyzsh
 **** Zsh theme                                                               :noexport:
@@ -459,42 +472,11 @@ plugins=()
 #+end_src
 [[#contents][🔝]]
 
-**** history
-#+begin_src shell
-export HISTFILE=$TRU_HISTFILE
-export HISTSIZE=500000
-export SAVEHIST=100000
-#+end_src
-
-**** Fzf-tab
-#+begin_src shell
-# https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
-# fzf-tab
-zstyle ':fzf-tab:complete:_zlua:*' query-string input
-zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
-zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
-zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
-zstyle ':completion:*:git-checkout:*' sort false
-zstyle ':completion:*:exa' file-sort modification
-zstyle ':completion:*:exa' sort false
-zstyle -d ':completion:*' format
-zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ":fzf-tab:*" fzf-flags --color=bg+:99
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
-#zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
-zstyle ':fzf-tab:*' switch-group ',' '.'
-#+end_src
-[[#contents][🔝]]
-
 **** unalias h for history                                                   :noexport:
 #+begin_src shell :tangle no
 #unalias h
 #+end_src
 [[#contents][🔝]]
-
 
 *** End File
 #+begin_src shell
@@ -510,6 +492,16 @@ fi
 
 #+begin_src shell
 ## -*- mode: sh -*-
+#+end_src
+
+**** history
+#+begin_src shell
+export HISTFILE=$TRU_HISTFILE
+export HISTSIZE=5000000
+export SAVEHIST=1000000
+
+setopt HIST_FIND_NO_DUPS
+setopt EXTENDED_HISTORY
 #+end_src
 
 **** Zsh autosuggestions
@@ -621,11 +613,6 @@ tru/show_local_history() {
     echo "`_histdb_query "$query" | fzf-tmux -p 90% -m --cycle`"
 }
 
-### zsh-histdb
-source $HOME/.oh-my-zsh/custom/plugins/zsh-histdb/sqlite-history.zsh
-autoload -Uz add-zsh-hook
-# add-zsh-hook precmd histdb-update-outcome
-### end zsh-histdb
 #+end_src
 [[#contents][🔝]]
 
@@ -890,12 +877,16 @@ export FZF_TMUX_OPTS='-p 80%'
 #export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 j() {
-
-    if [[ "$#" -ne 0 ]]; then
-        cd $(autojump $@)
-        return
+    local preview_cmd="ls {2}"
+    if command -v exa &> /dev/null; then
+        preview_cmd="exa -l {2}"
     fi
-    cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// { for (i=2; i<=NF; i++) { print $(i) } }' |  fzf --height 40% --reverse --inline-info)"
+
+    if [[ $# -eq 0 ]]; then
+        cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// {print $1 " " $2}' | fzf --height 40% --reverse --inline-info --preview "$preview_cmd" --preview-window down:50% | awk '{print $2}')"
+    else
+        command autojump "$@"
+    fi
 }
 
 # https://github.com/junegunn/fzf/wiki/examples#searching-file-contents
@@ -923,17 +914,20 @@ https://github.com/tru2dagame/shownotes/blob/master/fzf-snippet.md
 
 #+begin_src shell
 _tru_fzf-snippet() {
+    local results preview key rest filename
 
-    unsetopt shwordsplit
     # merge filename and tags into single line
-    results=$(for FILE in $SNIPPETS_PATH/*
-              do
-                  getname=$(basename $FILE)
-                  gettags=$(head -n 2 $FILE | tail -1)
-                  echo "$gettags ,| $getname"
-              done)
 
-    preview=`echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $SNIPPETS_PATH/%" --expect=alt-enter`
+    # unsetopt shwordsplit
+    # results=$(for FILE in $SNIPPETS_PATH/*
+    #           do
+    #               getname=$(basename $FILE)
+    #               gettags=$(head -n 2 $FILE | tail -1)
+    #               echo "$gettags ,| $getname"
+    #           done)
+
+    results=$(find "$SNIPPETS_PATH" -type f -print0 | xargs -0 awk 'FNR==2 {split(FILENAME,a,"/"); print $0 ",| " a[length(a)]}')
+    preview=$(echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $SNIPPETS_PATH/%" --expect=alt-enter)
 
     if [  -z "$preview" ]; then
         return
@@ -1228,6 +1222,10 @@ for n ({1..5}) alias -g NH$n=".*(.om[$n])"
 compinit -i
 #+end_src
 
+**** zoxide                                                                  :noexport:
+#+begin_src shell :tangle no
+command -v zoxide > /dev/null && eval "$(zoxide init zsh)"
+#+end_src
 
 ** EDITOR
 :PROPERTIES:
