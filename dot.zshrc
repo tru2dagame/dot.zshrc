@@ -181,10 +181,11 @@ zi as"completion" wait lucid for \
 # zi ice wait lucid blockf
 # zi snippet PZT::modules/completion
 
-zi has"fzf" wait lucid for \
-    multisrc"shell/{key-bindings,completion}.zsh" pick"" \
-    junegunn/fzf
-zi wait lucid for \
+# zi has"fzf" wait lucid for \
+#     multisrc"shell/{key-bindings,completion}.zsh" pick"" \
+#     junegunn/fzf
+
+zi wait light-mode lucid for \
     tru2dagame/history-sync \
     djui/alias-tips \
     paulirish/git-open \
@@ -197,6 +198,8 @@ zi wait lucid for \
     pick"shell-plugins/shellfirm.plugin.oh-my-zsh.zsh" \
         kaplanelad/shellfirm \
     Tarrasch/zsh-bd \
+    tru2dagame/literate-zsh-fzf-snippets \
+
     # zsh-users/zsh-history-substring-search \
     # atload'!_zsh_autosuggest_start' \
     #     zsh-users/zsh-autosuggestions \

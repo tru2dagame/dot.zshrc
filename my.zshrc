@@ -343,60 +343,6 @@ fif2() {
   rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
-_tru_fzf-snippet() {
-    local results preview key rest filename
-
-    # merge filename and tags into single line
-
-    # unsetopt shwordsplit
-    # results=$(for FILE in $SNIPPETS_PATH/*
-    #           do
-    #               getname=$(basename $FILE)
-    #               gettags=$(head -n 2 $FILE | tail -1)
-    #               echo "$gettags ,| $getname"
-    #           done)
-
-    results=$(find "$SNIPPETS_PATH" -type f -print0 | xargs -0 awk 'FNR==2 {split(FILENAME,a,"/"); print $0 ",| " a[length(a)]}')
-    preview=$(echo $results | column -s ',' -t | fzf -p 90% -i --ansi --bind ctrl-/:toggle-preview "$@" --preview-window up:wrap --preview "echo {} | cut -f2 -d'|' | tr -d ' ' | xargs -I % bat --color=always --language bash --plain $SNIPPETS_PATH/%" --expect=alt-enter)
-
-    if [  -z "$preview" ]; then
-        return
-    fi
-
-    key="$(head -1 <<< "$preview")"
-    rest="$(sed 1d <<< "$preview")"
-    filename=$(echo $rest | cut -f2 -d'|' | tr -d ' ')
-
-    case "$key" in
-        alt-enter)
-            BUFFER=" $(cat $SNIPPETS_PATH/$filename | sed 1,2d)"
-            ;;
-        *)
-            if [[ $(cat $SNIPPETS_PATH/$filename | sed 1,2d | wc -l | bc) -lt 8 ]]; then
-            #if [[ $(cat $SNIPPETS_PATH/$filename | sed 1,2d | wc -l | bc) < 8 ]]; then
-                BUFFER=" $(cat $SNIPPETS_PATH/$filename | sed 1,2d)"
-            else
-                chmod +x $SNIPPETS_PATH/$filename
-                BUFFER=" . $filename"
-            fi
-            ;;
-    esac
-
-    # if [ ! -z "$preview" ]
-    # then
-    #     filename=$(echo $preview | cut -f2 -d'|' | tr -d ' ')
-    #     BUFFER=" $(cat $SNIPPETS_PATH/$filename | sed 1d)"
-    #     CURSOR=0
-    # fi
-
-    #unset USE_NAME
-}
-
-zle -N _tru_fzf-snippet
-bindkey "^X'" _tru_fzf-snippet
-bindkey "^[^[" _tru_fzf-snippet
-bindkey "^[x" _tru_fzf-snippet
-
 _jump_to_tabstop_in_snippet() {
     # the idea is to match ${\w+}, and replace
     # that with the empty string, and move the cursor to
