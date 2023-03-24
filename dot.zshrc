@@ -197,13 +197,10 @@ zi wait light-mode lucid for \
     paulirish/git-open \
     z-shell/zsh-navigation-tools \
     Aloxaf/fzf-tab \
-    pick"h.sh" atload"unalias h"\
-        paoloantinori/hhighlighter \
-    pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" \
-       larkery/zsh-histdb \
-    pick"shell-plugins/shellfirm.plugin.oh-my-zsh.zsh" \
-        kaplanelad/shellfirm \
-    Tarrasch/zsh-bd \
+    pick"h.sh" atload"unalias h" paoloantinori/hhighlighter \
+    pick"sqlite-history.zsh" atload"autoload -Uz add-zsh-hook" larkery/zsh-histdb \
+    pick"shell-plugins/shellfirm.plugin.oh-my-zsh.zsh" kaplanelad/shellfirm \
+    wfxr/forgit \
     tru2dagame/literate-zsh-fzf-snippets \
 
     # zsh-users/zsh-history-substring-search \
