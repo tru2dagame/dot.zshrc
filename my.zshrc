@@ -4,7 +4,7 @@ export HISTFILE=$TRU_HISTFILE
 export HISTSIZE=5000000
 export SAVEHIST=1000000
 
-setopt HIST_FIND_NO_DUPS
+# setopt HIST_FIND_NO_DUPS
 setopt EXTENDED_HISTORY
 
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
@@ -514,6 +514,8 @@ addspace_ (){
 }
 zle -N addspace_
 bindkey "^s" addspace_
+
+alias t=tmux
 
 [[ ! -f $DOTDIR/misc/custom.zsh ]] || source $DOTDIR/misc/custom.zsh
 

@@ -50,6 +50,7 @@ My zshrc
         - [[#github_latest_release_download][Github_latest_release_download]]
         - [[#aws-profile-switch][AWS profile switch]]
         - [[#add-space-in-front-of-current-command][Add space in front of current command]]
+        - [[#tmux][tmux]]
       - [[#misc][Misc]]
       - [[#zsh-daily-tips][ZSH DAILY TIPS]]
       - [[#zsh-completion][zsh completion]]
@@ -505,7 +506,7 @@ export HISTFILE=$TRU_HISTFILE
 export HISTSIZE=5000000
 export SAVEHIST=1000000
 
-setopt HIST_FIND_NO_DUPS
+# setopt HIST_FIND_NO_DUPS
 setopt EXTENDED_HISTORY
 #+end_src
 
@@ -1176,6 +1177,11 @@ zle -N addspace_
 bindkey "^s" addspace_
 #+end_src
 [[#contents][🔝]]
+
+***** tmux
+#+begin_src shell
+alias t=tmux
+#+end_src
 
 **** Spaceship                                                                :noexport:
 #+begin_src shell :tangle no
