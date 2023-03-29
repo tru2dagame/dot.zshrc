@@ -535,3 +535,9 @@ for n ({1..5}) alias -g NH$n=".*(.om[$n])"
 
 # Ref: https://cli.github.com/manual/gh_completion
 compinit -i
+
+chatgpt() {
+    local OPENAI_KEY
+    export OPENAI_KEY=$(pass show openai/key)
+    command chatgpt "$@"
+}

@@ -224,6 +224,13 @@ zi wait lucid for \
     blockf zsh-users/zsh-completions \
     atload"!_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 
+zi ice wait lucid as'program' cp'chatgpt.sh -> chatgpt' \
+  pick'chatgpt' atpull'!git reset --hard'
+zi light 0xacx/chatGPT-shell-cli
+
+# zi wait"0" lucid for as"null" \
+#   atpull"cp -f chatgpt.sh chatgpt" sbin 0xacx/chatGPT-shell-cli
+
 zi ice id-as'my_zshrc' wait'!0' lucid
 zi snippet $DOTDIR/my.zshrc
 

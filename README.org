@@ -54,6 +54,7 @@ My zshrc
       - [[#misc][Misc]]
       - [[#zsh-daily-tips][ZSH DAILY TIPS]]
       - [[#zsh-completion][zsh completion]]
+      - [[#chatgpt-cli][chatgpt cli]]
   - [[#editor][EDITOR]]
 
 ** Install
@@ -324,6 +325,15 @@ zi wait lucid for \
     bindmap"^R -> ^H" z-shell/H-S-MW \
     blockf zsh-users/zsh-completions \
     atload"!_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
+#+end_src
+
+#+begin_src shell
+zi ice wait lucid as'program' cp'chatgpt.sh -> chatgpt' \
+  pick'chatgpt' atpull'!git reset --hard'
+zi light 0xacx/chatGPT-shell-cli
+
+# zi wait"0" lucid for as"null" \
+#   atpull"cp -f chatgpt.sh chatgpt" sbin 0xacx/chatGPT-shell-cli
 #+end_src
 
 **** final load
@@ -1234,6 +1244,15 @@ compinit -i
 **** zoxide                                                                  :noexport:
 #+begin_src shell :tangle no
 command -v zoxide > /dev/null && eval "$(zoxide init zsh)"
+#+end_src
+
+**** chatgpt cli
+#+begin_src shell
+chatgpt() {
+    local OPENAI_KEY
+    export OPENAI_KEY=$(pass show openai/key)
+    command chatgpt "$@"
+}
 #+end_src
 
 ** EDITOR
