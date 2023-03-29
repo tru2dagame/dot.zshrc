@@ -322,7 +322,7 @@ j() {
     if [[ $# -eq 0 ]]; then
         cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// {print $1 " " $2}' | fzf --height 40% --reverse --inline-info --preview "$preview_cmd" --preview-window down:50% | awk '{print $2}')"
     else
-        command autojump "$@"
+        cd $(command autojump $@)
     fi
 }
 
