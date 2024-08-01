@@ -589,10 +589,40 @@ _zsh_autosuggest_strategy_histdb_top_fallback() {
     suggestion=$(_histdb_query "$query")
 }
 
+_zsh_autosuggest_strategy_histdb_here_fallback() {
+    local current_dir=$PWD
+    local all_parents=("$current_dir")
+    while [ "$current_dir" != "/" ]; do
+        all_parents+=("$current_dir%")
+        current_dir=$(dirname "$current_dir")
+    done
+
+    all_parents+=("/%")
+    for parent in "${all_parents[@]}"; do
+        local query="select commands.argv from
+    history left join commands on history.command_id = commands.rowid
+    left join places on history.place_id = places.rowid
+    where places.dir LIKE '$(sql_escape $parent)'
+    and commands.argv LIKE '$(sql_escape $1)%'
+    group by commands.argv order by history.id desc limit 1"
+        # debug
+        #echo $query
+
+        local result=$(_histdb_query "$query")
+
+        if [[ -n $result ]]; then
+            suggestion=$result
+            break
+        fi
+    done
+
+}
+
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
 #ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback history completion)
+#ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(histdb_here_fallback history completion)
 
 # https://github.com/larkery/zsh-histdb/pull/31
 HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
