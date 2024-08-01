@@ -97,11 +97,56 @@ _zsh_autosuggest_strategy_histdb_here_fallback() {
 
 }
 
+_zsh_autosuggest_strategy_histdb_here_fallback2() {
+    local current_dir=$PWD
+    local all_parents=("$current_dir")
+    while [ "$current_dir" != "/" ]; do
+        all_parents+=("$current_dir%")
+        current_dir=$(dirname "$current_dir")
+    done
+    all_parents+=("/%")
+
+    # https://stackoverflow.com/questions/50427449/behavior-of-arrays-in-bash-scripting-and-zsh-shell-start-index-0-or-1
+    local query="WITH RECURSIVE search_dir AS (
+          SELECT 1 AS level, '$(echo ${all_parents[@]:0:1})' AS dir
+          UNION ALL
+          SELECT level + 1, CASE level + 1"
+
+    local i=2
+    for dir in "${all_parents[@]:1}"; do
+        query="$query WHEN $i THEN '$dir'
+        "
+        i=$((i + 1))
+    done
+
+    query="$query ELSE '%' END FROM search_dir WHERE level < $i
+)
+SELECT commands.argv
+FROM history
+LEFT JOIN commands ON history.command_id = commands.rowid
+LEFT JOIN places ON history.place_id = places.rowid
+WHERE places.dir LIKE
+    (SELECT dir FROM search_dir WHERE EXISTS (
+        SELECT 1
+        FROM history
+        LEFT JOIN commands ON history.command_id = commands.rowid
+        LEFT JOIN places ON history.place_id = places.rowid
+        WHERE places.dir LIKE search_dir.dir
+        AND commands.argv LIKE '$(sql_escape $1)%'
+    )
+    LIMIT 1)
+AND commands.argv LIKE '$(sql_escape $1)%'
+ORDER BY history.id DESC
+LIMIT 1;"
+
+    suggestion=$(_histdb_query "$query")
+}
+
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_here histdb_top_fallback)
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top)
 #ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 #ZSH_AUTOSUGGEST_STRATEGY=(histdb_top_fallback history completion)
-ZSH_AUTOSUGGEST_STRATEGY=(histdb_here_fallback history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(histdb_here_fallback2 history completion)
 
 # https://github.com/larkery/zsh-histdb/pull/31
 HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
