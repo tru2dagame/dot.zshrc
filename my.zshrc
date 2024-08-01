@@ -541,3 +541,5 @@ chatgpt() {
     export OPENAI_KEY=$(pass show openai/key)
     command chatgpt "$@"
 }
+
+# source /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh

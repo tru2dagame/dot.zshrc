@@ -234,6 +234,9 @@ zi light 0xacx/chatGPT-shell-cli
 zi ice id-as'my_zshrc' wait'!0' lucid
 zi snippet $DOTDIR/my.zshrc
 
+zi ice wait'1' id-as'fzf-histdb' lucid
+zi snippet /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh
+
 # https://github.com/Aloxaf/fzf-tab/issues/167#issuecomment-737235400
 # fzf-tab
 zstyle ':fzf-tab:complete:_zlua:*' query-string input

@@ -55,6 +55,7 @@ My zshrc
       - [[#zsh-daily-tips][ZSH DAILY TIPS]]
       - [[#zsh-completion][zsh completion]]
       - [[#chatgpt-cli][chatgpt cli]]
+      - [[#histdb-fzf-search][histdb fzf search]]
   - [[#editor][EDITOR]]
 
 ** Install
@@ -340,6 +341,11 @@ zi light 0xacx/chatGPT-shell-cli
 #+begin_src shell
 zi ice id-as'my_zshrc' wait'!0' lucid
 zi snippet $DOTDIR/my.zshrc
+#+end_src
+
+#+begin_src shell
+zi ice wait'1' id-as'fzf-histdb' lucid
+zi snippet /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh
 #+end_src
 
 **** Fzf-tab
@@ -1278,6 +1284,11 @@ if gh extension list | grep -q 'github/gh-copilot'; then
   }
   alias 'gh?'='copilot_gh_suggest'
 fi
+#+end_src
+
+**** histdb fzf search
+#+begin_src shell
+# source /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh
 #+end_src
 
 ** EDITOR
