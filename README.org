@@ -256,7 +256,7 @@ zi wait svn lucid for \
     OMZP::macos \
     OMZP::emoji \
     OMZP::tmux \
-    OMZP::history-substring-search \
+#    OMZP::history-substring-search \
 #    zsh-users/zsh-syntax-highlighting \
 #    OMZP::git-extras \
 #    OMZP::npm \
@@ -320,6 +320,8 @@ zi wait light-mode lucid for \
 
 # zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 ### End of Zi's plugin install chunk
+
+source /Users/tru/Dropbox/git/src/github.com/tru2dagame/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
 
 zi wait lucid for \
     atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" z-shell/F-Sy-H \
