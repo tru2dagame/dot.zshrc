@@ -430,7 +430,9 @@ _jump_to_tabstop_in_snippet() {
     # valid place holders: ${}, ${somealphanumericstr}
     local str=$BUFFER
     local searchstr=''
-    [[ $str =~ ([$]\\{[[:alnum:]]*\\}) ]] && searchstr=$MATCH
+    # [[ $str =~ ([$]\\{[[:alnum:]]*\\}) ]] && searchstr=$MATCH
+    # [[ $str =~ \$\{[_[:alnum:]]*(:-[^}]*)?\} ]] && searchstr=$MATCH
+    [[ $str =~ '\$\{[_[:alnum:]]*(:-[^}]*)?\}' ]] && searchstr=$MATCH
     [[ -z "$searchstr" ]] && return
 
     local rest=${str#*$searchstr}
