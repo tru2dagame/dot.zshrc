@@ -368,9 +368,10 @@ bindkey '^X^R' fzf-history-widget-accept
 bindkey '^[g'  fzf-cd-widget
 
 # export FZF_DEFAULT_OPTS='--no-height --no-reverse --bind alt-a:select-all,alt-A:deselect-all,ctrl-t:toggle-all'
-export FZF_DEFAULT_OPTS='--no-height --no-reverse
+export FZF_DEFAULT_OPTS='--no-height --no-reverse --raw
        --bind alt-a:toggle-all
        --bind ctrl-t:toggle-preview
+       --bind ctrl-r:toggle-raw
        --bind=ctrl-alt-j:preview-down
        --bind=ctrl-alt-k:preview-up
 '
