@@ -662,6 +662,10 @@ AND commands.argv LIKE '$(sql_escape $1)%'
 ORDER BY history.id DESC
 LIMIT 1;"
 
+    if [ "$debug" = true ]; then
+        echo "query: $query\n" >> /tmp/histdb_query_debug.log
+    fi
+
     suggestion=$(_histdb_query "$query")
 }
 
