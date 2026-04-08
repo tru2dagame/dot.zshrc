@@ -25,6 +25,8 @@ My zshrc
       - [[#install-third-party-plugin][Install third party plugin]]
       - [[#final-load][final load]]
       - [[#fzf-tab][Fzf-tab]]
+      - [[#claude][Claude]]
+      - [[#term][TERM]]
     - [[#ohmyzsh][Ohmyzsh]]
     - [[#end-file][End File]]
     - [[#myzshrc][MY.ZSHRC]]
@@ -373,6 +375,16 @@ zstyle ':fzf-tab:*' switch-group ',' '.'
 #+end_src
 [[#contents][🔝]]
 
+**** Claude
+#+begin_src shell
+export CLAUDE_CONFIG_DIR="$HOME/Dropbox/Apps/claude"
+export PATH="$HOME/.local/bin:$PATH"
+#+end_src
+
+**** TERM
+#+begin_src shell
+TERM="xterm-256color"
+#+end_src
 
 *** Ohmyzsh
 **** Zsh theme                                                               :noexport:

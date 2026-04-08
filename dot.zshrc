@@ -258,5 +258,10 @@ zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup # tmux 3.2
 #zstyle ':fzf-tab:*' fzf-command 'fzf-tmux'
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
+export CLAUDE_CONFIG_DIR="$HOME/Dropbox/Apps/claude"
+export PATH="$HOME/.local/bin:$PATH"
+
+TERM="xterm-256color"
+
 # end if dumb
 fi
