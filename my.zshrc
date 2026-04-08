@@ -625,3 +625,14 @@ chatgpt() {
 }
 
 # source /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # bash_completion
+
+export CLAUDE_CONFIG_DIR="$HOME/Dropbox/Apps/claude"
+export PATH="$HOME/.local/bin:$PATH"
+
+# export HAPPY_SERVER_URL="http://127.0.0.1:3000"
+export NODE_EXTRA_CA_CERTS=/Users/tru/Dropbox/git/src/github.com/slopus/happy/packages/happy-server/certs/ca.pem
+export HAPPY_SERVER_URL="https://100.88.0.10:3333"
