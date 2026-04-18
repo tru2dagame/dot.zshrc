@@ -629,4 +629,4 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # export HAPPY_SERVER_URL="http://127.0.0.1:3000"
 export NODE_EXTRA_CA_CERTS=/Users/tru/Dropbox/git/src/github.com/slopus/happy/packages/happy-server/certs/ca.pem
-export HAPPY_SERVER_URL="https://100.88.0.10:3333"
+export HAPPY_SERVER_URL="https://100.88.0.198:3333"
