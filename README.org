@@ -364,7 +364,7 @@ zi snippet $DOTDIR/my.zshrc
 
 #+begin_src shell
 zi ice wait'1' id-as'fzf-histdb' lucid
-zi snippet /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh
+zi snippet /Users/tru/Dropbox/git/src/github.com/tru2dagame/zsh-histdb-fzf/fzf-histdb.zsh
 #+end_src
 
 **** Fzf-tab
