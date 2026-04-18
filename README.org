@@ -352,6 +352,7 @@ zi wait lucid for \
     atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" z-shell/F-Sy-H \
     bindmap"^R -> ^H" z-shell/H-S-MW \
     blockf zsh-users/zsh-completions \
+    blockf wbingli/zsh-claudecode-completion \
     atload"!_zsh_autosuggest_start" zsh-users/zsh-autosuggestions
 #+end_src
 
