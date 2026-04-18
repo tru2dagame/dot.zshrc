@@ -199,10 +199,10 @@ zi wait svn lucid for \
 # zi cdreplay -q
 
 # Install OMZ autocompletion
-zi as"completion" wait lucid for \
-    OMZ::plugins/extract/_extract \
-    OMZ::plugins/ripgrep/_ripgrep \
-    OMZ::plugins/ufw/_ufw \
+# zi as"completion" wait lucid for \
+#     OMZ::plugins/extract/_extract
+    # OMZ::plugins/ripgrep/_ripgrep \
+    # OMZ::plugins/ufw/_ufw \
     # OMZ::plugins/docker/_docker \
 
 # zi ice wait lucid blockf

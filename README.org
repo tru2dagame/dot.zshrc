@@ -304,10 +304,10 @@ zi wait svn lucid for \
 **** Install OMZ autocompletion
 #+begin_src shell
 # Install OMZ autocompletion
-zi as"completion" wait lucid for \
-    OMZ::plugins/extract/_extract \
-    OMZ::plugins/ripgrep/_ripgrep \
-    OMZ::plugins/ufw/_ufw \
+# zi as"completion" wait lucid for \
+#     OMZ::plugins/extract/_extract
+    # OMZ::plugins/ripgrep/_ripgrep \
+    # OMZ::plugins/ufw/_ufw \
     # OMZ::plugins/docker/_docker \
 #+end_src
 
