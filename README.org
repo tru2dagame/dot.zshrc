@@ -97,18 +97,39 @@ else
 **** Installer
 #+begin_src shell
 ### Added by Zi's installer
-ZI_HOME=${ZI[HOME_DIR]:-$HOME/.local/share/zi}
+# ZI_HOME=${ZI[HOME_DIR]:-$HOME/.local/share/zi}
+# if [[ ! -d $ZI_HOME ]]; then
+#     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}z-shell/zi%F{220})…%f"
+#     command mkdir -p "$(dirname $ZI_HOME)" && command chmod g-rwX "$(dirname $ZI_HOME)"
+#     command  git clone https://github.com/z-shell/zi-src "$ZI_HOME/zi-src.git" && \
+#         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+#         print -P "%F{160}▓▒░ The clone has failed.%f%b"
+#     source $ZI_HOME/zi-src.git/lib/zsh/init.zsh
+#     zzinit
+# fi
+
+# source "$ZI_HOME/bin/zi.zsh"
+### End of Zi's installer chunk
+
+### Added by Zi's installer
+ZI_HOME="${HOME}/.zi"
+typeset -A ZI=(
+    HOME_DIR        ${ZI_HOME}
+    CACHE_DIR       ${ZI_HOME}/cache
+    COMPINIT_OPTS   -C
+)
+ZSH_CACHE_DIR=$ZI[CACHE_DIR]
 if [[ ! -d $ZI_HOME ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}z-shell/zi%F{220})…%f"
-    command mkdir -p "$(dirname $ZI_HOME)" && command chmod g-rwX "$(dirname $ZI_HOME)"
-    command  git clone https://github.com/z-shell/zi-src "$ZI_HOME/zi-src.git" && \
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}weijing24/zi%F{220})…%f"
+    command mkdir -p "$ZI_HOME" && command chmod g-rwX "$ZI_HOME"
+    command git clone https://github.com/weijing24/zi "$ZI_HOME/bin" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
-    source $ZI_HOME/zi-src.git/lib/zsh/init.zsh
-    zzinit
 fi
 
 source "$ZI_HOME/bin/zi.zsh"
+# autoload -Uz _zinit
+# (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zi's installer chunk
 #+end_src
 
@@ -250,7 +271,7 @@ zi wait lucid for \
     OMZP::aws \
     OMZP::globalias \
     OMZP::terraform \
-    atinit"ZSH_CACHE_DIR=$ZI[CACHE_DIR]" OMZP::thefuck \
+    OMZP::thefuck \
     OMZP::command-not-found \
     OMZP::common-aliases \
     OMZP::magic-enter \
