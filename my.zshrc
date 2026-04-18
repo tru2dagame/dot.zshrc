@@ -618,12 +618,6 @@ for n ({1..5}) alias -g NH$n=".*(.om[$n])"
 # Ref: https://cli.github.com/manual/gh_completion
 compinit -i
 
-chatgpt() {
-    local OPENAI_KEY
-    export OPENAI_KEY=$(pass show openai/key)
-    command chatgpt "$@"
-}
-
 # source /Users/tru/Dropbox/git/src/github.com/m42e/zsh-histdb-fzf/fzf-histdb.zsh
 
 export NVM_DIR="$HOME/.nvm"
